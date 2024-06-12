@@ -110,12 +110,12 @@ export default function Home() {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">หน้าแรก</h1>
+              <h1 className="m-0">Home</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
-                  <li className="breadcrumb-item active">หน้าแรก</li>
+                  <li className="breadcrumb-item active">Home</li>
                 </li>
               </ol>
             </div>
@@ -169,7 +169,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 mt-5">
+            {/* <div className="col-lg-6 mt-5">
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <h5>จำนวนเรื่องที่เขียน</h5>
@@ -224,7 +224,7 @@ export default function Home() {
                     </ResponsiveContainer>
                   </div>
                 </div>
-              </div>
+              </div> */}
           </div>
         </div>
       </div>

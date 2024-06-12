@@ -12,7 +12,7 @@ export default function Sidebar() {
             className="brand-image img-circle elevation-1"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">KSS SYSTEM</span>
+          <span className="brand-text font-weight-light">OT SYSTEM</span>
         </Link>
         <div className="sidebar">
           <nav className="mt-2">
@@ -22,11 +22,11 @@ export default function Sidebar() {
               role="menu"
               data-accordion="false"
             >
-              <li className="nav-header">เมนูหลัก</li>
+              <li className="nav-header">Main menu</li>
               <li className="nav-item">
                 <Link to="/" className="nav-link">
                   <i className="nav-icon fas fa-home"></i>
-                  <p>หน้าแรก</p>
+                  <p>Home</p>
                 </Link>
               </li>
               {/* <li className="nav-item">
@@ -54,6 +54,12 @@ export default function Sidebar() {
                 </Link>
               </li> */}
               <li className="nav-item">
+                <Link to="/overtime" className="nav-link">
+                  <i className="nav-icon fas fa-clock"></i>
+                  <p>Overtime</p>
+                </Link>
+              </li>
+              {/* <li className="nav-item">
                 <Link to="/suggestions" className="nav-link">
                   <i className="nav-icon fas fa-users"></i>
                   <p>ข้อเสนอแนะ</p>
@@ -64,7 +70,7 @@ export default function Sidebar() {
                   <i className="nav-icon fas fa-user-check"></i>
                   <p>การอนุมัติ</p>
                 </Link>
-              </li>
+              </li> */}
               {/* <li className="nav-item">
                 <Link to="/movies" className="nav-link">
                   <i className="nav-icon fas fa-photo-video"></i>

@@ -9,7 +9,7 @@ export default function Footer() {
         Copyright © 2023 <a href="https://full-stack-app.com">Full stack app Co.,Ltd</a>.
       </strong>{" "} */}
       <strong>
-        Copyright © 2024 <a href="">Krishanathep@gmail.com</a>.
+        Copyright © 2024 <a href="http://www.thairung.co.th/" target="_blank">บริษัท ไทยรุ่งยูเนี่ยนคาร์ จำกัด (มหาชน)</a>
       </strong>{" "}
       All rights reserved.
     </footer>

@@ -27,14 +27,14 @@ export default function Navbar() {
            <i className="fas fa-user-circle fa-lg"></i>{' '}Hi : {userDatail().name}{' '}
           </a>
           <div className="dropdown-menu dropdown-menu-md dropdown-menu-right">
-            <a href="#" className="dropdown-item">
+            {/* <a href="#" className="dropdown-item">
             <i className="fas fa-user mr-2"></i>Profile
             </a>
             <hr className="dropdown-divider"/>
             <a href="#" className="dropdown-item">
             <i className="fas fa-cog mr-2"></i>Settings
             </a>
-            <hr className="dropdown-divider"/>
+            <hr className="dropdown-divider"/> */}
             <a href="#" className="dropdown-item" onClick={handleSignOut}>
               <i className="fas fa-sign-out-alt mr-2"></i> Sign out
             </a>

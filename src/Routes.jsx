@@ -12,6 +12,8 @@ import Home from './pages/home'
 import Suggesions from "./pages/Suggestions";
 import Approver from "./pages/approver";
 
+import Overtime from './pages/overtime'
+
 
 const RoutesPage = () => {
   return (
@@ -31,6 +33,7 @@ const RoutesPage = () => {
           <Route path="/" element={<Home />} />
           <Route path="/suggestions" element={<Suggesions />} />
           <Route path="/approver" element={<Approver />} />
+          <Route path="/overtime" element={<Overtime />} />
         </Route>
       </Routes>
     </Router>
