@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
-import { Button, Badge } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
+import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Swal from "sweetalert2";
@@ -11,12 +12,11 @@ import axios from "axios";
 const PAGE_SIZES = [10, 20, 30];
 
 const Overtime = () => {
-    
   //user login
   const userDatail = useAuthUser();
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
-  const [blogs, setBlogs] = useState([]);
+  const [overtimes, setOvertimes] = useState([]);
 
   useEffect(() => {
     setPage(1);
@@ -24,7 +24,7 @@ const Overtime = () => {
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [records, setRecords] = useState(blogs.slice(0, pageSize));
+  const [records, setRecords] = useState(overtimes.slice(0, pageSize));
 
   const getData = async () => {
     const from = (page - 1) * pageSize;
@@ -35,7 +35,8 @@ const Overtime = () => {
         "https://full-stack-app.com/laravel_auth_jwt_api/public/api/ksssystems"
       )
       .then((res) => {
-        setBlogs(res.data.ksssystems);
+        //Change api name
+        setOvertimes(res.data.ksssystems);
         setRecords(res.data.ksssystems.slice(from, to));
         setLoading(false);
       });
@@ -104,12 +105,58 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
-                          <button
-                            className="btn btn-success mb-3"
-                            
+                          <Link
+                            to={"/overtime/create"}
+                            className="btn btn-success mb-2"
                           >
                             <i className="fa fa-plus"></i> Create
-                          </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12">
+                        <div className="card">
+                          <div className="card-body">
+                            <div className="row">
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">เลขที่ใบคำร้อง</label> */}
+                                  <input className="form-control" type="text" placeholder="เลขที่ใบคำร้อง"/>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">ผู้ควบคุมงาน</label> */}
+                                  <input className="form-control" type="text" placeholder="ผู้ควบคุมงาน"/>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">สถานะการอนุมัติ</label> */}
+                                  <input className="form-control" type="text" placeholder="หน่วยงาน"/>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
+                                  <input className="form-control" type="text" placeholder="สถานะการอนุมัติ"/>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
+                                  <input className="form-control" type="text" placeholder="วันที่เริ่มต้น"/>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
+                                  <input className="form-control" type="text" placeholder="วันที่สิ้นสุด"/>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -135,10 +182,13 @@ const Overtime = () => {
                         },
                         {
                           accessor: "title",
-                          title: "หัวข้อเรื่อง",
+                          title: "เลขที่ใบคำร้อง",
                         },
-                        { accessor: "objective", title: "วัตถุประสงค์" },
-                        { accessor: "suggest_type", title: "ประเภทข้อเสนอแนะ" },
+                        { accessor: "objective", title: "ผู้ควบคุมงาน" },
+                        {
+                          accessor: "suggest_type",
+                          title: "หน่วย / ส่วน / ฝ่าย",
+                        },
                         {
                           accessor: "status",
                           title: "สถานะการอนุมัติ",
@@ -159,10 +209,17 @@ const Overtime = () => {
                         },
                         {
                           accessor: "created_at",
-                          title: "วันที่จัดทำ",
+                          title: "วันที่เริ่มต้น",
                           textAlignment: "center",
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MMM-YYYY"),
+                        },
+                        {
+                          accessor: "created_at",
+                          title: "วันที่สิ้นสุด",
+                          textAlignment: "center",
+                          render: ({ updated_at }) =>
+                            dayjs(updated_at).format("DD-MMM-YYYY"),
                         },
                         {
                           accessor: "actions",
@@ -171,31 +228,31 @@ const Overtime = () => {
                           width: 300,
                           render: (blogs) => (
                             <>
-                              <Button
-                                variant="primary"
-                               
+                              <Link
+                                to={"/overtime/view/" + blogs.id}
+                                className="btn btn-info"
                               >
                                 View
-                              </Button>{" "}
-                              <Button
-                                variant="info"
-                                
+                              </Link>{" "}
+                              <Link
+                                to={"/overtime/edit/" + blogs.id}
+                                className="btn btn-primary"
                               >
-                                Update
-                              </Button>{" "}
-                              <Button
-                                variant="danger"
+                                Edit
+                              </Link>{" "}
+                              <button
+                                className="btn btn-danger"
                                 onClick={() => hanldeDelete(blogs)}
                               >
                                 Delete
-                              </Button>
+                              </button>
                             </>
                           ),
                         },
                       ]}
                       records={records}
                       minHeight={200}
-                      totalRecords={blogs.length}
+                      totalRecords={overtimes.length}
                       recordsPerPage={pageSize}
                       page={page}
                       onPageChange={(p) => setPage(p)}

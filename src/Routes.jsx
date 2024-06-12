@@ -9,11 +9,11 @@ import Signin from "./pages/auth/Signin";
 import Signup from "./pages/auth/Signup";
 
 import Home from './pages/home'
-import Suggesions from "./pages/Suggestions";
-import Approver from "./pages/approver";
 
 import Overtime from './pages/overtime'
-
+import OvertimeCreate from './pages/overtime/create'
+import OvertimeView from './pages/overtime/view'
+import OvertimeEdit from './pages/overtime/edit'
 
 const RoutesPage = () => {
   return (
@@ -31,9 +31,10 @@ const RoutesPage = () => {
           }
         >
           <Route path="/" element={<Home />} />
-          <Route path="/suggestions" element={<Suggesions />} />
-          <Route path="/approver" element={<Approver />} />
           <Route path="/overtime" element={<Overtime />} />
+          <Route path="/overtime/create" element={<OvertimeCreate />} />
+          <Route path="/overtime/view/:id" element={<OvertimeView />} />
+          <Route path="/overtime/edit/:id" element={<OvertimeEdit />} />
         </Route>
       </Routes>
     </Router>

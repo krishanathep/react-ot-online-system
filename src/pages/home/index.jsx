@@ -129,10 +129,10 @@ export default function Home() {
               <div className="small-box bg-info">
                 <div className="inner">
                   <h3>{succestion}</h3>
-                  <p>All Suggestion</p>
+                  <p>All Overtime</p>
                 </div>
                 <div className="icon">
-                <i className="fas fa-chalkboard-teacher"></i>
+                <i className="fas fa-user-clock"></i>
                 </div>
               </div>
             </div>
