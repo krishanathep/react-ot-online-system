@@ -83,14 +83,14 @@ const Overtime = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Overtime list</h1>
+                <h1 className="m-0">งานนอกเวลา ทั้งหมด</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Overtime</li>
+                  <li className="breadcrumb-item active">งานนอกเวลา</li>
                 </ol>
               </div>
             </div>
@@ -116,43 +116,43 @@ const Overtime = () => {
                     </div>
                     <div className="row">
                       <div className="col-lg-12">
-                        <div className="card">
+                        <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">เลขที่ใบคำร้อง</label> */}
-                                  <input className="form-control" type="text" placeholder="เลขที่ใบคำร้อง"/>
+                                  <label htmlFor="">เลขที่ใบคำร้อง</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">ผู้ควบคุมงาน</label> */}
-                                  <input className="form-control" type="text" placeholder="ผู้ควบคุมงาน"/>
+                                  <label htmlFor="">ผู้ควบคุมงาน</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">สถานะการอนุมัติ</label> */}
-                                  <input className="form-control" type="text" placeholder="หน่วยงาน"/>
+                                  <label htmlFor="">สถานะการอนุมัติ</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
-                                  <input className="form-control" type="text" placeholder="สถานะการอนุมัติ"/>
+                                  <label htmlFor="">วันที่เริ่มต้น</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
-                                  <input className="form-control" type="text" placeholder="วันที่เริ่มต้น"/>
+                                  <label htmlFor="">วันที่สิ้นสุด</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  {/* <label htmlFor="">วันที่จัดทำ</label> */}
-                                  <input className="form-control" type="text" placeholder="วันที่สิ้นสุด"/>
+                                  <label htmlFor="">วันที่จัดทำ</label>
+                                  <input className="form-control" type="text" placeholder="Please Enter"/>
                                 </div>
                               </div>
                             </div>
