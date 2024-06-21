@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { useForm } from "react-hook-form"
 import { useSignIn } from 'react-auth-kit'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Preloader from "../../components/Preloader";
 import Swal from 'sweetalert2'
 import axios from 'axios'

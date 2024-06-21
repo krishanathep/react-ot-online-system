@@ -68,7 +68,7 @@ const view = () => {
                               </button>{" "}
                               <Link
                                 to={"/overtime"}
-                                className="btn btn-secondary"
+                                className="btn btn-danger"
                               >
                                 Cancel
                               </Link>{" "}

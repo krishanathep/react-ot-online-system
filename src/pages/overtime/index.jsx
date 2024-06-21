@@ -3,7 +3,7 @@ import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css";
+
 
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -32,12 +32,12 @@ const Overtime = () => {
 
     await axios
       .get(
-        "https://full-stack-app.com/laravel_auth_jwt_api/public/api/ksssystems"
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests"
       )
       .then((res) => {
         //Change api name
-        setOvertimes(res.data.ksssystems);
-        setRecords(res.data.ksssystems.slice(from, to));
+        setOvertimes(res.data.data);
+        setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
   };
@@ -83,14 +83,14 @@ const Overtime = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">งานนอกเวลา ทั้งหมด</h1>
+                <h1 className="m-0">Overtime list</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">งานนอกเวลา</li>
+                  <li className="breadcrumb-item active">Overtime</li>
                 </ol>
               </div>
             </div>
@@ -105,11 +105,14 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
+                          <buttno className="btn btn-secondary mb-3">
+                            <i className="fas fa-download"></i> EXPORT
+                          </buttno>{' '}
                           <Link
                             to={"/overtime/create"}
-                            className="btn btn-success mb-2"
+                            className="btn btn-success mb-3"
                           >
-                            <i className="fa fa-plus"></i> Create
+                            <i className="fa fa-plus"></i> CREATE
                           </Link>
                         </div>
                       </div>
@@ -122,37 +125,73 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>เลขที่ใบคำร้อง 1</option>
+                                  <option>เลขที่ใบคำร้อง 2</option>
+                                  <option>เลขที่ใบคำร้อง 3</option>
+                                  <option>เลขที่ใบคำร้อง 4</option>
+                                </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>ผู้ควบคุมงาน 1</option>
+                                  <option>ผู้ควบคุมงาน 2</option>
+                                  <option>ผู้ควบคุมงาน 3</option>
+                                  <option>ผู้ควบคุมงาน 4</option>
+                                </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>สถานะการอนุมัติ 1</option>
+                                  <option>สถานะการอนุมัติ 2</option>
+                                  <option>สถานะการอนุมัติ 3</option>
+                                  <option>สถานะการอนุมัติ 4</option>
+                                </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>วันที่เริ่มต้น 1</option>
+                                  <option>วันที่เริ่มต้น 2</option>
+                                  <option>วันที่เริ่มต้น 3</option>
+                                  <option>วันที่เริ่มต้น 4</option>
+                                </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่สิ้นสุด</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>วันที่สิ้นสุด 1</option>
+                                  <option>วันที่สิ้นสุด 2</option>
+                                  <option>วันที่สิ้นสุด 3</option>
+                                  <option>วันที่สิ้นสุด 4</option>
+                                </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  <input className="form-control" type="text" placeholder="Please Enter"/>
+                                  <select class="form-control" id="sel1">
+                                  <option>Please Select</option>
+                                  <option>วันที่จัดทำ 1</option>
+                                  <option>วันที่จัดทำ 2</option>
+                                  <option>วันที่จัดทำ 3</option>
+                                  <option>วันที่จัดทำ 4</option>
+                                </select>
                                 </div>
                               </div>
                             </div>
@@ -181,13 +220,15 @@ const Overtime = () => {
                           render: (record) => records.indexOf(record) + 1,
                         },
                         {
-                          accessor: "title",
+                          accessor: "ot_member_id",
                           title: "เลขที่ใบคำร้อง",
                         },
-                        { accessor: "objective", title: "ผู้ควบคุมงาน" },
+                        { accessor: "department_name", 
+                          title: "ผู้ควบคุมงาน" },
                         {
-                          accessor: "suggest_type",
-                          title: "หน่วย / ส่วน / ฝ่าย",
+                          accessor: "department",
+                          title: "หน่วยงาน",
+                          textAlignment: "center"
                         },
                         {
                           accessor: "status",
@@ -208,14 +249,14 @@ const Overtime = () => {
                           ),
                         },
                         {
-                          accessor: "created_at",
+                          accessor: "start_date",
                           title: "วันที่เริ่มต้น",
                           textAlignment: "center",
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MMM-YYYY"),
                         },
                         {
-                          accessor: "created_at",
+                          accessor: "end_date",
                           title: "วันที่สิ้นสุด",
                           textAlignment: "center",
                           render: ({ updated_at }) =>
