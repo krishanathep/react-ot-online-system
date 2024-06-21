@@ -4,7 +4,6 @@ import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
 
-
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -65,7 +64,7 @@ const Overtime = () => {
         });
         axios
           .delete(
-            "https://full-stack-app.com/laravel_auth_jwt_api/public/api/ksssystem-delete/" +
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest/delete/" +
               blogs.id
           )
           .then((res) => {

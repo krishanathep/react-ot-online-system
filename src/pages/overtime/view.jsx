@@ -1,10 +1,42 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
+import dayjs from "dayjs";
 
 const view = () => {
+
+  const { id } = useParams();
+
+  const [overtimes, setOvertimes]=useState({})
+  const [members, setMemebers]=useState([])
+
+  const getData = async () => {
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest/"+id
+      )
+      .then((res) => {
+        setOvertimes(res.data.data);
+        console.log(res.data.data)
+      });
+
+      await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest/"+id
+      )
+      .then((res) => {
+        setMemebers(res.data.data.members);
+        console.log(res.data.data.members)
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
-         <div className="content-wrapper">
+      <div className="content-wrapper">
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -30,51 +62,60 @@ const view = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <form>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label htmlFor="">เลขที่ใบคำร้อง</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label htmlFor="">ผู้ควบคุมงาน</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label htmlFor="">หน่วย/ส่วน/ฝ่าย</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label htmlFor="">วันที่เริ่มต้น</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label htmlFor="">วันที่สิ้นสุด</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
+                        <div className="col-md-12">
+                          <table className="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>ผู้จัดการฝ่าย : { overtimes.department_name }</th>
+                                <th>หน่วยงาน :  { overtimes.department }</th>
+                                <th>เลขคำร้อง :  { overtimes.ot_member_id }</th>
+                              </tr>
+                              <tr>
+                                <th>ผู้ควบคุมงาน : { overtimes.create_name }</th>
+                                <th>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</th>
+                                <th>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                        <div className="col-md-12">
+                          <table className="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>ลำดับ</th>
+                                <th>ชื่อพนักงาน</th>
+                                <th>ประเภทค่าแรง</th>
+                                <th>ชนิดของงาน</th>
+                                <th>ความสำเร็จ</th>
+                                <th>รถรับส่ง</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {members.map((member, index)=>{
+                                  return(
+                                    <tr>
+                                    <td>{member.id}</td>
+                                    <td>{member.emp_name}</td>
+                                    <td>{member.cost_type}</td>
+                                    <td>{member.job_type}</td>
+                                    <td>{member.objective}</td>
+                                    <td>{member.bus_stations}</td>
+                                  </tr>
+                                  )
+                                })}
+                            </tbody>
+                          </table>
+                        </div>
                           <div className="col-md-12">
                             <div className="float-right">
-                              <button className="btn btn-primary">
-                                Submit
-                              </button>{" "}
                               <Link
                                 to={"/overtime"}
                                 className="btn btn-danger"
                               >
-                                Cancel
+                                ย้อนกลับ
                               </Link>{" "}
                             </div>
                           </div>
-                        </form>
                       </div>
                     </div>
                   </div>
