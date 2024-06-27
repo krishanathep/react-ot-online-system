@@ -1,29 +1,65 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Swal from "sweetalert2";
+import dayjs from "dayjs";
+import axios from "axios";
 
 const create = () => {
-  const { register, control, handleSubmit, reset, trigger, setError } = useForm(
-    {
-      // defaultValues: {}; you can populate the fields by this attribute
-      defaultValues: {
-        test: [
-          {
-            firstName: "",
-            lastName: "",
-          },
-        ],
-      },
-    }
-  );
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    trigger,
+    setError,
+    formState: { errors },
+  } = useForm({
+    // defaultValues: {}; you can populate the fields by this attribute
+    defaultValues: {
+      test: [
+        {
+          firstName: "",
+          lastName: "",
+        },
+      ],
+    },
+  });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "test",
   });
 
+  const userDatail = useAuthUser();
+  const navigate = useNavigate();
+
+  const handleCreateSubmit = async (data) => {
+    await axios
+      .post(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
+        data
+      )
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been created",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        navigate('/overtime')
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
-         <div className="content-wrapper">
+      <div className="content-wrapper">
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -49,88 +85,157 @@ const create = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                      <div className="card shadow-none border">
+                        <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>เลขที่ใบคำร้อง 1</option>
-                                  <option>เลขที่ใบคำร้อง 2</option>
-                                  <option>เลขที่ใบคำร้อง 3</option>
-                                  <option>เลขที่ใบคำร้อง 4</option>
-                                </select>
+                                  <input
+                                    readOnly
+                                    type="text"
+                                    className="form-control"
+                                    value={"OT012324QC"}
+                                    {...register("ot_member_id", {
+                                      required: true,
+                                    })}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">ผู้จัดการฝ่าย</label>
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    {...register("department_name", {
+                                      required: true,
+                                    })}
+                                  >
+                                    <option value="" disabled selected>
+                                      Please Select
+                                    </option>
+                                    <option value={"ผู้จัดการฝ่าย 1"}>
+                                      ผู้จัดการฝ่าย 1
+                                    </option>
+                                    <option value={"ผู้จัดการฝ่าย 2"}>
+                                      ผู้จัดการฝ่าย 2
+                                    </option>
+                                    <option value={"ผู้จัดการฝ่าย 3"}>
+                                      ผู้จัดการฝ่าย 3
+                                    </option>
+                                    <option value={"ผู้จัดการฝ่าย 4"}>
+                                      ผู้จัดการฝ่าย 4
+                                    </option>
+                                  </select>
+                                  {errors.department_name && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">หน่วยงาน</label>
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    {...register("department", {
+                                      required: true,
+                                    })}
+                                  >
+                                    <option value="" disabled selected>
+                                      Please Select
+                                    </option>
+                                    <option value={"หน่วยงาน 1"}>
+                                      หน่วยงาน 1
+                                    </option>
+                                    <option value={"หน่วยงาน 2"}>
+                                      หน่วยงาน 2
+                                    </option>
+                                    <option value={"หน่วยงาน 3"}>
+                                      หน่วยงาน 3
+                                    </option>
+                                    <option value={"หน่วยงาน 4"}>
+                                      หน่วยงาน 4
+                                    </option>
+                                  </select>
+                                  {errors.department && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>ผู้ควบคุมงาน 1</option>
-                                  <option>ผู้ควบคุมงาน 2</option>
-                                  <option>ผู้ควบคุมงาน 3</option>
-                                  <option>ผู้ควบคุมงาน 4</option>
-                                </select>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">สถานะการอนุมัติ</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>สถานะการอนุมัติ 1</option>
-                                  <option>สถานะการอนุมัติ 2</option>
-                                  <option>สถานะการอนุมัติ 3</option>
-                                  <option>สถานะการอนุมัติ 4</option>
-                                </select>
+                                  <input
+                                    readOnly
+                                    type="text"
+                                    className="form-control"
+                                    value={userDatail().name}
+                                    {...register("create_name", {
+                                      required: true,
+                                    })}
+                                  />
+                                  {errors.create_name && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>วันที่เริ่มต้น 1</option>
-                                  <option>วันที่เริ่มต้น 2</option>
-                                  <option>วันที่เริ่มต้น 3</option>
-                                  <option>วันที่เริ่มต้น 4</option>
-                                </select>
+                                  <Controller
+                                    control={control}
+                                    name="start_date"
+                                    render={({ field }) => (
+                                      <DatePicker
+                                        className="form-control"
+                                        placeholderText="Select start date"
+                                        onChange={(date) =>
+                                          field.onChange(
+                                            dayjs(date).format("YYYY/MM/DD")
+                                          )
+                                        }
+                                        selected={field.value}
+                                      />
+                                    )}
+                                  />
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่สิ้นสุด</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>วันที่สิ้นสุด 1</option>
-                                  <option>วันที่สิ้นสุด 2</option>
-                                  <option>วันที่สิ้นสุด 3</option>
-                                  <option>วันที่สิ้นสุด 4</option>
-                                </select>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
-                                  <option>วันที่จัดทำ 1</option>
-                                  <option>วันที่จัดทำ 2</option>
-                                  <option>วันที่จัดทำ 3</option>
-                                  <option>วันที่จัดทำ 4</option>
-                                </select>
+                                  <Controller
+                                    control={control}
+                                    name="end_date"
+                                    render={({ field }) => (
+                                      <DatePicker
+                                        className="form-control"
+                                        placeholderText="Select end date"
+                                        onChange={(date) =>
+                                          field.onChange(
+                                            dayjs(date).format("YYYY/MM/DD")
+                                          )
+                                        }
+                                        selected={field.value}
+                                      />
+                                    )}
+                                  />
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      <form
-                          onSubmit={handleSubmit((data) =>
-                            alert(JSON.stringify(data))
-                          )}
+                        <form
+                        // onSubmit={handleSubmit((data) =>
+                        //   alert(JSON.stringify(data))
+                        // )}
                         >
                           {fields.map((item, index) => (
                             <div
@@ -138,70 +243,118 @@ const create = () => {
                               key={item.index}
                             >
                               <div className="card-body">
+                                <div className="row">
+                                  <div className="col-md-4">
+                                    <div className="form-group">
+                                      <label htmlFor="">ข้อมูลพนักงาน :</label>
+                                      <select
+                                        className="form-control"
+                                        id="sel1"
+                                        {...register(
+                                          `employee.${index}.emp_name`,
+                                          { required: true }
+                                        )}
+                                      >
+                                        <option value="" disabled selected>
+                                          Please Select
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 1"}>
+                                          ข้อมูลพนักงาน 1
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 2"}>
+                                          ข้อมูลพนักงาน 2
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 3"}>
+                                          ข้อมูลพนักงาน 3
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 4"}>
+                                          ข้อมูลพนักงาน 4
+                                        </option>
+                                      </select>
+                                      {errors.emp_name && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="col-md-4">
+                                    <div className="form-group">
+                                      <label htmlFor="">ประเภทค่าแรง :</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        {...register(
+                                          `employee.${index}.cost_type`,
+                                          { required: true }
+                                        )}
+                                        placeholder="Please Enter Cost Type"
+                                      />
+                                      {errors.cost_type && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="col-md-4">
+                                    <div className="form-group">
+                                      <label htmlFor="">ประเภทงาน :</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        {...register(
+                                          `employee.${index}.job_type`,
+                                          { required: true }
+                                        )}
+                                        placeholder="Please Enter Job Type"
+                                      />
+                                      {errors.job_type && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
                                 <div className="col-md-12">
-                                <div className="form-group">
-                                  <label htmlFor="">ข้อมูลพนักงาน :</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    {...register(`test.${index}.firstName`)}
-                                    placeholder="Please Enter Employee"
-                                  />
+                                  <div className="float-right">
+                                    <button
+                                      className="btn btn-secondary btn-sm"
+                                      type="button"
+                                      onClick={() =>
+                                        append({
+                                          emp_name: "",
+                                          cost_type: "",
+                                          job_type: "",
+                                        })
+                                      }
+                                    >
+                                      <i className="fas fa-plus"></i>
+                                    </button>{" "}
+                                    <button
+                                      className="btn btn-secondary btn-sm"
+                                      type="button"
+                                      onClick={() => remove(index)}
+                                    >
+                                      <i className="fas fa-minus"></i>
+                                    </button>
+                                  </div>
                                 </div>
-                                </div>
-                                <div className="col-md-12">
-                                <div className="form-group">
-                                  <label htmlFor="">ประเภทค่าแรง :</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    {...register(`test.${index}.lastName`)}
-                                    placeholder="Please Enter Cost Type"
-                                  />
-                                </div>
-                                </div>
-                               <div className="col-md-12">
-                               <div className="form-group">
-                                  <label htmlFor="">ประเภทงาน :</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    {...register(`test.${index}.lastName`)}
-                                    placeholder="Please Enter Job Type"
-                                  />
-                                </div>
-                               </div>
-                               <div className="col-md-12">
-                                <div className="float-right mt-2">
-                                <button
-                                  className="btn btn-secondary btn-sm"
-                                  type="button"
-                                  onClick={() =>
-                                    append({ firstName: "", lastName: "" })
-                                  }
-                                >
-                                  <i className="fas fa-plus"></i>
-                                </button> {' '}
-                                <button
-                                  className="btn btn-secondary btn-sm"
-                                  type="button"
-                                  onClick={() => remove(index)}
-                                >
-                                  <i className="fas fa-minus"></i>
-                                </button>
-                                </div>
-                               </div>
                               </div>
                             </div>
                           ))}
                           <div className="col-md-12">
                             <div className="float-right">
-                              <input
+                              <button
+                                onClick={handleSubmit(handleCreateSubmit)}
                                 className="btn btn-primary"
-                                type="submit"
-                                value={"SUBMIT"}
-                              />{' '}
-                              <Link to={'/overtime'} className="btn btn-danger">CANCEL</Link>
+                              >
+                                ยืนยัน
+                              </button>{" "}
+                              <Link to={"/overtime"} className="btn btn-danger">
+                                ย้อนกลับ
+                              </Link>
                             </div>
                           </div>
                         </form>
@@ -215,7 +368,7 @@ const create = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default create
+export default create;

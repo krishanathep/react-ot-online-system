@@ -17,16 +17,8 @@ const view = () => {
       )
       .then((res) => {
         setOvertimes(res.data.data);
+        setMemebers(res.data.data.employees)
         console.log(res.data.data)
-      });
-
-      await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest/"+id
-      )
-      .then((res) => {
-        setMemebers(res.data.data.members);
-        console.log(res.data.data.members)
       });
   };
 
@@ -66,14 +58,14 @@ const view = () => {
                           <table className="table table-bordered">
                             <thead>
                               <tr>
-                                <th>ผู้จัดการฝ่าย : { overtimes.department_name }</th>
-                                <th>หน่วยงาน :  { overtimes.department }</th>
-                                <th>เลขคำร้อง :  { overtimes.ot_member_id }</th>
+                                <td>ผู้จัดการฝ่าย : { overtimes.department_name }</td>
+                                <td>หน่วยงาน :  { overtimes.department }</td>
+                                <td>เลขคำร้อง :  { overtimes.ot_member_id }</td>
                               </tr>
                               <tr>
-                                <th>ผู้ควบคุมงาน : { overtimes.create_name }</th>
-                                <th>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</th>
-                                <th>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</th>
+                                <td>ผู้ควบคุมงาน : { overtimes.create_name }</td>
+                                <td>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
+                                <td>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
                               </tr>
                             </thead>
                           </table>
@@ -81,7 +73,7 @@ const view = () => {
                         <div className="col-md-12">
                           <table className="table table-bordered">
                             <thead>
-                              <tr>
+                              <tr align={'center'}>
                                 <th>ลำดับ</th>
                                 <th>ชื่อพนักงาน</th>
                                 <th>ประเภทค่าแรง</th>
@@ -93,8 +85,8 @@ const view = () => {
                             <tbody>
                                 {members.map((member, index)=>{
                                   return(
-                                    <tr>
-                                    <td>{member.id}</td>
+                                    <tr align='center'>
+                                    <td>{index}</td>
                                     <td>{member.emp_name}</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>

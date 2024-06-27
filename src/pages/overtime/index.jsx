@@ -64,7 +64,7 @@ const Overtime = () => {
         });
         axios
           .delete(
-            "http://localhost/laravel_auth_jwt_api/public/api/otrequest/delete/" +
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-delete/" +
               blogs.id
           )
           .then((res) => {
@@ -104,7 +104,7 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
-                          <buttno className="btn btn-secondary mb-3">
+                          <buttno onClick={() => alert('Export OT File')} className="btn btn-secondary mb-3">
                             <i className="fas fa-download"></i> EXPORT
                           </buttno>{' '}
                           <Link
@@ -124,8 +124,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>เลขที่ใบคำร้อง 1</option>
                                   <option>เลขที่ใบคำร้อง 2</option>
                                   <option>เลขที่ใบคำร้อง 3</option>
@@ -136,8 +136,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>ผู้ควบคุมงาน 1</option>
                                   <option>ผู้ควบคุมงาน 2</option>
                                   <option>ผู้ควบคุมงาน 3</option>
@@ -148,8 +148,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>สถานะการอนุมัติ 1</option>
                                   <option>สถานะการอนุมัติ 2</option>
                                   <option>สถานะการอนุมัติ 3</option>
@@ -160,8 +160,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>วันที่เริ่มต้น 1</option>
                                   <option>วันที่เริ่มต้น 2</option>
                                   <option>วันที่เริ่มต้น 3</option>
@@ -172,8 +172,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่สิ้นสุด</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>วันที่สิ้นสุด 1</option>
                                   <option>วันที่สิ้นสุด 2</option>
                                   <option>วันที่สิ้นสุด 3</option>
@@ -184,8 +184,8 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  <select class="form-control" id="sel1">
-                                  <option>Please Select</option>
+                                  <select className="form-control" id="sel1">
+                                  <option value="" disabled selected>Please Select</option>
                                   <option>วันที่จัดทำ 1</option>
                                   <option>วันที่จัดทำ 2</option>
                                   <option>วันที่จัดทำ 3</option>
@@ -209,7 +209,7 @@ const Overtime = () => {
                       paginationSize="md"
                       withColumnBorders
                       fetching={loading}
-                      idAccessor="_id"
+                      idAccessor="id"
                       columns={[
                         {
                           accessor: "index",
@@ -251,15 +251,15 @@ const Overtime = () => {
                           accessor: "start_date",
                           title: "วันที่เริ่มต้น",
                           textAlignment: "center",
-                          render: ({ created_at }) =>
-                            dayjs(created_at).format("DD-MMM-YYYY"),
+                          render: ({ start_date }) =>
+                            dayjs(start_date).format("DD-MMM-YYYY"),
                         },
                         {
                           accessor: "end_date",
                           title: "วันที่สิ้นสุด",
                           textAlignment: "center",
-                          render: ({ updated_at }) =>
-                            dayjs(updated_at).format("DD-MMM-YYYY"),
+                          render: ({ end_date }) =>
+                            dayjs(end_date).format("DD-MMM-YYYY"),
                         },
                         {
                           accessor: "actions",
@@ -272,7 +272,7 @@ const Overtime = () => {
                                 to={"/overtime/view/" + blogs.id}
                                 className="btn btn-info"
                               >
-                                View
+                                ดูข้อมูล
                               </Link>{" "}
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
@@ -286,6 +286,26 @@ const Overtime = () => {
                               >
                                 Delete
                               </button>
+                              {/* <button
+                                className="btn btn-primary"
+                                onClick={() => handlApproverShow(blogs)}
+                                disbled button then status = In progress
+                                disabled={
+                                  blogs.status === "In progress" ? false : true
+                                }
+                              >
+                                อนุมัติ
+                              </button>{' '} */}
+                              {/* <button
+                                className="btn btn-danger"
+                                onClick={() => handlApproverShow(blogs)}
+                                disbled button then status = In progress
+                                disabled={
+                                  blogs.status === "In progress" ? false : true
+                                }
+                              >
+                                ไม่อนุมัติ
+                              </button> */}
                             </>
                           ),
                         },
