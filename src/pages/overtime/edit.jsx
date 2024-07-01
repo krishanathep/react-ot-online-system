@@ -48,8 +48,8 @@ const create = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        //navigate("/overtime");
-        console.log(res.data);
+        navigate("/overtime");
+        //console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -302,15 +302,29 @@ const create = () => {
                                   <div className="col-md-4">
                                     <div className="form-group">
                                       <label htmlFor="">ประเภทค่าแรง :</label>
-                                      <input
-                                        type="text"
+                                      <select
                                         className="form-control"
+                                        id="sel1"
                                         control={control}
-                                        {...register(
-                                          `test.${index}.cost_type`,
-                                        )}
-                                        placeholder="Please Enter Cost Type"
-                                      />
+                                        {...register(`test.${index}.cost_type`, {
+                                        })}
+                                      >
+                                        <option value="">
+                                          Please Select
+                                        </option>
+                                        <option value={"ประเภทค่าแรง 1"}>
+                                          ประเภทค่าแรง 1
+                                        </option>
+                                        <option value={"ประเภทค่าแรง 2"}>
+                                          ประเภทค่าแรง 2
+                                        </option>
+                                        <option value={"ประเภทค่าแรง 3"}>
+                                          ประเภทค่าแรง 3
+                                        </option>
+                                        <option value={"ประเภทค่าแรง 4"}>
+                                          ประเภทค่าแรง 4
+                                        </option>
+                                      </select>
                                       {errors.cost_type && (
                                         <span className="text-danger">
                                           This field is required
@@ -321,14 +335,29 @@ const create = () => {
                                   <div className="col-md-4">
                                     <div className="form-group">
                                       <label htmlFor="">ประเภทงาน :</label>
-                                      <input
-                                        type="text"
+                                       <select
                                         className="form-control"
+                                        id="sel1"
                                         control={control}
                                         {...register(`test.${index}.job_type`, {
                                         })}
-                                        placeholder="Please Enter Job Type"
-                                      />
+                                      >
+                                        <option value="">
+                                          Please Select
+                                        </option>
+                                        <option value={"ประเภทงาน 1"}>
+                                          ประเภทงาน 1
+                                        </option>
+                                        <option value={"ประเภทงาน 2"}>
+                                          ประเภทงาน 2
+                                        </option>
+                                        <option value={"ประเภทงาน 3"}>
+                                          ประเภทงาน 3
+                                        </option>
+                                        <option value={"ประเภทงาน 4"}>
+                                          ประเภทงาน 4
+                                        </option>
+                                      </select>
                                       {errors.job_type && (
                                         <span className="text-danger">
                                           This field is required

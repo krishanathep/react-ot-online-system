@@ -75,6 +75,48 @@ const Overtime = () => {
     });
   };
 
+  const handleApproverSubmit = async (blogs,data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve/" +
+          blogs.id, data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been status update",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleRejectSubmit = async (blogs,data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-reject/" +
+          blogs.id, data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been status update",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <div className="content-wrapper">
@@ -274,7 +316,7 @@ const Overtime = () => {
                               >
                                 ดูข้อมูล
                               </Link>{" "}
-                              <Link
+                              {/* <Link
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
                               >
@@ -285,27 +327,27 @@ const Overtime = () => {
                                 onClick={() => hanldeDelete(blogs)}
                               >
                                 ลบ
-                              </button>
-                              {/* <button
+                              </button> */}
+                              <button
                                 className="btn btn-primary"
-                                onClick={() => handlApproverShow(blogs)}
-                                disbled button then status = In progress
+                                onClick={() => handleApproverSubmit(blogs)}
+                                // disbled button then status = In progress
                                 disabled={
                                   blogs.status === "In progress" ? false : true
                                 }
                               >
                                 อนุมัติ
-                              </button>{' '} */}
-                              {/* <button
+                              </button>{' '}
+                              <button
                                 className="btn btn-danger"
-                                onClick={() => handlApproverShow(blogs)}
-                                disbled button then status = In progress
+                                onClick={() => handleRejectSubmit(blogs)}
+                                // disbled button then status = In progress
                                 disabled={
                                   blogs.status === "In progress" ? false : true
                                 }
                               >
                                 ไม่อนุมัติ
-                              </button> */}
+                              </button>
                             </>
                           ),
                         },

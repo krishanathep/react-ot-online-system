@@ -285,16 +285,16 @@ const create = () => {
                                         <option value="">
                                           Please Select
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 1"}>
+                                        <option value={"ประเภทค่าแรง 1"}>
                                         ประเภทค่าแรง 1
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 2"}>
+                                        <option value={"ประเภทค่าแรง 2"}>
                                         ประเภทค่าแรง 2
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 3"}>
+                                        <option value={"ประเภทค่าแรง 3"}>
                                         ประเภทค่าแรง 3
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 4"}>
+                                        <option value={"ประเภทค่าแรง 4"}>
                                         ประเภทค่าแรง 4
                                         </option>
                                       </select>
@@ -319,16 +319,16 @@ const create = () => {
                                         <option value="">
                                           Please Select
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 1"}>
+                                        <option value={"ประเภทงาน 1"}>
                                         ประเภทงาน 1
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 2"}>
+                                        <option value={"ประเภทงาน 2"}>
                                         ประเภทงาน 2
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 3"}>
+                                        <option value={"ประเภทงาน 3"}>
                                         ประเภทงาน 3
                                         </option>
-                                        <option value={"ข้อมูลพนักงาน 4"}>
+                                        <option value={"ประเภทงาน 4"}>
                                         ประเภทงาน 4
                                         </option>
                                       </select>
