@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
@@ -13,15 +13,12 @@ const create = () => {
     control,
     handleSubmit,
     reset,
-    trigger,
-    setError,
     formState: { errors },
   } = useForm({
-    // defaultValues: {}; you can populate the fields by this attribute
     defaultValues: {
-      loadState: "unloaded",
       test: [
         {
+          id:"",
           emp_name: "",
           cost_type: "",
           job_type: "",
@@ -37,21 +34,22 @@ const create = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleCreateSubmit = async (data) => {
+  const handleUpdateSubmit = async (data) => {
     await axios
-      .post(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-update/" +
+          id,
         data
       )
       .then((res) => {
-        console.log(res.data);
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been created",
+          title: "Your OT request has been updated",
           showConfirmButton: false,
           timer: 2000,
         });
-        navigate('/overtime')
+        //navigate("/overtime");
+        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -60,10 +58,9 @@ const create = () => {
 
   const getData = async () => {
     await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest/"+id
-      )
+      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id)
       .then((res) => {
+        console.log(res.data.data.employees);
         reset({
           department_name: res.data.data.department_name,
           department: res.data.data.department,
@@ -71,26 +68,13 @@ const create = () => {
           create_name: res.data.data.create_name,
           start_date: res.data.data.start_date,
           end_date: res.data.data.end_date,
-          test:[
-            {
-              emp_name: 'ข้อมูลพนักงาน 1',
-              cost_type: 'ประเภทค่าแรง 1',
-              job_type:  'ประเภทงาน 2',
-            },
-            {
-              emp_name: 'ข้อมูลพนักงาน 2',
-              cost_type: 'ประเภทค่าแรง 2',
-              job_type: 'ประเภทงาน 2',
-            },
-            {
-              emp_name: 'ข้อมูลพนักงาน 3',
-              cost_type: 'ประเภทค่าแรง 3',
-              job_type: 'ประเภทงาน 3',
-            },
-          ]
+          test: res.data.data.employees.map(employee => ({
+            id: employee.id,
+            emp_name: employee.emp_name,
+            cost_type: employee.cost_type,
+            job_type: employee.job_type,
+          }))  
         });
-    
-        console.log(res.data.data.employees)
       });
   };
 
@@ -152,7 +136,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="" disabled selected>
+                                    <option value="">
                                       Please Select
                                     </option>
                                     <option value={"ผู้จัดการฝ่าย 1"}>
@@ -185,7 +169,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="" disabled selected>
+                                    <option value="">
                                       Please Select
                                     </option>
                                     <option value={"หน่วยงาน 1"}>
@@ -281,17 +265,17 @@ const create = () => {
                                 <div className="row">
                                   <div className="col-md-4">
                                     <div className="form-group">
-                                      <label htmlFor="">ข้อมูลพนักงาน :</label>
+                                      <label htmlFor="">
+                                        ข้อมูลพนักงาน {index + 1} :
+                                      </label>
                                       <select
                                         className="form-control"
                                         id="sel1"
                                         control={control}
-                                        {...register(
-                                          `test.${index}.emp_name`,
-                                          { required: true }
-                                        )}
+                                        {...register(`test.${index}.emp_name`, {
+                                        })}
                                       >
-                                        <option value="" disabled selected>
+                                        <option value="">
                                           Please Select
                                         </option>
                                         <option value={"ข้อมูลพนักงาน 1"}>
@@ -307,6 +291,7 @@ const create = () => {
                                           ข้อมูลพนักงาน 4
                                         </option>
                                       </select>
+                                      <input type="text" value={item.id} hidden />
                                       {errors.emp_name && (
                                         <span className="text-danger">
                                           This field is required
@@ -323,7 +308,6 @@ const create = () => {
                                         control={control}
                                         {...register(
                                           `test.${index}.cost_type`,
-                                          { required: true }
                                         )}
                                         placeholder="Please Enter Cost Type"
                                       />
@@ -341,10 +325,8 @@ const create = () => {
                                         type="text"
                                         className="form-control"
                                         control={control}
-                                        {...register(
-                                          `test.${index}.job_type`,
-                                          { required: true }
-                                        )}
+                                        {...register(`test.${index}.job_type`, {
+                                        })}
                                         placeholder="Please Enter Job Type"
                                       />
                                       {errors.job_type && (
@@ -385,7 +367,7 @@ const create = () => {
                           <div className="col-md-12">
                             <div className="float-right">
                               <button
-                                onClick={handleSubmit(handleCreateSubmit)}
+                                onClick={handleSubmit(handleUpdateSubmit)}
                                 className="btn btn-primary"
                               >
                                 ยืนยัน

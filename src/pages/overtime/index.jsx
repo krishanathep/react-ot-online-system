@@ -104,9 +104,9 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
-                          <buttno onClick={() => alert('Export OT File')} className="btn btn-secondary mb-3">
+                          <button onClick={() => alert('Export OT File')} className="btn btn-secondary mb-3">
                             <i className="fas fa-download"></i> EXPORT
-                          </buttno>{' '}
+                          </button>{' '}
                           <Link
                             to={"/overtime/create"}
                             className="btn btn-success mb-3"
@@ -125,11 +125,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>เลขที่ใบคำร้อง 1</option>
-                                  <option>เลขที่ใบคำร้อง 2</option>
-                                  <option>เลขที่ใบคำร้อง 3</option>
-                                  <option>เลขที่ใบคำร้อง 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="เลขที่ใบคำร้อง 1">เลขที่ใบคำร้อง 1</option>
+                                  <option value="เลขที่ใบคำร้อง 2">เลขที่ใบคำร้อง 2</option>
+                                  <option value="เลขที่ใบคำร้อง 3">เลขที่ใบคำร้อง 3</option>
+                                  <option value="เลขที่ใบคำร้อง 4">เลขที่ใบคำร้อง 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -137,11 +137,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>ผู้ควบคุมงาน 1</option>
-                                  <option>ผู้ควบคุมงาน 2</option>
-                                  <option>ผู้ควบคุมงาน 3</option>
-                                  <option>ผู้ควบคุมงาน 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="ผู้ควบคุมงาน 1">ผู้ควบคุมงาน 1</option>
+                                  <option value="ผู้ควบคุมงาน 2">ผู้ควบคุมงาน 2</option>
+                                  <option value="ผู้ควบคุมงาน 3">ผู้ควบคุมงาน 3</option>
+                                  <option value="ผู้ควบคุมงาน 4">ผู้ควบคุมงาน 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -149,11 +149,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>สถานะการอนุมัติ 1</option>
-                                  <option>สถานะการอนุมัติ 2</option>
-                                  <option>สถานะการอนุมัติ 3</option>
-                                  <option>สถานะการอนุมัติ 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="สถานะการอนุมัติ 1">สถานะการอนุมัติ 1</option>
+                                  <option value="สถานะการอนุมัติ 2">สถานะการอนุมัติ 2</option>
+                                  <option value="สถานะการอนุมัติ 3">สถานะการอนุมัติ 3</option>
+                                  <option value="สถานะการอนุมัติ 4">สถานะการอนุมัติ 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -161,11 +161,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>วันที่เริ่มต้น 1</option>
-                                  <option>วันที่เริ่มต้น 2</option>
-                                  <option>วันที่เริ่มต้น 3</option>
-                                  <option>วันที่เริ่มต้น 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="วันที่เริ่มต้น 1">วันที่เริ่มต้น 1</option>
+                                  <option value="วันที่เริ่มต้น 2">วันที่เริ่มต้น 2</option>
+                                  <option value="วันที่เริ่มต้น 3">วันที่เริ่มต้น 3</option>
+                                  <option value="วันที่เริ่มต้น 4">วันที่เริ่มต้น 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -173,11 +173,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่สิ้นสุด</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>วันที่สิ้นสุด 1</option>
-                                  <option>วันที่สิ้นสุด 2</option>
-                                  <option>วันที่สิ้นสุด 3</option>
-                                  <option>วันที่สิ้นสุด 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="วันที่สิ้นสุด 1">วันที่สิ้นสุด 1</option>
+                                  <option value="วันที่สิ้นสุด 2">วันที่สิ้นสุด 2</option>
+                                  <option value="วันที่สิ้นสุด 3">วันที่สิ้นสุด 3</option>
+                                  <option value="วันที่สิ้นสุด 4">วันที่สิ้นสุด 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -185,11 +185,11 @@ const Overtime = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   <select className="form-control" id="sel1">
-                                  <option value="" disabled selected>Please Select</option>
-                                  <option>วันที่จัดทำ 1</option>
-                                  <option>วันที่จัดทำ 2</option>
-                                  <option>วันที่จัดทำ 3</option>
-                                  <option>วันที่จัดทำ 4</option>
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="วันที่จัดทำ 1">วันที่จัดทำ 1</option>
+                                  <option value="วันที่จัดทำ 2">วันที่จัดทำ 2</option>
+                                  <option value="วันที่จัดทำ 3">วันที่จัดทำ 3</option>
+                                  <option value="วันที่จัดทำ 4">วันที่จัดทำ 4</option>
                                 </select>
                                 </div>
                               </div>
@@ -278,13 +278,13 @@ const Overtime = () => {
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                                Edit
+                                แก้ไข
                               </Link>{" "}
                               <button
                                 className="btn btn-danger"
                                 onClick={() => hanldeDelete(blogs)}
                               >
-                                Delete
+                                ลบ
                               </button>
                               {/* <button
                                 className="btn btn-primary"

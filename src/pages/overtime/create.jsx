@@ -13,17 +13,14 @@ const create = () => {
     register,
     control,
     handleSubmit,
-    reset,
-    trigger,
-    setError,
     formState: { errors },
   } = useForm({
-    // defaultValues: {}; you can populate the fields by this attribute
     defaultValues: {
       test: [
         {
-          firstName: "",
-          lastName: "",
+          emp_name: "",
+          cost_type: "",
+          job_type: "",
         },
       ],
     },
@@ -112,7 +109,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="" disabled selected>
+                                    <option value="">
                                       Please Select
                                     </option>
                                     <option value={"ผู้จัดการฝ่าย 1"}>
@@ -145,7 +142,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="" disabled selected>
+                                    <option value="">
                                       Please Select
                                     </option>
                                     <option value={"หน่วยงาน 1"}>
@@ -232,30 +229,26 @@ const create = () => {
                             </div>
                           </div>
                         </div>
-                        <form
-                        // onSubmit={handleSubmit((data) =>
-                        //   alert(JSON.stringify(data))
-                        // )}
-                        >
                           {fields.map((item, index) => (
                             <div
                               className="card shadow-none border"
-                              key={item.index}
+                              key={item.id}
                             >
                               <div className="card-body">
                                 <div className="row">
+
                                   <div className="col-md-4">
                                     <div className="form-group">
-                                      <label htmlFor="">ข้อมูลพนักงาน :</label>
+                                      <label htmlFor="">ข้อมูลพนักงาน {index +1} :</label>
                                       <select
                                         className="form-control"
                                         id="sel1"
                                         {...register(
-                                          `employee.${index}.emp_name`,
+                                          `test.${index}.emp_name`,
                                           { required: true }
                                         )}
                                       >
-                                        <option value="" disabled selected>
+                                        <option value="">
                                           Please Select
                                         </option>
                                         <option value={"ข้อมูลพนักงาน 1"}>
@@ -281,15 +274,30 @@ const create = () => {
                                   <div className="col-md-4">
                                     <div className="form-group">
                                       <label htmlFor="">ประเภทค่าแรง :</label>
-                                      <input
-                                        type="text"
+                                      <select
                                         className="form-control"
+                                        id="sel1"
                                         {...register(
-                                          `employee.${index}.cost_type`,
+                                          `test.${index}.cost_type`,
                                           { required: true }
                                         )}
-                                        placeholder="Please Enter Cost Type"
-                                      />
+                                      >
+                                        <option value="">
+                                          Please Select
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 1"}>
+                                        ประเภทค่าแรง 1
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 2"}>
+                                        ประเภทค่าแรง 2
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 3"}>
+                                        ประเภทค่าแรง 3
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 4"}>
+                                        ประเภทค่าแรง 4
+                                        </option>
+                                      </select>
                                       {errors.cost_type && (
                                         <span className="text-danger">
                                           This field is required
@@ -300,15 +308,30 @@ const create = () => {
                                   <div className="col-md-4">
                                     <div className="form-group">
                                       <label htmlFor="">ประเภทงาน :</label>
-                                      <input
-                                        type="text"
+                                        <select
                                         className="form-control"
+                                        id="sel1"
                                         {...register(
-                                          `employee.${index}.job_type`,
+                                          `test.${index}.job_type`,
                                           { required: true }
                                         )}
-                                        placeholder="Please Enter Job Type"
-                                      />
+                                      >
+                                        <option value="">
+                                          Please Select
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 1"}>
+                                        ประเภทงาน 1
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 2"}>
+                                        ประเภทงาน 2
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 3"}>
+                                        ประเภทงาน 3
+                                        </option>
+                                        <option value={"ข้อมูลพนักงาน 4"}>
+                                        ประเภทงาน 4
+                                        </option>
+                                      </select>
                                       {errors.job_type && (
                                         <span className="text-danger">
                                           This field is required
@@ -357,7 +380,6 @@ const create = () => {
                               </Link>
                             </div>
                           </div>
-                        </form>
                       </div>
                     </div>
                   </div>

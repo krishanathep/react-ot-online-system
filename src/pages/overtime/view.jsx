@@ -74,7 +74,7 @@ const view = () => {
                           <table className="table table-bordered">
                             <thead>
                               <tr align={'center'}>
-                                <th>ลำดับ</th>
+                                <th>#</th>
                                 <th>ชื่อพนักงาน</th>
                                 <th>ประเภทค่าแรง</th>
                                 <th>ชนิดของงาน</th>
@@ -85,8 +85,8 @@ const view = () => {
                             <tbody>
                                 {members.map((member, index)=>{
                                   return(
-                                    <tr align='center'>
-                                    <td>{index}</td>
+                                    <tr align='center' key={member.id}>
+                                    <td>{index +1}</td>
                                     <td>{member.emp_name}</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
