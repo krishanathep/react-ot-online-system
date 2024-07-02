@@ -332,9 +332,9 @@ const Overtime = () => {
                                 className="btn btn-primary"
                                 onClick={() => handleApproverSubmit(blogs)}
                                 // disbled button then status = In progress
-                                disabled={
-                                  blogs.status === "In progress" ? false : true
-                                }
+                                // disabled={
+                                //   blogs.status === "In progress" ? false : true
+                                // }
                               >
                                 อนุมัติ
                               </button>{' '}

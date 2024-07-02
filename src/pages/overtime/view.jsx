@@ -61,11 +61,13 @@ const view = () => {
                                 <td>ผู้จัดการฝ่าย : { overtimes.department_name }</td>
                                 <td>หน่วยงาน :  { overtimes.department }</td>
                                 <td>เลขคำร้อง :  { overtimes.ot_member_id }</td>
+                                <td>ผู้ควบคุมงาน : { overtimes.create_name }</td>
                               </tr>
                               <tr>
-                                <td>ผู้ควบคุมงาน : { overtimes.create_name }</td>
                                 <td>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
                                 <td>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
+                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("HH:MM") }</td>
+                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("HH:MM") }</td>
                               </tr>
                             </thead>
                           </table>
@@ -98,6 +100,24 @@ const view = () => {
                             </tbody>
                           </table>
                         </div>
+                        <div className="col-md-12">
+                            <table className="table table-bordered">
+                                <thead>
+                                  <tr align="center">
+                                    <td>หัวหน้าหน่วย : { overtimes.review1_email }</td>
+                                    <td>หัวหน้าส่วน : { overtimes.create_name }</td>
+                                    <td>ผู้จัดการฝ่าย : { overtimes.create_name }</td>
+                                    <td>ผู้จัดการอาวุโส : { overtimes.create_name }</td>
+                                  </tr>
+                                  <tr align="center">
+                                    <td>ผู้จัดทำเอกสาร</td>
+                                    <td>ผู้ตรวจสอบ</td>
+                                    <td>ผู้อนุมัติคนที่ 1</td>
+                                    <td>ผู้อนุมัติคนที่ 2</td>
+                                  </tr>
+                                </thead>
+                            </table>
+                          </div>
                           <div className="col-md-12">
                             <div className="float-right">
                               <Link
