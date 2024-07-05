@@ -196,10 +196,13 @@ const create = () => {
                                         placeholderText="Select start date"
                                         onChange={(date) =>
                                           field.onChange(
-                                            dayjs(date).format("YYYY/MM/DD")
+                                            dayjs(date).format("YYYY-MM-DD hh:mm")
                                           )
                                         }
+                                        dateFormat="dd-MMMM-yyyy hh:mm"
                                         selected={field.value}
+                                        timeInputLabel="Time:"
+                                        showTimeInput
                                       />
                                     )}
                                   />
@@ -217,10 +220,13 @@ const create = () => {
                                         placeholderText="Select end date"
                                         onChange={(date) =>
                                           field.onChange(
-                                            dayjs(date).format("YYYY/MM/DD")
+                                            dayjs(date).format("YYYY-MM-DD hh:mm")
                                           )
                                         }
+                                        dateFormat="dd-MMMM-yyyy hh:mm"
                                         selected={field.value}
+                                        timeInputLabel="Time:"
+                                        showTimeInput
                                       />
                                     )}
                                   />

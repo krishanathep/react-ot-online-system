@@ -66,8 +66,8 @@ const view = () => {
                               <tr>
                                 <td>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
                                 <td>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
-                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("HH:MM") }</td>
-                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("HH:MM") }</td>
+                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("hh:mm") }</td>
+                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("hh:mm") }</td>
                               </tr>
                             </thead>
                           </table>
@@ -104,16 +104,16 @@ const view = () => {
                             <table className="table table-bordered">
                                 <thead>
                                   <tr align="center">
-                                    <td>หัวหน้าหน่วย : { overtimes.review1_email }</td>
-                                    <td>หัวหน้าส่วน : { overtimes.create_name }</td>
-                                    <td>ผู้จัดการฝ่าย : { overtimes.create_name }</td>
-                                    <td>ผู้จัดการอาวุโส : { overtimes.create_name }</td>
+                                    <td>{ overtimes.review1_email }</td>
+                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.create_name }</td>
                                   </tr>
                                   <tr align="center">
-                                    <td>ผู้จัดทำเอกสาร</td>
-                                    <td>ผู้ตรวจสอบ</td>
-                                    <td>ผู้อนุมัติคนที่ 1</td>
-                                    <td>ผู้อนุมัติคนที่ 2</td>
+                                    <td>หัวหน้าหน่วย</td>
+                                    <td>หัวหน้าส่วน</td>
+                                    <td>ผู้จัดการฝ่าย</td>
+                                    <td>ผู้จัดการอาวุโส</td>
                                   </tr>
                                 </thead>
                             </table>
