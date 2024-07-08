@@ -9,7 +9,24 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
 
+const generateCode = (prefix = 'CODE') => {
+  const now = new Date();
+  const year = now.getFullYear().toString().slice(-2);
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  
+  return `${prefix}${year}${month}${day}${random}`;
+};
+
 const create = () => {
+
+  const [code, setCode] = useState('');
+
+  const handleRegenerate = () => {
+    setCode(generateCode('OT'));
+  };
+
   const {
     register,
     control,
@@ -82,6 +99,7 @@ const create = () => {
       });
   };
 
+  
   useEffect(()=>{
     getEmployees()
   },[])
@@ -124,7 +142,7 @@ const create = () => {
                                     readOnly
                                     type="text"
                                     className="form-control"
-                                    value={"OT012324QC"}
+                                    value={code}
                                     {...register("ot_member_id", {
                                       required: true,
                                     })}
@@ -391,6 +409,10 @@ const create = () => {
                         ))}
                         <div className="col-md-12">
                           <div className="float-right">
+                            <button 
+                             onClick={handleRegenerate}
+                             className="btn btn-secondary"
+                            >สร้างรหัส</button>{' '}
                             <button
                               onClick={handleSubmit(handleCreateSubmit)}
                               className="btn btn-primary"

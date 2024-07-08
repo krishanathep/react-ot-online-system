@@ -203,23 +203,7 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
-                                  <select className="form-control" id="sel1">
-                                    <option defaultValue="">
-                                      Please Select
-                                    </option>
-                                    <option value="เลขที่ใบคำร้อง 1">
-                                      เลขที่ใบคำร้อง 1
-                                    </option>
-                                    <option value="เลขที่ใบคำร้อง 2">
-                                      เลขที่ใบคำร้อง 2
-                                    </option>
-                                    <option value="เลขที่ใบคำร้อง 3">
-                                      เลขที่ใบคำร้อง 3
-                                    </option>
-                                    <option value="เลขที่ใบคำร้อง 4">
-                                      เลขที่ใบคำร้อง 4
-                                    </option>
-                                  </select>
+                                  <input type="text" className="form-control" placeholder="Please Enter" />
                                 </div>
                               </div>
                               <div className="col-md-2">
