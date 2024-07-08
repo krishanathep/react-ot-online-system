@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -18,7 +19,7 @@ const create = () => {
     defaultValues: {
       test: [
         {
-          id:"",
+          id: "",
           emp_name: "",
           cost_type: "",
           job_type: "",
@@ -26,7 +27,8 @@ const create = () => {
       ],
     },
   });
-  const { fields, append, remove } = useFieldArray({
+
+  const { fields } = useFieldArray({
     control,
     name: "test",
   });
@@ -34,12 +36,44 @@ const create = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [employees, setEmployees] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const getEmployees = async () => {
+    try {
+      setLoading(true);
+      await axios
+        .get("http://localhost/laravel_auth_jwt_api/public/api/employees")
+        .then((res) => {
+          setEmployees(
+            res.data.employees.map((employee) => ({
+              value: employee.full_name,
+              label: employee.full_name,
+            }))
+          );
+          console.log(employees)
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleUpdateSubmit = async (data) => {
+
+    const newData = JSON.parse(JSON.stringify(data)); // Create a deep copy
+
+    newData.test = newData.test.map(item => ({
+      ...item,
+      emp_name: item.emp_name.value
+    }));
+
     await axios
       .put(
         "http://localhost/laravel_auth_jwt_api/public/api/otrequest-update/" +
           id,
-        data
+        newData
       )
       .then((res) => {
         Swal.fire({
@@ -68,18 +102,19 @@ const create = () => {
           create_name: res.data.data.create_name,
           start_date: res.data.data.start_date,
           end_date: res.data.data.end_date,
-          test: res.data.data.employees.map(employee => ({
+          test: res.data.data.employees.map((employee) => ({
             id: employee.id,
             emp_name: employee.emp_name,
             cost_type: employee.cost_type,
             job_type: employee.job_type,
-          }))  
+          })),
         });
       });
   };
 
   useEffect(() => {
     getData();
+    getEmployees();
   }, [reset]);
 
   return (
@@ -136,9 +171,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">
-                                      Please Select
-                                    </option>
+                                    <option value="">Please Select</option>
                                     <option value={"ผู้จัดการฝ่าย 1"}>
                                       ผู้จัดการฝ่าย 1
                                     </option>
@@ -169,9 +202,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">
-                                      Please Select
-                                    </option>
+                                    <option value="">Please Select</option>
                                     <option value={"หน่วยงาน 1"}>
                                       หน่วยงาน 1
                                     </option>
@@ -268,30 +299,26 @@ const create = () => {
                                       <label htmlFor="">
                                         ข้อมูลพนักงาน {index + 1} :
                                       </label>
-                                      <select
-                                        className="form-control"
-                                        id="sel1"
-                                        control={control}
-                                        {...register(`test.${index}.emp_name`, {
-                                        })}
-                                      >
-                                        <option value="">
-                                          Please Select
-                                        </option>
-                                        <option value={"ข้อมูลพนักงาน 1"}>
-                                          ข้อมูลพนักงาน 1
-                                        </option>
-                                        <option value={"ข้อมูลพนักงาน 2"}>
-                                          ข้อมูลพนักงาน 2
-                                        </option>
-                                        <option value={"ข้อมูลพนักงาน 3"}>
-                                          ข้อมูลพนักงาน 3
-                                        </option>
-                                        <option value={"ข้อมูลพนักงาน 4"}>
-                                          ข้อมูลพนักงาน 4
-                                        </option>
-                                      </select>
-                                      <input type="text" value={item.id} hidden />
+                                      
+                                      //ยังดึงข้อมูลที่ต้องการแก้ไขไม่ได้ 08/07/24
+                                      <Controller
+                                      control={control}
+                                      name={`test.${index}.emp_name`}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={employees}
+                                          isClearable={true}
+                                          isLoading={isLoading}
+                                          placeholder="Please Select "
+                                        />
+                                      )}
+                                    />
+                                      <input
+                                        type="text"
+                                        value={item.id}
+                                        hidden
+                                      />
                                       {errors.emp_name && (
                                         <span className="text-danger">
                                           This field is required
@@ -306,12 +333,12 @@ const create = () => {
                                         className="form-control"
                                         id="sel1"
                                         control={control}
-                                        {...register(`test.${index}.cost_type`, {
-                                        })}
+                                        {...register(
+                                          `test.${index}.cost_type`,
+                                          {}
+                                        )}
                                       >
-                                        <option value="">
-                                          Please Select
-                                        </option>
+                                        <option value="">Please Select</option>
                                         <option value={"ประเภทค่าแรง 1"}>
                                           ประเภทค่าแรง 1
                                         </option>
@@ -335,16 +362,16 @@ const create = () => {
                                   <div className="col-md-4">
                                     <div className="form-group">
                                       <label htmlFor="">ประเภทงาน :</label>
-                                       <select
+                                      <select
                                         className="form-control"
                                         id="sel1"
                                         control={control}
-                                        {...register(`test.${index}.job_type`, {
-                                        })}
+                                        {...register(
+                                          `test.${index}.job_type`,
+                                          {}
+                                        )}
                                       >
-                                        <option value="">
-                                          Please Select
-                                        </option>
+                                        <option value="">Please Select</option>
                                         <option value={"ประเภทงาน 1"}>
                                           ประเภทงาน 1
                                         </option>

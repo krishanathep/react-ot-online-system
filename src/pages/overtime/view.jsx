@@ -104,7 +104,7 @@ const view = () => {
                             <table className="table table-bordered">
                                 <thead>
                                   <tr align="center">
-                                    <td>{ overtimes.review1_email }</td>
+                                    <td>{ overtimes.create_name }</td>
                                     <td>{ overtimes.create_name }</td>
                                     <td>{ overtimes.create_name }</td>
                                     <td>{ overtimes.create_name }</td>
