@@ -43,6 +43,66 @@ const Overtime = () => {
       });
   };
 
+  //filter function by ot code
+  const codeFilter = async (key) => {
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-code?data='+key)
+    .then((res)=>{
+      setOvertimes(res.data.otrequest);
+      console.log(overtimes)
+      setRecords(res.data.otrequest.slice(from, to));
+      setLoading(false);
+    })
+  }
+
+  //filter function by department name
+  const nameFilter = async (key) => {
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-name?data='+key)
+    .then((res)=>{
+      setOvertimes(res.data.otrequest);
+      console.log(overtimes)
+      setRecords(res.data.otrequest.slice(from, to));
+      setLoading(false);
+    })
+  }
+  
+  //filter function by department
+  const departmentFilter = async (key) => {
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-department?data='+key)
+    .then((res)=>{
+      setOvertimes(res.data.otrequest);
+      console.log(overtimes)
+      setRecords(res.data.otrequest.slice(from, to));
+      setLoading(false);
+    })
+  }
+
+  //filter function by status
+  const statusFilter = async (key) => {
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?data='+key)
+    .then((res)=>{
+      setOvertimes(res.data.otrequest);
+      console.log(overtimes)
+      setRecords(res.data.otrequest.slice(from, to));
+      setLoading(false);
+    })
+  }
+
   useEffect(() => {
     getData();
     getApprover();
@@ -214,23 +274,28 @@ const Overtime = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
                                   <input
                                     type="text"
                                     className="form-control"
                                     placeholder="Please Enter"
+                                    onChange={(event) =>
+                                      codeFilter(event.target.value)
+                                    }
                                   />
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้จัดการฝ่าย</label>
                                   <select 
                                   className="form-control" 
                                   id="sel1"
-                         
+                                  onChange={(event) =>
+                                    nameFilter(event.target.value)
+                                  } 
                                   >
                                     <option value="">Please Select</option>
                                     {approver.map((item) => (
@@ -244,10 +309,14 @@ const Overtime = () => {
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              {/* <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select className="form-control" id="sel1">
+                                  <select className="form-control" id="sel1"
+                                  onChange={(event) =>
+                                    createFilter(event.target.value)
+                                  } 
+                                  >
                                   <option value="">Please Select</option>
                                     {approver.map((item) => (
                                       <option
@@ -259,11 +328,15 @@ const Overtime = () => {
                                     ))}
                                   </select>
                                 </div>
-                              </div>
-                              <div className="col-md-2">
+                              </div> */}
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">หน่วยงาน</label>
-                                  <select className="form-control" id="sel1">
+                                  <select className="form-control" id="sel1"
+                                   onChange={(event) =>
+                                    departmentFilter(event.target.value)
+                                  } 
+                                  >
                                   <option value="">Please Select</option>
                                     {approver.map((item) => (
                                       <option
@@ -276,10 +349,14 @@ const Overtime = () => {
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
-                                  <select className="form-control" id="sel1">
+                                  <select className="form-control" id="sel1"
+                                  onChange={(event) =>
+                                    statusFilter(event.target.value)
+                                  } 
+                                  >
                                     <option defaultValue="">
                                       Please Select
                                     </option>
@@ -291,7 +368,7 @@ const Overtime = () => {
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              {/* <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label> 
                                   <input
@@ -299,7 +376,7 @@ const Overtime = () => {
                                     className="form-control"
                                     />
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
