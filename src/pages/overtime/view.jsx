@@ -58,16 +58,16 @@ const view = () => {
                           <table className="table table-bordered">
                             <thead>
                               <tr>
-                                <td>ผู้จัดการฝ่าย : { overtimes.department_name }</td>
-                                <td>หน่วยงาน :  { overtimes.department }</td>
                                 <td>เลขคำร้อง :  { overtimes.ot_member_id }</td>
+                                <td>ผู้จัดการฝ่าย : { overtimes.department_name }</td>
                                 <td>ผู้ควบคุมงาน : { overtimes.create_name }</td>
+                                <td>หน่วยงาน :  { overtimes.department }</td>
                               </tr>
                               <tr>
                                 <td>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
                                 <td>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
-                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("hh:mm") }</td>
-                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("hh:mm") }</td>
+                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("hh:mm:ss") }</td>
+                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("hh:mm:ss") }</td>
                               </tr>
                             </thead>
                           </table>

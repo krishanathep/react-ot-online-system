@@ -4,6 +4,9 @@ import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -16,6 +19,7 @@ const Overtime = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
+  const [approver, setApprover] = useState([]);
 
   useEffect(() => {
     setPage(1);
@@ -41,6 +45,7 @@ const Overtime = () => {
 
   useEffect(() => {
     getData();
+    getApprover();
   }, [page, pageSize]);
 
   const hanldeDelete = (blogs) => {
@@ -118,9 +123,9 @@ const Overtime = () => {
   };
 
   const today = new Date();
-  const month = today.getMonth()+1;
+  const month = today.getMonth() + 1;
   const year = today.getFullYear();
-  const date = today. getDate();
+  const date = today.getDate();
   const currentDate = "_" + month + "_" + date + "_" + year;
 
   const textExport = async () => {
@@ -131,24 +136,33 @@ const Overtime = () => {
       );
       // Create a blob from the response data
       const blob = new Blob([response.data], { type: "text/plain" });
-  
+
       // Create a temporary URL for the blob
       const url = window.URL.createObjectURL(blob);
-  
+
       // Create a link element and trigger the download
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", 'ot_request_export'+currentDate+'.txt');
+      link.setAttribute("download", "ot_request_export" + currentDate + ".txt");
       document.body.appendChild(link);
       link.click();
-  
+
       // Clean up
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Export failed:', error);
+      console.error("Export failed:", error);
       //alert('Failed to export data. Please try again.');
     }
+  };
+
+  const getApprover = async () => {
+    await axios
+      .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
+      .then((res) => {
+        console.log(res.data.approver);
+        setApprover(res.data.approver);
+      });
   };
 
   return (
@@ -203,28 +217,62 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
-                                  <input type="text" className="form-control" placeholder="Please Enter" />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Please Enter"
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">ผู้จัดการฝ่าย</label>
+                                  <select 
+                                  className="form-control" 
+                                  id="sel1"
+                         
+                                  >
+                                    <option value="">Please Select</option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.name_approve_2}
+                                      >
+                                        {item.name_approve_2}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <select className="form-control" id="sel1">
-                                    <option defaultValue="">
-                                      Please Select
-                                    </option>
-                                    <option value="ผู้ควบคุมงาน 1">
-                                      ผู้ควบคุมงาน 1
-                                    </option>
-                                    <option value="ผู้ควบคุมงาน 2">
-                                      ผู้ควบคุมงาน 2
-                                    </option>
-                                    <option value="ผู้ควบคุมงาน 3">
-                                      ผู้ควบคุมงาน 3
-                                    </option>
-                                    <option value="ผู้ควบคุมงาน 4">
-                                      ผู้ควบคุมงาน 4
-                                    </option>
+                                  <option value="">Please Select</option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.name_approve_1}
+                                      >
+                                        {item.name_approve_1}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">หน่วยงาน</label>
+                                  <select className="form-control" id="sel1">
+                                  <option value="">Please Select</option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.division}
+                                      >
+                                        {item.division}
+                                      </option>
+                                    ))}
                                   </select>
                                 </div>
                               </div>
@@ -235,85 +283,21 @@ const Overtime = () => {
                                     <option defaultValue="">
                                       Please Select
                                     </option>
-                                    <option value="สถานะการอนุมัติ 1">
-                                      สถานะการอนุมัติ 1
+                                    <option value="In progress">
+                                      In progress
                                     </option>
-                                    <option value="สถานะการอนุมัติ 2">
-                                      สถานะการอนุมัติ 2
-                                    </option>
-                                    <option value="สถานะการอนุมัติ 3">
-                                      สถานะการอนุมัติ 3
-                                    </option>
-                                    <option value="สถานะการอนุมัติ 4">
-                                      สถานะการอนุมัติ 4
-                                    </option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
                                   </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <select className="form-control" id="sel1">
-                                    <option defaultValue="">
-                                      Please Select
-                                    </option>
-                                    <option value="วันที่เริ่มต้น 1">
-                                      วันที่เริ่มต้น 1
-                                    </option>
-                                    <option value="วันที่เริ่มต้น 2">
-                                      วันที่เริ่มต้น 2
-                                    </option>
-                                    <option value="วันที่เริ่มต้น 3">
-                                      วันที่เริ่มต้น 3
-                                    </option>
-                                    <option value="วันที่เริ่มต้น 4">
-                                      วันที่เริ่มต้น 4
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">วันที่สิ้นสุด</label>
-                                  <select className="form-control" id="sel1">
-                                    <option defaultValue="">
-                                      Please Select
-                                    </option>
-                                    <option value="วันที่สิ้นสุด 1">
-                                      วันที่สิ้นสุด 1
-                                    </option>
-                                    <option value="วันที่สิ้นสุด 2">
-                                      วันที่สิ้นสุด 2
-                                    </option>
-                                    <option value="วันที่สิ้นสุด 3">
-                                      วันที่สิ้นสุด 3
-                                    </option>
-                                    <option value="วันที่สิ้นสุด 4">
-                                      วันที่สิ้นสุด 4
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label>
-                                  <select className="form-control" id="sel1">
-                                    <option defaultValue="">
-                                      Please Select
-                                    </option>
-                                    <option value="วันที่จัดทำ 1">
-                                      วันที่จัดทำ 1
-                                    </option>
-                                    <option value="วันที่จัดทำ 2">
-                                      วันที่จัดทำ 2
-                                    </option>
-                                    <option value="วันที่จัดทำ 3">
-                                      วันที่จัดทำ 3
-                                    </option>
-                                    <option value="วันที่จัดทำ 4">
-                                      วันที่จัดทำ 4
-                                    </option>
-                                  </select>
+                                  <label htmlFor="">วันที่จัดทำ</label> 
+                                  <input
+                                    type="date" 
+                                    className="form-control"
+                                    />
                                 </div>
                               </div>
                             </div>
@@ -345,7 +329,7 @@ const Overtime = () => {
                           accessor: "ot_member_id",
                           title: "เลขที่ใบคำร้อง",
                         },
-                        { accessor: "department_name", title: "ผู้ควบคุมงาน" },
+                        { accessor: "department_name", title: "ผู้จัดการฝ่าย" },
                         {
                           accessor: "department",
                           title: "หน่วยงาน",

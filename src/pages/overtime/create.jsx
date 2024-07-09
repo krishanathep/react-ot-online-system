@@ -9,24 +9,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
 
-const generateCode = (prefix = 'CODE') => {
-  const now = new Date();
-  const year = now.getFullYear().toString().slice(-2);
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  
-  return `${prefix}${year}${month}${day}${random}`;
-};
-
 const create = () => {
-
-  const [code, setCode] = useState('');
-
-  const handleRegenerate = () => {
-    setCode(generateCode('OT'));
-  };
-
   const {
     register,
     control,
@@ -39,6 +22,7 @@ const create = () => {
           emp_name: "",
           cost_type: "",
           job_type: "",
+          bus_stations: "",
         },
       ],
     },
@@ -48,61 +32,75 @@ const create = () => {
     name: "test",
   });
 
+  const [approver, setApprover] = useState([]);
   const userDatail = useAuthUser();
   const navigate = useNavigate();
 
-  const [employees, setEmployees]=useState([]);
-  const [isLoading, setLoading]=useState(false)
+  const [employees, setEmployees] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   const getEmployees = async () => {
-   try {
-    setLoading(true)
-    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/employees')
-    .then((res)=>{
-      setEmployees(res.data.employees.map(employee=>({
-        value: employee.full_name, label: employee.full_name,
-      })))
-    })
-   } catch (error) {
-      console.log(error)
-   } finally {
-    setLoading(false)
-   }
-  }
+    try {
+      setLoading(true);
+      await axios
+        .get("http://localhost/laravel_auth_jwt_api/public/api/employees")
+        .then((res) => {
+          setEmployees(
+            res.data.employees.map((employee) => ({
+              value: employee.full_name,
+              label: employee.full_name,
+            }))
+          );
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Bug เมื่อเพิมฟังชั่นรหัสอัติโนมัติต้องกดยืนยันสองรอบ
   const handleCreateSubmit = async (data) => {
-
     const newData = JSON.parse(JSON.stringify(data)); // Create a deep copy
 
-    newData.test = newData.test.map(item => ({
+    newData.test = newData.test.map((item) => ({
       ...item,
-      emp_name: item.emp_name.value
+      emp_name: item.emp_name.value,
     }));
-
-    await axios
-      .post(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
-        newData
-      )
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          icon: "success",
-          title: "Your OT request has been created",
-          showConfirmButton: false,
-          timer: 2000,
+    try {
+      //alert(JSON.stringify(data))
+      await axios
+        .post(
+          "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
+          newData
+        )
+        .then((res) => {
+          console.log(res.data);
+          Swal.fire({
+            icon: "success",
+            title: "Your OT request has been created",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          navigate("/overtime");
         });
-        navigate("/overtime");
-      })
-      .catch((error) => {
-        console.log(error);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getApprover = async () => {
+    await axios
+      .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
+      .then((res) => {
+        setApprover(res.data.approver);
       });
   };
 
-  
-  useEffect(()=>{
-    getEmployees()
-  },[])
+  useEffect(() => {
+    getEmployees();
+    getApprover();
+  }, []);
 
   return (
     <>
@@ -141,8 +139,8 @@ const create = () => {
                                   <input
                                     readOnly
                                     type="text"
+                                    value={'OT2407093XXX'}
                                     className="form-control"
-                                    value={code}
                                     {...register("ot_member_id", {
                                       required: true,
                                     })}
@@ -160,20 +158,43 @@ const create = () => {
                                     })}
                                   >
                                     <option value="">Please Select</option>
-                                    <option value={"ผู้จัดการฝ่าย 1"}>
-                                      ผู้จัดการฝ่าย 1
-                                    </option>
-                                    <option value={"ผู้จัดการฝ่าย 2"}>
-                                      ผู้จัดการฝ่าย 2
-                                    </option>
-                                    <option value={"ผู้จัดการฝ่าย 3"}>
-                                      ผู้จัดการฝ่าย 3
-                                    </option>
-                                    <option value={"ผู้จัดการฝ่าย 4"}>
-                                      ผู้จัดการฝ่าย 4
-                                    </option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.name_approve_2}
+                                      >
+                                        {item.name_approve_2}
+                                      </option>
+                                    ))}
                                   </select>
                                   {errors.department_name && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">ผู้ควบคุมงาน</label>
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    {...register("create_name", {
+                                      required: true,
+                                    })}
+                                  >
+                                    <option value="">Please Select</option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.name_approve_1}
+                                      >
+                                        {item.name_approve_1}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  {errors.create_name && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
@@ -191,39 +212,16 @@ const create = () => {
                                     })}
                                   >
                                     <option value="">Please Select</option>
-                                    <option value={"หน่วยงาน 1"}>
-                                      หน่วยงาน 1
-                                    </option>
-                                    <option value={"หน่วยงาน 2"}>
-                                      หน่วยงาน 2
-                                    </option>
-                                    <option value={"หน่วยงาน 3"}>
-                                      หน่วยงาน 3
-                                    </option>
-                                    <option value={"หน่วยงาน 4"}>
-                                      หน่วยงาน 4
-                                    </option>
+                                    {approver.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.division}
+                                      >
+                                        {item.division}
+                                      </option>
+                                    ))}
                                   </select>
                                   {errors.department && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <input
-                                    readOnly
-                                    type="text"
-                                    className="form-control"
-                                    value={userDatail().name}
-                                    {...register("create_name", {
-                                      required: true,
-                                    })}
-                                  />
-                                  {errors.create_name && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
@@ -243,11 +241,11 @@ const create = () => {
                                         onChange={(date) =>
                                           field.onChange(
                                             dayjs(date).format(
-                                              "YYYY-MM-DD hh:mm"
+                                              "YYYY-MM-DD hh:mm:ss"
                                             )
                                           )
                                         }
-                                        dateFormat="dd-MMMM-yyyy hh:mm"
+                                        dateFormat="dd-MMMM-yyyy hh:mm:ss"
                                         selected={field.value}
                                         timeInputLabel="Time:"
                                         showTimeInput
@@ -269,11 +267,11 @@ const create = () => {
                                         onChange={(date) =>
                                           field.onChange(
                                             dayjs(date).format(
-                                              "YYYY-MM-DD hh:mm"
+                                              "YYYY-MM-DD hh:mm:ss"
                                             )
                                           )
                                         }
-                                        dateFormat="dd-MMMM-yyyy hh:mm"
+                                        dateFormat="dd-MMMM-yyyy hh:mm:ss"
                                         selected={field.value}
                                         timeInputLabel="Time:"
                                         showTimeInput
@@ -292,7 +290,7 @@ const create = () => {
                           >
                             <div className="card-body">
                               <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                   <div className="form-group">
                                     <label htmlFor="">
                                       ข้อมูลพนักงาน {index + 1} :
@@ -317,7 +315,7 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                   <div className="form-group">
                                     <label htmlFor="">ประเภทค่าแรง :</label>
                                     <select
@@ -328,17 +326,11 @@ const create = () => {
                                       })}
                                     >
                                       <option value="">Please Select</option>
-                                      <option value={"ประเภทค่าแรง 1"}>
-                                        ประเภทค่าแรง 1
+                                      <option value={"ประเภทค่าแรง D"}>
+                                        ประเภทค่าแรง D
                                       </option>
-                                      <option value={"ประเภทค่าแรง 2"}>
-                                        ประเภทค่าแรง 2
-                                      </option>
-                                      <option value={"ประเภทค่าแรง 3"}>
-                                        ประเภทค่าแรง 3
-                                      </option>
-                                      <option value={"ประเภทค่าแรง 4"}>
-                                        ประเภทค่าแรง 4
+                                      <option value={"ประเภทค่าแรง I"}>
+                                        ประเภทค่าแรง I
                                       </option>
                                     </select>
                                     {errors.cost_type && (
@@ -348,9 +340,9 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                   <div className="form-group">
-                                    <label htmlFor="">ประเภทงาน :</label>
+                                    <label htmlFor="">ชนิดงานที่ทำ :</label>
                                     <select
                                       className="form-control"
                                       id="sel1"
@@ -359,17 +351,57 @@ const create = () => {
                                       })}
                                     >
                                       <option value="">Please Select</option>
-                                      <option value={"ประเภทงาน 1"}>
-                                        ประเภทงาน 1
+                                      <option value={"ล่วงเวลาปกติ"}>
+                                        ล่วงเวลาปกติ
                                       </option>
-                                      <option value={"ประเภทงาน 2"}>
-                                        ประเภทงาน 2
+                                      <option value={"ทำงานวันหยุด"}>
+                                        ทำงานวันหยุด
                                       </option>
-                                      <option value={"ประเภทงาน 3"}>
-                                        ประเภทงาน 3
+                                      <option value={"ล่วงเวลาวันหยุด"}>
+                                        ล่วงเวลาวันหยุด
                                       </option>
-                                      <option value={"ประเภทงาน 4"}>
-                                        ประเภทงาน 4
+                                      <option value={"ทำงานวันหยุดประเพณี"}>
+                                        ทำงานวันหยุดประเพณี
+                                      </option>
+                                      <option value={"ล่วงเวลาวันหยุดประเพณี"}>
+                                        ล่วงเวลาวันหยุดประเพณี
+                                      </option>
+                                    </select>
+                                    {errors.job_type && (
+                                      <span className="text-danger">
+                                        This field is required
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="col-md-3">
+                                  <div className="form-group">
+                                    <label htmlFor="">จุดลงรถรับส่ง :</label>
+                                    <select
+                                      className="form-control"
+                                      id="sel1"
+                                      {...register(
+                                        `test.${index}.bus_stations`,
+                                        {
+                                          required: true,
+                                        }
+                                      )}
+                                    >
+                                      <option value="">Please Select</option>
+                                      <option value={"จุดลงรถรับส่งที่ 1"}>
+                                        จุดลงรถรับส่งที่ 1
+                                      </option>
+                                      <option value={"จุดลงรถรับส่งที่ 2"}>
+                                        จุดลงรถรับส่งที่ 2
+                                      </option>
+                                      <option value={"จุดลงรถรับส่งที่ 3"}>
+                                        จุดลงรถรับส่งที่ 3
+                                      </option>
+                                      <option value={"จุดลงรถรับส่งที่ 4"}>
+                                        จุดลงรถรับส่งที่ 4
+                                      </option>
+                                      <option value={"ไม่ระบุจุดรถรับส่ง"}>
+                                        ไม่ระบุจุดรถรับส่ง
                                       </option>
                                     </select>
                                     {errors.job_type && (
@@ -390,6 +422,7 @@ const create = () => {
                                         emp_name: "",
                                         cost_type: "",
                                         job_type: "",
+                                        bus_stations: "",
                                       })
                                     }
                                   >
@@ -409,10 +442,10 @@ const create = () => {
                         ))}
                         <div className="col-md-12">
                           <div className="float-right">
-                            <button 
+                            {/* <button 
                              onClick={handleRegenerate}
                              className="btn btn-secondary"
-                            >สร้างรหัส</button>{' '}
+                            >สร้างรหัส</button>{' '} */}
                             <button
                               onClick={handleSubmit(handleCreateSubmit)}
                               className="btn btn-primary"
