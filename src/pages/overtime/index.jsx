@@ -4,9 +4,6 @@ import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -20,6 +17,8 @@ const Overtime = () => {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
   const [approver, setApprover] = useState([]);
+
+  const [d, setDate] = useState(new Date());
 
   useEffect(() => {
     setPage(1);
@@ -45,63 +44,93 @@ const Overtime = () => {
 
   //filter function by ot code
   const codeFilter = async (key) => {
-
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-code?data='+key)
-    .then((res)=>{
-      setOvertimes(res.data.otrequest);
-      console.log(overtimes)
-      setRecords(res.data.otrequest.slice(from, to));
-      setLoading(false);
-    })
-  }
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
+          key
+      )
+      .then((res) => {
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
+      });
+  };
 
   //filter function by department name
   const nameFilter = async (key) => {
-
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-name?data='+key)
-    .then((res)=>{
-      setOvertimes(res.data.otrequest);
-      console.log(overtimes)
-      setRecords(res.data.otrequest.slice(from, to));
-      setLoading(false);
-    })
-  }
-  
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
+          key
+      )
+      .then((res) => {
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
+      });
+  };
+
   //filter function by department
   const departmentFilter = async (key) => {
-
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-department?data='+key)
-    .then((res)=>{
-      setOvertimes(res.data.otrequest);
-      console.log(overtimes)
-      setRecords(res.data.otrequest.slice(from, to));
-      setLoading(false);
-    })
-  }
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
+          key
+      )
+      .then((res) => {
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
+      });
+  };
 
   //filter function by status
   const statusFilter = async (key) => {
-
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    await axios.get('http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?data='+key)
-    .then((res)=>{
-      setOvertimes(res.data.otrequest);
-      console.log(overtimes)
-      setRecords(res.data.otrequest.slice(from, to));
-      setLoading(false);
-    })
-  }
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?data=" +
+          key
+      )
+      .then((res) => {
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
+      });
+  };
+
+  //filter function by date
+  const dateFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?data=" +
+          key
+      )
+      .then((res) => {
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     getData();
@@ -232,14 +261,14 @@ const Overtime = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Overtime list</h1>
+                <h1 className="m-0">OT-REQUEST LIST</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">Home</a>
+                    <a href="#">HOME</a>
                   </li>
-                  <li className="breadcrumb-item active">Overtime</li>
+                  <li className="breadcrumb-item active">OT-REQUEST</li>
                 </ol>
               </div>
             </div>
@@ -258,13 +287,13 @@ const Overtime = () => {
                             onClick={textExport}
                             className="btn btn-secondary mb-3"
                           >
-                            <i className="fas fa-download"></i> EXPORT
+                            <i className="fas fa-download"></i> ดึงข้อมูล
                           </button>{" "}
                           <Link
                             to={"/overtime/create"}
                             className="btn btn-success mb-3"
                           >
-                            <i className="fa fa-plus"></i> CREATE
+                            <i className="fa fa-plus"></i> คำร้องใหม่
                           </Link>
                         </div>
                       </div>
@@ -280,44 +309,25 @@ const Overtime = () => {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Please Enter"
+                                    placeholder="กรุณากรอกเลขที่ใบคำร้อง"
                                     onChange={(event) =>
                                       codeFilter(event.target.value)
                                     }
                                   />
                                 </div>
                               </div>
-                              <div className="col-md-3">
-                                <div className="form-group">
-                                  <label htmlFor="">ผู้จัดการฝ่าย</label>
-                                  <select 
-                                  className="form-control" 
-                                  id="sel1"
-                                  onChange={(event) =>
-                                    nameFilter(event.target.value)
-                                  } 
-                                  >
-                                    <option value="">Please Select</option>
-                                    {approver.map((item) => (
-                                      <option
-                                        key={item.id}
-                                        value={item.name_approve_2}
-                                      >
-                                        {item.name_approve_2}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                              {/* <div className="col-md-2">
+
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select className="form-control" id="sel1"
-                                  onChange={(event) =>
-                                    createFilter(event.target.value)
-                                  } 
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    onChange={(event) =>
+                                      departmentFilter(event.target.value)
+                                    }
                                   >
-                                  <option value="">Please Select</option>
+                                    <option value="">กรุณาเลือกผู้ควบคุมงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -328,16 +338,20 @@ const Overtime = () => {
                                     ))}
                                   </select>
                                 </div>
-                              </div> */}
+                              </div>
+                              
+                              
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">หน่วยงาน</label>
-                                  <select className="form-control" id="sel1"
-                                   onChange={(event) =>
-                                    departmentFilter(event.target.value)
-                                  } 
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    onChange={(event) =>
+                                      departmentFilter(event.target.value)
+                                    }
                                   >
-                                  <option value="">Please Select</option>
+                                    <option value="">กรุณาเลือกหน่วยงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -349,34 +363,38 @@ const Overtime = () => {
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-3">
+
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
-                                  <select className="form-control" id="sel1"
-                                  onChange={(event) =>
-                                    statusFilter(event.target.value)
-                                  } 
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    onChange={(event) =>
+                                      statusFilter(event.target.value)
+                                    }
                                   >
                                     <option defaultValue="">
-                                      Please Select
+                                      กรุณาเลือกสถานะการอนุมัติ
                                     </option>
-                                    <option value="In progress">
-                                      In progress
+                                    <option value="รอการอนุมัติ">
+                                      รอการอนุมัติ
                                     </option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
+                                    <option value="ได้รับการอนุมัติ">ได้รับการอนุมัติ</option>
+                                    <option value="ไม่ได้รับการอนุมัติ">ไม่ได้รับการอนุมัติ</option>
                                   </select>
                                 </div>
                               </div>
-                              {/* <div className="col-md-2">
+                              <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label> 
+                                  <label htmlFor="">วันที่จัดทำ</label>
                                   <input
-                                    type="date" 
+                                    type="date"
                                     className="form-control"
-                                    />
+                                    onChange={(event) => dateFilter(dayjs(event.target.value).format("YYYY-MM-DD"))}
+                                  />
                                 </div>
-                              </div> */}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -419,9 +437,9 @@ const Overtime = () => {
                           render: ({ status }) => (
                             <>
                               <h5>
-                                {status === "Approved" ? (
+                                {status === "ได้รับการอนุมัติ" ? (
                                   <Badge bg="success">{status}</Badge>
-                                ) : status === "Rejected" ? (
+                                ) : status === "ไม่ได้รับการอนุมัติ" ? (
                                   <Badge bg="danger">{status}</Badge>
                                 ) : (
                                   <Badge bg="primary">{status}</Badge>
@@ -435,19 +453,26 @@ const Overtime = () => {
                           title: "วันที่เริ่มต้น",
                           textAlignment: "center",
                           render: ({ start_date }) =>
-                            dayjs(start_date).format("DD-MMM-YYYY"),
+                            dayjs(start_date).format("DD-MMMM-YYYY"),
                         },
                         {
                           accessor: "end_date",
                           title: "วันที่สิ้นสุด",
                           textAlignment: "center",
                           render: ({ end_date }) =>
-                            dayjs(end_date).format("DD-MMM-YYYY"),
+                            dayjs(end_date).format("DD-MMMM-YYYY"),
+                        },
+                        {
+                          accessor: "end_date",
+                          title: "วันที่จัดทำ",
+                          textAlignment: "center",
+                          render: ({ created_at }) =>
+                            dayjs(created_at).format("DD-MMMM-YYYY"),
                         },
                         {
                           accessor: "actions",
                           textAlignment: "center",
-                          title: "Actions",
+                          title: "ดำเนินการ",
                           width: 300,
                           render: (blogs) => (
                             <>

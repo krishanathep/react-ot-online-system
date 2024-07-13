@@ -61,12 +61,12 @@ export default function Home() {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">Home</h1>
+              <h1 className="m-0">HOME</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
-                  <li className="breadcrumb-item active">Home</li>
+                  <li className="breadcrumb-item active">HOME</li>
                 </li>
               </ol>
             </div>
@@ -80,7 +80,7 @@ export default function Home() {
               <div className="small-box bg-info">
                 <div className="inner">
                   <h3>{overtimes}</h3>
-                  <p>Overtime All</p>
+                  <p>คำร้องขอทำงานล่วงเวลา ทั้งหมด</p>
                 </div>
                 <div className="icon">
                 <i className="far fa-clock"></i>
@@ -91,7 +91,7 @@ export default function Home() {
               <div className="small-box bg-primary">
                 <div className="inner">
                   <h3>{ inprogress }</h3>
-                  <p>In Progress</p>
+                  <p>รอการอนุมัติ</p>
                 </div>
                 <div className="icon">
                 <i className="fas fa-cogs"></i>
@@ -102,7 +102,7 @@ export default function Home() {
               <div className="small-box bg-success">
                 <div className="inner">
                   <h3>{ approved }</h3>
-                  <p>Approved</p>
+                  <p>ได้รับการอนุมัติ</p>
                 </div>
                 <div className="icon">
                 <i className="far fa-check-circle"></i>
@@ -113,7 +113,7 @@ export default function Home() {
               <div className="small-box bg-danger">
                 <div className="inner">
                   <h3>{ rejected }</h3>
-                  <p>Rejected</p>
+                  <p>ไม่ได้รับการอนุมัติ</p>
                 </div>
                 <div className="icon">
                 <i className="far fa-times-circle"></i>

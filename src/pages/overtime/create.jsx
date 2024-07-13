@@ -8,6 +8,7 @@ import Select from "react-select";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
+import { em } from "@mantine/core";
 
 const create = () => {
   const {
@@ -33,11 +34,15 @@ const create = () => {
   });
 
   const [approver, setApprover] = useState([]);
+
   const userDatail = useAuthUser();
   const navigate = useNavigate();
 
   const [employees, setEmployees] = useState([]);
   const [isLoading, setLoading] = useState(false);
+
+  const [code, setCode] = useState('')
+  const [costType, setConstType] = useState('')
 
   const getEmployees = async () => {
     try {
@@ -49,6 +54,8 @@ const create = () => {
             res.data.employees.map((employee) => ({
               value: employee.full_name,
               label: employee.full_name,
+              code: employee.code,
+              cost: employee.business_group,
             }))
           );
         });
@@ -109,14 +116,15 @@ const create = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Overtime create</h1>
+                <h1 className="m-0">OT-REQUEST CREATE</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">Home</a>
+                    <a href="#">HOME</a>
                   </li>
-                  <li className="breadcrumb-item active">Create</li>
+                  <li className="breadcrumb-item">OT-REQUEST</li>
+                  <li className="breadcrumb-item active">CREATE</li>
                 </ol>
               </div>
             </div>
@@ -157,7 +165,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">Please Select</option>
+                                    <option value="">ผู้จัดการฝ่าย</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -184,7 +192,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">Please Select</option>
+                                    <option value="">ผู้ควบคุมงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -211,7 +219,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">Please Select</option>
+                                    <option value="">กรุณาเลือกหน่วยงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -237,7 +245,7 @@ const create = () => {
                                     render={({ field }) => (
                                       <DatePicker
                                         className="form-control"
-                                        placeholderText="Select start date"
+                                        placeholderText="กรุณาเลือกวันที่เริ่มต้น"
                                         onChange={(date) =>
                                           field.onChange(
                                             dayjs(date).format(
@@ -263,7 +271,7 @@ const create = () => {
                                     render={({ field }) => (
                                       <DatePicker
                                         className="form-control"
-                                        placeholderText="Select end date"
+                                        placeholderText="กรุณาเลือกวันที่สิ้นสุด"
                                         onChange={(date) =>
                                           field.onChange(
                                             dayjs(date).format(
@@ -280,6 +288,35 @@ const create = () => {
                                   />
                                 </div>
                               </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">ประเภทงาน</label>
+                                  <select
+                                      className="form-control"
+                                      id="sel1"
+                                      {...register("department", {
+                                        required: true,
+                                      })}
+                                    >
+                                      <option value="">กรุณาเลือกประเภทงาน</option>
+                                      <option value={"ล่วงเวลาวันปกติ"}>
+                                        ล่วงเวลาวันปกติ
+                                      </option>
+                                      <option value={"ทำงานวันหยุด"}>
+                                        ทำงานวันหยุด
+                                      </option>
+                                      <option value={"ล่วงเวลาวันหยุด"}>
+                                        ล่วงเวลาวันหยุด
+                                      </option>
+                                      <option value={"ทำงานวันหยุดประเพณี"}>
+                                        ทำงานวันหยุดประเพณี
+                                      </option>
+                                      <option value={"ล่วงเวลาทำงานวันหยุดประเพณี"}>
+                                        ล่วงเวลาทำงานวันหยุดประเพณี
+                                      </option>
+                                    </select>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -290,10 +327,20 @@ const create = () => {
                           >
                             <div className="card-body">
                               <div className="row">
-                                <div className="col-md-3">
+                                <div className="col-md-2">
+                                 <div className="form-group">
+                                 <label htmlFor="">รหัสพนักงาน :</label>
+                                 <input type="text" 
+                                 className="form-control"
+                                 value={code}
+                                 readOnly
+                                 />
+                                 </div>
+                                </div>
+                                <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">
-                                      ข้อมูลพนักงาน {index + 1} :
+                                      ชื่อพนักงาน :
                                     </label>
                                     <Controller
                                       control={control}
@@ -305,6 +352,11 @@ const create = () => {
                                           isClearable={true}
                                           isLoading={isLoading}
                                           placeholder="Please Select "
+                                          onChange={(employees) => {
+                                            field.onChange(employees);
+                                            setCode(employees.code);
+                                            setConstType(employees.cost)
+                                          }}
                                         />
                                       )}
                                     />
@@ -315,24 +367,18 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">ประเภทค่าแรง :</label>
-                                    <select
+                                    <input
                                       className="form-control"
                                       id="sel1"
+                                      value={costType}
+                                      readOnly
                                       {...register(`test.${index}.cost_type`, {
                                         required: true,
                                       })}
-                                    >
-                                      <option value="">Please Select</option>
-                                      <option value={"ประเภทค่าแรง D"}>
-                                        ประเภทค่าแรง D
-                                      </option>
-                                      <option value={"ประเภทค่าแรง I"}>
-                                        ประเภทค่าแรง I
-                                      </option>
-                                    </select>
+                                    />
                                     {errors.cost_type && (
                                       <span className="text-danger">
                                         This field is required
@@ -340,7 +386,7 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">ชนิดงานที่ทำ :</label>
                                     <select
@@ -350,21 +396,21 @@ const create = () => {
                                         required: true,
                                       })}
                                     >
-                                      <option value="">Please Select</option>
-                                      <option value={"ล่วงเวลาปกติ"}>
-                                        ล่วงเวลาปกติ
+                                      <option value="">กรุณาเลือกชนิดงานที่ทำ</option>
+                                      <option value={"ชนิดงานที่ 1"}>
+                                        ชนิดงานที่ 1
                                       </option>
-                                      <option value={"ทำงานวันหยุด"}>
-                                        ทำงานวันหยุด
+                                      <option value={"ชนิดงานที่ 2"}>
+                                        ชนิดงานที่ 2
                                       </option>
-                                      <option value={"ล่วงเวลาวันหยุด"}>
-                                        ล่วงเวลาวันหยุด
+                                      <option value={"ชนิดงานที่ 3"}>
+                                        ชนิดงานที่ 3
                                       </option>
-                                      <option value={"ทำงานวันหยุดประเพณี"}>
-                                        ทำงานวันหยุดประเพณี
+                                      <option value={"ชนิดงานที่ 4"}>
+                                        ชนิดงานที่ 4
                                       </option>
-                                      <option value={"ล่วงเวลาวันหยุดประเพณี"}>
-                                        ล่วงเวลาวันหยุดประเพณี
+                                      <option value={"ชนิดงานที่ 5"}>
+                                        ชนิดงานที่ 5
                                       </option>
                                     </select>
                                     {errors.job_type && (
@@ -374,7 +420,15 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-md-2">
+                                  <div className="form-group">
+                                    <label htmlFor="">เป้าหมาย :</label>
+                                    <input type="text" className="form-control" 
+                                    placeholder="กรุณากรอกเป้าหมาย"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">จุดลงรถรับส่ง :</label>
                                     <select
@@ -387,21 +441,21 @@ const create = () => {
                                         }
                                       )}
                                     >
-                                      <option value="">Please Select</option>
-                                      <option value={"จุดลงรถรับส่งที่ 1"}>
-                                        จุดลงรถรับส่งที่ 1
+                                      <option value="">กรุณาเลืกจุดลงรถรับส่ง</option>
+                                      <option value={"จุดที่ 1"}>
+                                        จุดที่ 1
                                       </option>
-                                      <option value={"จุดลงรถรับส่งที่ 2"}>
-                                        จุดลงรถรับส่งที่ 2
+                                      <option value={"จุดที่ 2"}>
+                                        จุดที่ 2
                                       </option>
-                                      <option value={"จุดลงรถรับส่งที่ 3"}>
-                                        จุดลงรถรับส่งที่ 3
+                                      <option value={"จุดที่ 3"}>
+                                        จุดที่ 3
                                       </option>
-                                      <option value={"จุดลงรถรับส่งที่ 4"}>
-                                        จุดลงรถรับส่งที่ 4
+                                      <option value={"จุดที่ 4"}>
+                                        จุดที่ 4
                                       </option>
-                                      <option value={"ไม่ระบุจุดรถรับส่ง"}>
-                                        ไม่ระบุจุดรถรับส่ง
+                                      <option value={"ไม่ระส่ง"}>
+                                        ไม่ระบุ
                                       </option>
                                     </select>
                                     {errors.job_type && (

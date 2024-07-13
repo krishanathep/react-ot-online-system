@@ -33,14 +33,15 @@ const view = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">Overtime view</h1>
+                <h1 className="m-0">OT-REQUEST VIEW</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">Home</a>
+                    <a href="#">HOME</a>
                   </li>
-                  <li className="breadcrumb-item active">View</li>
+                  <li className="breadcrumb-item">OT-REQUEST</li>
+                  <li className="breadcrumb-item active">VIEW</li>
                 </ol>
               </div>
             </div>
@@ -55,33 +56,42 @@ const view = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="col-md-12">
-                          <table className="table table-bordered">
+                          <table className="table table-bordered mt-5">
                             <thead>
                               <tr>
-                                <td>เลขคำร้อง :  { overtimes.ot_member_id }</td>
-                                <td>ผู้จัดการฝ่าย : { overtimes.department_name }</td>
-                                <td>ผู้ควบคุมงาน : { overtimes.create_name }</td>
-                                <td>หน่วยงาน :  { overtimes.department }</td>
+                                <td><b>เลขคำร้อง</b> :  { overtimes.ot_member_id }</td>
+                                <td><b>ผู้จัดการฝ่าย</b>  : { overtimes.department_name }</td>
+                                <td><b>ผู้ควบคุมงาน</b>  : { overtimes.create_name }</td>
+                                <td><b>หน่วยงาน</b>  :  { overtimes.department }</td>
+                                <td><b>ประเภทงาน</b>  : { overtimes.work_type }</td>
                               </tr>
                               <tr>
-                                <td>วันที่เริ่มต้น : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
-                                <td>วันที่สิ้นสุด : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
-                                <td>เวลาที่เริ่มต้น : { dayjs(overtimes.start_date).format("hh:mm:ss") }</td>
-                                <td>เวลาที่สิ้นสุด : { dayjs(overtimes.end_date).format("hh:mm:ss") }</td>
+                                <td><b>วันที่เริ่มต้น</b>  : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
+                                <td><b>วันที่สิ้นสุด</b>  : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
+                                <td><b>เวลาที่เริ่มต้น</b>  : { dayjs(overtimes.start_date).format("hh:mm") } น.</td>
+                                <td><b>เวลาที่สิ้นสุด</b>  : { dayjs(overtimes.end_date).format("hh:mm") } น.</td>
+                                <td><b>เวลาทั้งหมด</b>  : 2 ชั่วโมง</td>
                               </tr>
                             </thead>
                           </table>
                         </div>
                         <div className="col-md-12">
-                          <table className="table table-bordered">
+                          <table className="table table-bordered mt-5">
                             <thead>
                               <tr align={'center'}>
                                 <th>#</th>
+                                <th>รหัส</th>
                                 <th>ชื่อพนักงาน</th>
+                                <th>หน่วยงาน</th>
                                 <th>ประเภทค่าแรง</th>
                                 <th>ชนิดของงาน</th>
-                                <th>ความสำเร็จ</th>
+                                <th>เป้าหมาย</th>
+                                <th>ทำได้จริง</th>
+                                <th>ข้อมูลแสกน</th>
+                                <th>เวลาเลิกงาน</th>
+                                <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
+                                <th>ค่ารถ</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -89,11 +99,18 @@ const view = () => {
                                   return(
                                     <tr align='center' key={member.id}>
                                     <td>{index +1}</td>
+                                    <td>{member.code }</td>
                                     <td>{member.emp_name}</td>
+                                    <td>ITD</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
+                                    <td>{member.target}</td>
                                     <td>{member.objective}</td>
+                                    <td>{member.scan}</td>
+                                    <td>{member.out_time}</td>
+                                    <td>{member.some_time}</td>
                                     <td>{member.bus_stations}</td>
+                                    <td>{member.bus_price}</td>
                                   </tr>
                                   )
                                 })}
@@ -101,19 +118,19 @@ const view = () => {
                           </table>
                         </div>
                         <div className="col-md-12">
-                            <table className="table table-bordered">
+                            <table className="table table-bordered mt-5">
                                 <thead>
-                                  <tr align="center">
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
+                                <tr align="center">
+                                    <th>หัวหน้าหน่วย</th>
+                                    <th>หัวหน้าส่วน</th>
+                                    <th>ผู้จัดการฝ่าย</th>
+                                    <th>ผู้จัดการอาวุโส</th>
                                   </tr>
                                   <tr align="center">
-                                    <td>หัวหน้าหน่วย</td>
-                                    <td>หัวหน้าส่วน</td>
-                                    <td>ผู้จัดการฝ่าย</td>
-                                    <td>ผู้จัดการอาวุโส</td>
+                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.create_name }</td>
                                   </tr>
                                 </thead>
                             </table>

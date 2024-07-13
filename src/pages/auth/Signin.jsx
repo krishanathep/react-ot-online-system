@@ -12,7 +12,8 @@ export default function Signin() {
   const signIn = useSignIn()
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const REACT_APP_API = 'https://full-stack-app.com/laravel_auth_jwt_api/public/api/auth/login'
+  const REACT_APP_API = 'http://localhost/laravel_auth_jwt_api/public/api/auth/login'
+  
 
   const onSubmit = async data => {
     try {
@@ -63,7 +64,7 @@ export default function Signin() {
         <div className="login-box">
           <div className="login-logo">
             <a href="#">
-              <b>OT </b>SYSTEM
+              <b>OT-</b>REQUEST
             </a>
           </div>
           <div  id="auth_bg" className="card">
