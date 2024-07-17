@@ -249,7 +249,7 @@ const Overtime = () => {
     await axios
       .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
       .then((res) => {
-        console.log(res.data.approver);
+        //console.log(res.data.approver);
         setApprover(res.data.approver);
       });
   };
@@ -449,25 +449,25 @@ const Overtime = () => {
                           ),
                         },
                         {
-                          accessor: "start_date",
-                          title: "วันที่เริ่มต้น",
-                          textAlignment: "center",
-                          render: ({ start_date }) =>
-                            dayjs(start_date).format("DD-MMMM-YYYY"),
-                        },
-                        {
-                          accessor: "end_date",
-                          title: "วันที่สิ้นสุด",
-                          textAlignment: "center",
-                          render: ({ end_date }) =>
-                            dayjs(end_date).format("DD-MMMM-YYYY"),
-                        },
-                        {
-                          accessor: "end_date",
+                          accessor: "ot_date",
                           title: "วันที่จัดทำ",
                           textAlignment: "center",
                           render: ({ created_at }) =>
-                            dayjs(created_at).format("DD-MMMM-YYYY"),
+                            dayjs(created_at).format("DD-MM-YYYY"),
+                        },
+                        {
+                          accessor: "start_date",
+                          title: "เวลาเริ่มต้น",
+                          textAlignment: "center",
+                          // render: ({ start_date }) =>
+                          //   dayjs(start_date).format("DD-MMMM-YYYY"),
+                        },
+                        {
+                          accessor: "end_date",
+                          title: "เวลาสิ้นสุด",
+                          textAlignment: "center",
+                          // render: ({ end_date }) =>
+                          //   dayjs(end_date).format("DD-MMMM-YYYY"),
                         },
                         {
                           accessor: "actions",

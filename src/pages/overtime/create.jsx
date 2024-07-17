@@ -20,10 +20,10 @@ const create = () => {
     defaultValues: {
       test: [
         {
-          emp_name: "",
-          cost_type: "",
-          job_type: "",
-          bus_stations: "",
+          // emp_name: "",
+          // cost_type: "",
+          // job_type: "",
+          // bus_stations: "",
         },
       ],
     },
@@ -43,8 +43,27 @@ const create = () => {
   const [code, setCode] = useState("");
   const [costType, setConstType] = useState("");
 
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState("");
   const [timeList, setTimeLlist] = useState([]);
+
+  const [employeesByrole, setEmployeesByrole] = useState([])
+
+  const getEmployeesByrole = async () => {
+    try {
+      await axios.get('http://localhost/laravel_auth_jwt_api/public/api/employees-role?data='+userDetail().dept)
+        .then((res)=>{
+          setEmployeesByrole(
+            res.data.employees.map((employee)=>({
+              value: employee.full_name,
+              label: employee.full_name,
+              code: employee.code,
+              cost: employee.business_group,
+            })))
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const getEmployees = async () => {
     try {
@@ -56,8 +75,6 @@ const create = () => {
             res.data.employees.map((employee) => ({
               value: employee.full_name,
               label: employee.full_name,
-              code: employee.code,
-              cost: employee.business_group,
             }))
           );
         });
@@ -92,20 +109,21 @@ const create = () => {
       });
   };
 
-  // Bug เมื่อเพิมฟังชั่นรหัสอัติโนมัติต้องกดยืนยันสองรอบ
   const handleCreateSubmit = async (data) => {
-    const newData = JSON.parse(JSON.stringify(data)); // Create a deep copy
 
-    newData.test = newData.test.map((item) => ({
-      ...item,
-      emp_name: item.emp_name.value,
-    }));
+    // const newData = JSON.parse(JSON.stringify(data))
+
+    // newData.test = newData.test.map((item) => ({
+    //   ...item,
+    //   emp_name: item.emp_name.value,
+    // }));
+
     try {
       //alert(JSON.stringify(data))
       await axios
         .post(
           "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
-          newData
+          data
         )
         .then((res) => {
           console.log(res.data);
@@ -122,9 +140,10 @@ const create = () => {
     }
   };
 
+  //fetch approver by login role
   const getApprover = async () => {
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
+      .get("http://localhost/laravel_auth_jwt_api/public/api/approver-role?data="+userDetail().dept)
       .then((res) => {
         setApprover(res.data.approver);
       });
@@ -149,7 +168,8 @@ const create = () => {
     getEmployees();
     getApprover();
     deptFilter()
-  }, []);
+    getEmployeesByrole()
+  }, [time, code, costType]);
 
   return (
     <>
@@ -187,7 +207,7 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
                                   <input
-                                    readOnly
+                                    //readOnly
                                     type="text"
                                     value={"OT2407093XXX"}
                                     className="form-control"
@@ -195,6 +215,11 @@ const create = () => {
                                       required: true,
                                     })}
                                   />
+                                  {errors.ot_member_id && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-3">
@@ -203,7 +228,7 @@ const create = () => {
                                   <input
                                     className="form-control"
                                     id="sel1"
-                                    readOnly
+                                    //readOnly
                                     //value={}
                                     {...register("department_name", {
                                       required: true,
@@ -226,7 +251,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   >
-                                    <option value="">ผู้ควบคุมงาน</option>
+                                    <option value="">กรุณาเลือกผู้ควบคุมงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -248,7 +273,7 @@ const create = () => {
                                   <label htmlFor="">หน่วยงาน</label>
                                   <input
                                     value={approver.division}
-                                    readOnly
+                                    //readOnly
                                     className="form-control"
                                     id="sel1"
                                     {...register("department", {
@@ -256,6 +281,35 @@ const create = () => {
                                     })}
                                   />
                                   {errors.department && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">วันที่เริ่มต้น</label>
+                                  <Controller
+                                    control={control}
+                                    name="ot_date"
+                                    render={({ field }) => (
+                                      <DatePicker
+                                        className="form-control"
+                                        placeholderText="กรุณาเลือกวันที่เริ่มต้น"
+                                        onChange={(date) =>
+                                          field.onChange(
+                                            dayjs(date).format("YYYY-MM-DD")
+                                          )
+                                        }
+                                        dateFormat="dd-MM-yyyy"
+                                        selected={field.value}
+                                        //timeInputLabel="Time:"
+                                        //showTimeInput
+                                      />
+                                    )}
+                                  />
+                                     {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
@@ -293,43 +347,27 @@ const create = () => {
                                       ล่วงเวลาทำงานวันหยุดประเพณี
                                     </option>
                                   </select>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <Controller
-                                    control={control}
-                                    name="start_date"
-                                    render={({ field }) => (
-                                      <DatePicker
-                                        className="form-control"
-                                        placeholderText="กรุณาเลือกวันที่เริ่มต้น"
-                                        onChange={(date) =>
-                                          field.onChange(
-                                            dayjs(date).format("YYYY-MM-DD")
-                                          )
-                                        }
-                                        dateFormat="dd-MM-yyyy"
-                                        selected={field.value}
-                                        //timeInputLabel="Time:"
-                                        //showTimeInput
-                                      />
-                                    )}
-                                  />
+                                  {errors.work_type && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ประเภทโอที</label>
                                   <select
+                                    {...register("ot_type", {
+                                      required: true,
+                                    })}
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
                                       listFilter(event.target.value)
                                     }
                                   >
-                                    <option defaultValue="">
+                                    <option value="">
                                       กรุณาเลือกประเภทโอที
                                     </option>
                                     <option value="OT หลังเลิกงาน-ไม่พัก">
@@ -354,12 +392,21 @@ const create = () => {
                                       OT วันหยุด หลังเลิกงาน-พัก 20 นาที
                                     </option>
                                   </select>
+                                  {errors.ot_type && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เวลาที่เริ่มต้น</label>
-                                  <select className="form-control" id="sel1">
+                                  <select className="form-control" id="sel1"
+                                   {...register("start_date", {
+                                    required: true,
+                                  })}
+                                  >
                                     <option value="">
                                       กรุณาเลือกเวลาเริ่มต้น
                                     </option>
@@ -372,7 +419,7 @@ const create = () => {
                                       </option>
                                     ))}
                                   </select>
-                                  {errors.department && (
+                                  {errors.start_date && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
@@ -383,11 +430,11 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">เวลาที่สิ้นสุด</label>
                                   <select
+                                   {...register("end_date", {
+                                    required: true,
+                                  })}
                                     className="form-control"
                                     id="sel1"
-                                    {...register("out_time", {
-                                      required: true,
-                                    })}
                                     onChange={(event) =>
                                       finishFilter(event.target.value)
                                     }
@@ -404,20 +451,24 @@ const create = () => {
                                       </option>
                                     ))}
                                   </select>
-                                  {errors.department && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">จำนวนชั่วโมง</label>
                                   <input className="form-control" 
+                                   {...register("total_date", {
+                                    required: true,
+                                  })}
                                   type="text" 
                                   value={time}
+                                 
                                   />
+                                   {errors.total_date && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -437,8 +488,16 @@ const create = () => {
                                       type="text"
                                       className="form-control"
                                       value={code}
-                                      readOnly
+                                      //readOnly
+                                      {...register(`test.${index}.code`, {
+                                        required: true,
+                                      })}
                                     />
+                                    {errors.code && (
+                                      <span className="text-danger">
+                                        This field is required
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="col-md-2">
@@ -450,23 +509,18 @@ const create = () => {
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={employees}
+                                          options={employeesByrole}
                                           isClearable={true}
                                           isLoading={isLoading}
                                           placeholder="Please Select "
-                                          onChange={(employees) => {
-                                            field.onChange(employees);
-                                            setCode(employees.code);
-                                            setConstType(employees.cost);
+                                          onChange={(employeesByrole) => {
+                                            field.onChange(employeesByrole);
+                                            setCode(employeesByrole.code);
+                                            setConstType(employeesByrole.cost);
                                           }}
                                         />
                                       )}
                                     />
-                                    {errors.emp_name && (
-                                      <span className="text-danger">
-                                        This field is required
-                                      </span>
-                                    )}
                                   </div>
                                 </div>
                                 <div className="col-md-2">
@@ -476,7 +530,7 @@ const create = () => {
                                       className="form-control"
                                       id="sel1"
                                       value={costType}
-                                      readOnly
+                                      //readOnly
                                       {...register(`test.${index}.cost_type`, {
                                         required: true,
                                       })}
@@ -528,10 +582,22 @@ const create = () => {
                                   <div className="form-group">
                                     <label htmlFor="">เป้าหมาย :</label>
                                     <input
+                                       {...register(
+                                        `test.${index}.target`,
+                                        {
+                                          required: true,
+                                        }
+                                      )}
                                       type="text"
                                       className="form-control"
                                       placeholder="กรุณากรอกเป้าหมาย"
+                                   
                                     />
+                                      {errors.target && (
+                                      <span className="text-danger">
+                                        This field is required
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="col-md-2">
@@ -566,7 +632,7 @@ const create = () => {
                                         ไม่ระบุ
                                       </option>
                                     </select>
-                                    {errors.job_type && (
+                                    {errors.bus_stations && (
                                       <span className="text-danger">
                                         This field is required
                                       </span>

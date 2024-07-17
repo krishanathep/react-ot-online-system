@@ -66,11 +66,11 @@ const view = () => {
                                 <td><b>ประเภทงาน</b>  : { overtimes.work_type }</td>
                               </tr>
                               <tr>
-                                <td><b>วันที่เริ่มต้น</b>  : { dayjs(overtimes.start_date).format("DD-MMMM-YYYY") }</td>
-                                <td><b>วันที่สิ้นสุด</b>  : { dayjs(overtimes.end_date).format("DD-MMMM-YYYY") }</td>
-                                <td><b>เวลาที่เริ่มต้น</b>  : { dayjs(overtimes.start_date).format("hh:mm") } น.</td>
-                                <td><b>เวลาที่สิ้นสุด</b>  : { dayjs(overtimes.end_date).format("hh:mm") } น.</td>
-                                <td><b>เวลาทั้งหมด</b>  : 2 ชั่วโมง</td>
+                                <td><b>วันที่ทำงาน</b>  : { dayjs(overtimes.ot_date).format("DD-MM-YYYY") }</td>
+                                <td><b>เวลาที่เริ่มต้น</b>  : {overtimes.start_date } น.</td>
+                                <td><b>เวลาที่สิ้นสุด</b>  : { overtimes.end_date } น.</td>
+                                <td><b>เวลาทั้งหมด</b>  : { overtimes.total_date }</td>
+                                <td><b>จำนวนพนักงาน</b> : 1 คน</td>
                               </tr>
                             </thead>
                           </table>
@@ -101,14 +101,14 @@ const view = () => {
                                     <td>{index +1}</td>
                                     <td>{member.code }</td>
                                     <td>{member.emp_name}</td>
-                                    <td>ITD</td>
+                                    <td>HRD</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td>{member.objective}</td>
-                                    <td>{member.scan}</td>
-                                    <td>{member.out_time}</td>
-                                    <td>{member.some_time}</td>
+                                    <td><span className="text-primary">{member.objective}</span></td>
+                                    <td>{ overtimes.end_date }</td>
+                                    <td><span className="text-primary">{ member.out_time }</span></td>
+                                    <td>{ overtimes.total_date }</td>
                                     <td>{member.bus_stations}</td>
                                     <td>{member.bus_price}</td>
                                   </tr>
@@ -129,8 +129,8 @@ const view = () => {
                                   <tr align="center">
                                     <td>{ overtimes.create_name }</td>
                                     <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
+                                    <td>{ overtimes.department_name }</td>
+                                    <td>{ overtimes.department_name }</td>
                                   </tr>
                                 </thead>
                             </table>
