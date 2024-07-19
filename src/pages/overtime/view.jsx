@@ -56,7 +56,7 @@ const view = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="col-md-12">
-                          <table className="table table-bordered mt-5">
+                          <table className="table table mt-5">
                             <thead>
                               <tr>
                                 <td><b>เลขคำร้อง</b> :  { overtimes.ot_member_id }</td>
@@ -74,6 +74,7 @@ const view = () => {
                               </tr>
                             </thead>
                           </table>
+                          <hr />
                         </div>
                         <div className="col-md-12">
                           <table className="table table-bordered mt-5">
@@ -91,7 +92,7 @@ const view = () => {
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
                                 {/* <th>ค่ารถ</th> */}
-                                <th>เหตุผล</th>
+                                <th>หมายเหตุ</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -104,13 +105,13 @@ const view = () => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td><input className='form-control'type="text" size="1"/></td>
+                                    <td className='text-danger'>รอรายงาน</td>
                                     <td>{ overtimes.end_date }</td>
-                                    <td><input className='form-control'type="text" size="1"/></td>
+                                    <td className='text-danger'>รอรายงาน</td>
                                     <td>{ overtimes.total_date }</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td><input className='form-control'type="text" size="1"/></td>
+                                    <td className='text-danger'>รอรายงาน</td>
                                   </tr>
                                   )
                                 })}
@@ -118,7 +119,7 @@ const view = () => {
                           </table>
                         </div>
                         <div className="col-md-12">
-                            <table className="table table-bordered mt-5">
+                            <table className="table table mt-5">
                                 <thead>
                                 <tr align="center">
                                     <th>หัวหน้าหน่วย</th>
@@ -134,6 +135,7 @@ const view = () => {
                                   </tr>
                                 </thead>
                             </table>
+                            <hr />
                           </div>
                           <div className="col-md-12">
                             <div className="float-right">

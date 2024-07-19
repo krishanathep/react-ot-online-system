@@ -56,7 +56,7 @@ const edit = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="col-md-12">
-                          <table className="table table-bordered mt-5">
+                          <table className="table table mt-5">
                             <thead>
                               <tr>
                                 <td><b>เลขคำร้อง</b> :  { overtimes.ot_member_id }</td>
@@ -74,9 +74,10 @@ const edit = () => {
                               </tr>
                             </thead>
                           </table>
+                          <hr/>
                         </div>
                         <div className="col-md-12">
-                          <table className="table table mt-5">
+                          <table className="table table-bordered mt-5">
                             <thead>
                               <tr align={'center'}>
                                 <th>#</th>
@@ -87,7 +88,7 @@ const edit = () => {
                                 <th>เป้าหมาย</th>
                                 <th>ทำได้จริง</th>
                                 <th>ข้อมูลแสกน</th>
-                                <th>เวลาเลิกงาน</th>
+                                <th>เลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
                                 {/* <th>ค่ารถ</th> */}
@@ -108,14 +109,14 @@ const edit = () => {
                                     className='form-control'
                                     type="text" 
                                     size="1"
-                                    placeholder='ทำได้จริง'
+                                    placeholder='รายงาน'
                                     /></td>
                                     <td>{ overtimes.end_date }</td>
                                     <td><input 
                                     className='form-control'
                                     type="text" 
                                     size="1"
-                                    placeholder='เวลาเลิกงาน'
+                                    placeholder='รายงาน'
                                     /></td>
                                     <td>{ overtimes.total_date }</td>
                                     <td>{member.bus_stations}</td>
@@ -124,7 +125,7 @@ const edit = () => {
                                     className='form-control'
                                     type="text" 
                                     size="1"
-                                    placeholder='หมายเหตุ'
+                                    placeholder='รายงาน'
                                     /></td>
                                   </tr>
                                   )
@@ -132,7 +133,7 @@ const edit = () => {
                             </tbody>
                           </table>
                         </div>
-                          <div className="col-md-12">
+                          <div className="col-md-12 mt-4">
                             <div className="float-right">
                             <button className='btn btn-primary'><i className="fas fa-save"></i> ยืนยัน</button>{' '}
                               <Link
