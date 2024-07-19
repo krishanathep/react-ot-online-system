@@ -217,6 +217,7 @@ const Overtime = () => {
   const date = today.getDate();
   const currentDate = "_" + month + "_" + date + "_" + year;
 
+  // Text export function
   const textExport = async () => {
     try {
       const response = await axios.get(
@@ -247,9 +248,8 @@ const Overtime = () => {
 
   const getApprover = async () => {
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
+      .get("http://localhost/laravel_auth_jwt_api/public/api/approve-role?data="+userDatail().dept)
       .then((res) => {
-        //console.log(res.data.approver);
         setApprover(res.data.approver);
       });
   };
@@ -261,14 +261,14 @@ const Overtime = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">OT-REQUEST LIST</h1>
+                <h1 className="m-0">คำร้องขออนุมัติ OT</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">HOME</a>
+                    <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item active">OT-REQUEST</li>
+                  <li className="breadcrumb-item active">คำร้องขออนุมัติ OT</li>
                 </ol>
               </div>
             </div>
@@ -303,7 +303,7 @@ const Overtime = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-3">
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
                                   <input
@@ -317,23 +317,23 @@ const Overtime = () => {
                                 </div>
                               </div>
 
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
-                                      departmentFilter(event.target.value)
+                                    nameFilter(event.target.value)
                                     }
                                   >
                                     <option value="">กรุณาเลือกผู้ควบคุมงาน</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
-                                        value={item.name_approve_1}
+                                        value={item.app_name_1}
                                       >
-                                        {item.name_approve_1}
+                                        {item.app_name_1}
                                       </option>
                                     ))}
                                   </select>
@@ -355,9 +355,9 @@ const Overtime = () => {
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
-                                        value={item.division}
+                                        value={item.agency}
                                       >
-                                        {item.division}
+                                        {item.agency}
                                       </option>
                                     ))}
                                   </select>
@@ -377,11 +377,11 @@ const Overtime = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกสถานะการอนุมัติ
                                     </option>
-                                    <option value="รอการอนุมัติ">
-                                      รอการอนุมัติ
+                                    <option value="รออนุมัติ">
+                                      รออนุมัติ
                                     </option>
-                                    <option value="ได้รับการอนุมัติ">ได้รับการอนุมัติ</option>
-                                    <option value="ไม่ได้รับการอนุมัติ">ไม่ได้รับการอนุมัติ</option>
+                                    <option value="อนุมัติ">อนุมัติ</option>
+                                    <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                                   </select>
                                 </div>
                               </div>
@@ -423,8 +423,9 @@ const Overtime = () => {
                         {
                           accessor: "ot_member_id",
                           title: "เลขที่ใบคำร้อง",
+                          textAlignment: "center",
                         },
-                        { accessor: "department_name", title: "ผู้จัดการฝ่าย" },
+                        { accessor: "department_name", title: "ผู้จัดการฝ่าย",textAlignment: "center", },
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
@@ -437,9 +438,9 @@ const Overtime = () => {
                           render: ({ status }) => (
                             <>
                               <h5>
-                                {status === "ได้รับการอนุมัติ" ? (
+                                {status === "อนุมัติ" ? (
                                   <Badge bg="success">{status}</Badge>
-                                ) : status === "ไม่ได้รับการอนุมัติ" ? (
+                                ) : status === "ไม่อนุมัติ" ? (
                                   <Badge bg="danger">{status}</Badge>
                                 ) : (
                                   <Badge bg="primary">{status}</Badge>
@@ -449,7 +450,7 @@ const Overtime = () => {
                           ),
                         },
                         {
-                          accessor: "ot_date",
+                          accessor: "created_at",
                           title: "วันที่จัดทำ",
                           textAlignment: "center",
                           render: ({ created_at }) =>
@@ -459,21 +460,18 @@ const Overtime = () => {
                           accessor: "start_date",
                           title: "เวลาเริ่มต้น",
                           textAlignment: "center",
-                          // render: ({ start_date }) =>
-                          //   dayjs(start_date).format("DD-MMMM-YYYY"),
+                          render:({start_date})=>start_date +' น.'
                         },
                         {
                           accessor: "end_date",
                           title: "เวลาสิ้นสุด",
                           textAlignment: "center",
-                          // render: ({ end_date }) =>
-                          //   dayjs(end_date).format("DD-MMMM-YYYY"),
+                          render:({end_date})=>end_date +' น.',
                         },
                         {
                           accessor: "actions",
                           textAlignment: "center",
                           title: "ดำเนินการ",
-                          width: 300,
                           render: (blogs) => (
                             <>
                               <Link
@@ -486,34 +484,34 @@ const Overtime = () => {
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                                แก้ไข
+                                รายงานผล
                               </Link>{" "}
-                              <button
+                              {/* <button
                                 className="btn btn-danger"
                                 onClick={() => hanldeDelete(blogs)}
                               >
                                 ลบ
-                              </button>
-                              {/* <button
-                                className="btn btn-primary"
+                              </button> */}
+                              <button
+                                className="btn btn-success"
                                 onClick={() => handleApproverSubmit(blogs)}
                                 // disbled button then status = In progress
-                                // disabled={
-                                //   blogs.status === "In progress" ? false : true
-                                // }
+                                disabled={
+                                  blogs.status === "รออนุมัติ" ? false : true
+                                }
                               >
                                 อนุมัติ
-                              </button>{" "} */}
-                              {/* <button
+                              </button>{" "}
+                              <button
                                 className="btn btn-danger"
                                 onClick={() => handleRejectSubmit(blogs)}
                                 // disbled button then status = In progress
                                 disabled={
-                                  blogs.status === "In progress" ? false : true
+                                  blogs.status === "รออนุมัติ" ? false : true
                                 }
                               >
                                 ไม่อนุมัติ
-                              </button> */}
+                              </button>
                             </>
                           ),
                         },

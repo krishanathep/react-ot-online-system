@@ -33,15 +33,15 @@ const view = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">OT-REQUEST VIEW</h1>
+                <h1 className="m-0">คำร้องขออนุมัติ OT / รายละเอียด</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">HOME</a>
+                    <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item">OT-REQUEST</li>
-                  <li className="breadcrumb-item active">VIEW</li>
+                  <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
+                  <li className="breadcrumb-item active">รายละเอียด</li>
                 </ol>
               </div>
             </div>
@@ -67,8 +67,8 @@ const view = () => {
                               </tr>
                               <tr>
                                 <td><b>วันที่ทำงาน</b>  : { dayjs(overtimes.ot_date).format("DD-MM-YYYY") }</td>
-                                <td><b>เวลาที่เริ่มต้น</b>  : {overtimes.start_date } น.</td>
-                                <td><b>เวลาที่สิ้นสุด</b>  : { overtimes.end_date } น.</td>
+                                <td><b>เวลาเริ่มต้น</b>  : {overtimes.start_date } น.</td>
+                                <td><b>เวลาสิ้นสุด</b>  : { overtimes.end_date } น.</td>
                                 <td><b>เวลาทั้งหมด</b>  : { overtimes.total_date }</td>
                                 <td><b>จำนวนพนักงาน</b> : 1 คน</td>
                               </tr>
@@ -82,7 +82,6 @@ const view = () => {
                                 <th>#</th>
                                 <th>รหัส</th>
                                 <th>ชื่อพนักงาน</th>
-                                <th>หน่วยงาน</th>
                                 <th>ประเภทค่าแรง</th>
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
@@ -91,7 +90,8 @@ const view = () => {
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
-                                <th>ค่ารถ</th>
+                                {/* <th>ค่ารถ</th> */}
+                                <th>เหตุผล</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -101,16 +101,16 @@ const view = () => {
                                     <td>{index +1}</td>
                                     <td>{member.code }</td>
                                     <td>{member.emp_name}</td>
-                                    <td>HRD</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td><span className="text-primary">{member.objective}</span></td>
+                                    <td><input className='form-control'type="text" size="1"/></td>
                                     <td>{ overtimes.end_date }</td>
-                                    <td><span className="text-primary">{ member.out_time }</span></td>
+                                    <td><input className='form-control'type="text" size="1"/></td>
                                     <td>{ overtimes.total_date }</td>
                                     <td>{member.bus_stations}</td>
-                                    <td>{member.bus_price}</td>
+                                    {/* <td>{member.bus_price}</td> */}
+                                    <td><input className='form-control'type="text" size="1"/></td>
                                   </tr>
                                   )
                                 })}

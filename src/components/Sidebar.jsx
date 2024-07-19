@@ -26,13 +26,13 @@ export default function Sidebar() {
               <li className="nav-item">
                 <Link to="/" className="nav-link">
                   <i className="nav-icon fas fa-home"></i>
-                  <p>HOME</p>
+                  <p>หน้าหลัก</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/overtime" className="nav-link">
                   <i className="nav-icon fas fa-clock"></i>
-                  <p>OT-REQUEST</p>
+                  <p>ขออนุมัติ OT</p>
                 </Link>
               </li>
             </ul>

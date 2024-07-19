@@ -61,12 +61,12 @@ export default function Home() {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">HOME</h1>
+              <h1 className="m-0">หน้าหลัก</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
-                  <li className="breadcrumb-item active">HOME</li>
+                  <li className="breadcrumb-item active">หน้าหลัก</li>
                 </li>
               </ol>
             </div>
@@ -80,7 +80,7 @@ export default function Home() {
               <div className="small-box bg-info">
                 <div className="inner">
                   <h3>{overtimes}</h3>
-                  <p>คำร้องขอทำงานล่วงเวลา ทั้งหมด</p>
+                  <p>คำร้องขออนุมัติ OT ทั้งหมด</p>
                 </div>
                 <div className="icon">
                 <i className="far fa-clock"></i>

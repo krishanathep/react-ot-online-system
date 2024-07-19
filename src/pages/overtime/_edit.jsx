@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthUser } from "react-auth-kit";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -20,63 +19,28 @@ const create = () => {
     defaultValues: {
       test: [
         {
-          // emp_name: "",
-          // cost_type: "",
-          // job_type: "",
-          // bus_stations: "",
+          id: "",
+          emp_name: "",
+          cost_type: "",
+          job_type: "",
         },
       ],
     },
   });
-  const { fields, append, remove } = useFieldArray({
+
+  const { fields } = useFieldArray({
     control,
     name: "test",
   });
 
-  const [startDate, setStartDate] = useState('')
-
-  const [approver, setApprover] = useState([]);
-  const userDetail = useAuthUser();
   const navigate = useNavigate();
+  const { id } = useParams();
 
+  const [time, setTime] = useState('')
+  const [timeList, setTimeLlist] = useState([]);
+  const [approver, setApprover] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [isLoading, setLoading] = useState(false);
-
-  const [code, setCode] = useState("");
-  const [costType, setConstType] = useState("");
-
-  const [time, setTime] = useState("");
-  const [timeList, setTimeList] = useState([]);
-
-  const [employeesByrole, setEmployeesByrole] = useState([]);
-
-  const getEmployeesByrole = async () => {
-    try {
-      await axios
-        .get(
-          "http://localhost/laravel_auth_jwt_api/public/api/employees-role?data=" +
-            userDetail().dept
-        )
-        .then((res) => {
-          setEmployeesByrole(res.data.employees);
-          console.log(res.data.employees)
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //filter function by employee select
-  const employeeFilter = async (key) => {
-    await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/employees-select?data="+key
-      )
-      .then((res) => {
-        setCode(res.data.employees.code);
-        setConstType(res.data.employees.business_group)
-      });
-  };
 
   const getEmployees = async () => {
     try {
@@ -84,13 +48,82 @@ const create = () => {
       await axios
         .get("http://localhost/laravel_auth_jwt_api/public/api/employees")
         .then((res) => {
-          setEmployees(res.data.employees);
+          setEmployees(
+            res.data.employees.map((employee) => ({
+              value: employee.full_name,
+              label: employee.full_name,
+            }))
+          );
+          console.log(employees)
         });
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUpdateSubmit = async (data) => {
+
+    const newData = JSON.parse(JSON.stringify(data)); // Create a deep copy
+
+    newData.test = newData.test.map(item => ({
+      ...item,
+      emp_name: item.emp_name.value
+    }));
+
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-update/" +
+          id,
+        newData
+      )
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been updated",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        navigate("/overtime");
+        //console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getData = async () => {
+    await axios
+      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id)
+      .then((res) => {
+        reset({
+          department_name: res.data.data.department_name,
+          department: res.data.data.department,
+          ot_member_id: res.data.data.ot_member_id,
+          create_name: res.data.data.create_name,
+          ot_date: res.data.data.ot_date,
+          start_date: res.data.data.start_date,
+          end_date: res.data.data.end_date,
+          test: res.data.data.employees.map((employee) => ({
+            id: employee.id,
+            emp_name: employee.emp_name,
+            cost_type: employee.cost_type,
+            job_type: employee.job_type,
+            bus_stations: employee.bus_stations,
+          })),
+        });
+      });
+  };
+  
+
+  const getApprover = async () => {
+    await axios
+      .get("http://localhost/laravel_auth_jwt_api/public/api/approver")
+      .then((res) => {
+        console.log(res.data.approver);
+        setApprover(res.data.approver);
+      });
   };
 
   //filter function by ot list
@@ -101,7 +134,7 @@ const create = () => {
           key
       )
       .then((res) => {
-        setTimeList(res.data.time);
+        setTimeLlist(res.data.time);
       });
   };
 
@@ -117,70 +150,11 @@ const create = () => {
       });
   };
 
-  const handleCreateSubmit = async (data) => {
-    // const newData = JSON.parse(JSON.stringify(data))
-
-    // newData.test = newData.test.map((item) => ({
-    //   ...item,
-    //   emp_name: item.emp_name.value,
-    // }));
-
-    try {
-      //alert(JSON.stringify(data))
-      await axios
-        .post(
-          "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
-          data
-        )
-        .then((res) => {
-          console.log(res.data);
-          Swal.fire({
-            icon: "success",
-            title: "Your OT request has been created",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-          navigate("/overtime");
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //fetch approver by login role
-  const getApprover = async () => {
-    await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/approver-role?data=" +
-          userDetail().dept
-      )
-      .then((res) => {
-        setApprover(res.data.approver);
-      });
-  };
-
-  //filter function by ot list
-  const deptFilter = async () => {
-    await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/approve-dept?data=" +
-          userDetail().dept
-      )
-      .then((res) => {
-        reset({
-          create_name: res.data.approver.app_name_1,
-          department_name: res.data.approver.app_name_2,
-          department: res.data.approver.agency,
-        });
-      });
-  };
-
   useEffect(() => {
+    getData();
     getEmployees();
-    getApprover();
-    deptFilter();
-    getEmployeesByrole();
-  }, [time,code,costType]);
+    getApprover()
+  }, [reset]);
 
   return (
     <>
@@ -189,15 +163,15 @@ const create = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">คำร้องขออนุมัติ OT / เพิ่มคำร้องใหม่</h1>
+                <h1 className="m-0">คำร้องขออนุมัติ OT / รายงานผล</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                    <a href="#">HOME</a>
                   </li>
-                  <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
-                  <li className="breadcrumb-item active">เพิ่มคำร้องใหม่</li>
+                  <li className="breadcrumb-item">OT-REQUEST</li>
+                  <li className="breadcrumb-item active">EDIT</li>
                 </ol>
               </div>
             </div>
@@ -220,17 +194,11 @@ const create = () => {
                                   <input
                                     //readOnly
                                     type="text"
-                                    value={"OT2407093XXX"}
                                     className="form-control"
                                     {...register("ot_member_id", {
                                       required: true,
                                     })}
                                   />
-                                  {errors.ot_member_id && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
                                 </div>
                               </div>
                               <div className="col-md-3">
@@ -239,8 +207,6 @@ const create = () => {
                                   <input
                                     className="form-control"
                                     id="sel1"
-                                    //readOnly
-                                    //value={}
                                     {...register("department_name", {
                                       required: true,
                                     })}
@@ -262,6 +228,7 @@ const create = () => {
                                       required: true,
                                     })}
                                   />
+
                                   {errors.create_name && (
                                     <span className="text-danger">
                                       This field is required
@@ -273,8 +240,6 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">หน่วยงาน</label>
                                   <input
-                                    value={approver.division}
-                                    //readOnly
                                     className="form-control"
                                     id="sel1"
                                     {...register("department", {
@@ -291,29 +256,22 @@ const create = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <Controller
-                                  rules={{ required: true }}
+                                  <Controller 
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
                                         className="form-control"
-                                        placeholderText="กรุณาเลือกวันที่เริ่มต้น"
+                                        placeholderText="Select start date"
                                         onChange={(date) =>
                                           field.onChange(
-                                            dayjs(date).format("YYYY-MM-DD")
+                                            dayjs(date).format("YYYY/MM/DD")
                                           )
                                         }
-                                        dateFormat="dd-MM-yyyy"
                                         selected={field.value}
                                       />
                                     )}
-                                  /><br/>
-                                  {errors.ot_date && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
+                                  />
                                 </div>
                               </div>
                               <div className="col-md-2">
@@ -347,11 +305,6 @@ const create = () => {
                                       ล่วงเวลาทำงานวันหยุดประเพณี
                                     </option>
                                   </select>
-                                  {errors.work_type && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
                                 </div>
                               </div>
                               <div className="col-md-2">
@@ -476,20 +429,21 @@ const create = () => {
                             </div>
                           </div>
                         </div>
-                        {fields.map((item, index) => (
-                          <div
-                            className="card shadow-none border"
-                            key={item.id}
-                          >
-                            <div className="card-body">
-                              <div className="row">
+                        <form>
+                          {fields.map((item, index) => (
+                            <div
+                              className="card shadow-none border"
+                              key={item.id}
+                            >
+                              <div className="card-body">
+                                <div className="row">
                                 <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">รหัสพนักงาน :</label>
                                     <input
                                       type="text"
                                       className="form-control"
-                                      value={code}
+                                      //value={code}
                                       //readOnly
                                       {...register(`test.${index}.code`, {
                                         required: true,
@@ -502,59 +456,52 @@ const create = () => {
                                     )}
                                   </div>
                                 </div>
-                                <div className="col-md-2">
-                                  <div className="form-group">
-                                    <label htmlFor="">ชื่อพนักงาน :</label>
-                                    <select
-                                      className="form-control"
-                                      id="sel1"
-                                      {...register(`test.${index}.emp_name`, {
-                                        required: true,
-                                      })}
-                                      onChange={(event) =>
-                                        employeeFilter(event.target.value)
-                                      }
-                                    >
-                                      <option value="">
-                                        กรุณาเลือกพนักงาน
-                                      </option>
-                                      {employeesByrole.map((item) => (
-                                        <option
-                                          key={item.id}
-                                          value={item.full_name}
-                                        >
-                                          {item.code} | {item.full_name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                    {/* <Controller
+                                  <div className="col-md-2">
+                                    <div className="form-group">
+                                      <label htmlFor="">
+                                        ข้อมูลพนักงาน {index + 1} :
+                                      </label>
+                                      <input 
+                                        //readOnly
+                                        className="form-control" 
+                                        type="text" 
+                                        {...register(
+                                          `test.${index}.emp_name`,
+                                          {}
+                                        )}
+                                      />
+                                      {/* ยังดึงข้อมูลที่ต้องการแก้ไขไม่ได้ 08/07/24 */}
+                                      {/* <Controller
                                       control={control}
                                       name={`test.${index}.emp_name`}
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={employeesByrole}
+                                          options={employees}
                                           isClearable={true}
                                           isLoading={isLoading}
                                           placeholder="Please Select "
-                                          onChange={(employeesByrole) => {
-                                            field.onChange(employeesByrole);
-                                            setCode(employeesByrole.code);
-                                            setConstType(employeesByrole.cost);
-                                          }}
                                         />
                                       )}
                                     /> */}
+                                      <input
+                                        type="text"
+                                        value={item.id}
+                                        hidden
+                                      />
+                                      {errors.emp_name && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="col-md-2">
+                                  <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">ประเภทค่าแรง :</label>
                                     <input
                                       className="form-control"
                                       id="sel1"
-                                      value={costType}
-                                      //readOnly
                                       {...register(`test.${index}.cost_type`, {
                                         required: true,
                                       })}
@@ -570,7 +517,6 @@ const create = () => {
                                   <div className="form-group">
                                     <label htmlFor="">ชนิดงานที่ทำ :</label>
                                     <input
-                                      placeholder="กรุณากรอกชนิดงานที่ทำ"
                                       className="form-control"
                                       id="sel1"
                                       {...register(`test.${index}.job_type`, {
@@ -634,7 +580,7 @@ const create = () => {
                                         ไม่ระบุ
                                       </option>
                                     </select>
-                                    {errors.bus_stations && (
+                                    {errors.job_type && (
                                       <span className="text-danger">
                                         This field is required
                                       </span>
@@ -642,51 +588,47 @@ const create = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-md-12">
-                                <div className="float-right">
-                                  <button
-                                    className="btn btn-secondary btn-sm"
-                                    type="button"
-                                    onClick={() =>
-                                      append({
-                                        emp_name: "",
-                                        cost_type: "",
-                                        job_type: "",
-                                        bus_stations: "",
-                                      })
-                                    }
-                                  >
-                                    <i className="fas fa-plus"></i>
-                                  </button>{" "}
-                                  <button
-                                    className="btn btn-secondary btn-sm"
-                                    type="button"
-                                    onClick={() => remove(index)}
-                                  >
-                                    <i className="fas fa-minus"></i>
-                                  </button>
-                                </div>
+                                {/* <div className="col-md-12">
+                                  <div className="float-right">
+                                    <button
+                                      className="btn btn-secondary btn-sm"
+                                      type="button"
+                                      onClick={() =>
+                                        append({
+                                          emp_name: "",
+                                          cost_type: "",
+                                          job_type: "",
+                                        })
+                                      }
+                                    >
+                                      <i className="fas fa-plus"></i>
+                                    </button>{" "}
+                                    <button
+                                      className="btn btn-secondary btn-sm"
+                                      type="button"
+                                      onClick={() => remove(index)}
+                                    >
+                                      <i className="fas fa-minus"></i>
+                                    </button>
+                                  </div>
+                                </div> */}
                               </div>
                             </div>
+                          ))}
+                          <div className="col-md-12">
+                            <div className="float-right">
+                              <button
+                                onClick={handleSubmit(handleUpdateSubmit)}
+                                className="btn btn-primary"
+                              >
+                                ยืนยัน
+                              </button>{" "}
+                              <Link to={"/overtime"} className="btn btn-danger">
+                                ย้อนกลับ
+                              </Link>
+                            </div>
                           </div>
-                        ))}
-                        <div className="col-md-12">
-                          <div className="float-right">
-                            {/* <button 
-                             onClick={handleRegenerate}
-                             className="btn btn-secondary"
-                            >สร้างรหัส</button>{' '} */}
-                            <button
-                              onClick={handleSubmit(handleCreateSubmit)}
-                              className="btn btn-primary"
-                            >
-                              <i className="fas fa-save"></i> ยืนยัน
-                            </button>{" "}
-                            <Link to={"/overtime"} className="btn btn-danger">
-                              ย้อนกลับ
-                            </Link>
-                          </div>
-                        </div>
+                        </form>
                       </div>
                     </div>
                   </div>
