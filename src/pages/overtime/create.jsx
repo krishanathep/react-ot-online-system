@@ -4,17 +4,14 @@ import { useAuthUser } from "react-auth-kit";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import DualListBox from "react-dual-listbox";
+import "react-dual-listbox/lib/react-dual-listbox.css";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
 
 const create = () => {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
   const {
     register,
     control,
@@ -22,23 +19,14 @@ const create = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      test: [
-        {
-          // emp_name: "",
-          // cost_type: "",
-          // job_type: "",
-          // bus_stations: "",
-        },
-      ],
-    },
+    defaultValues: {},
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "test",
   });
 
-  const [startDate, setStartDate] = useState('')
+  const [startDate, setStartDate] = useState("");
 
   const [approver, setApprover] = useState([]);
   const userDetail = useAuthUser();
@@ -53,7 +41,7 @@ const create = () => {
   const [time, setTime] = useState("");
   const [timeList, setTimeList] = useState([]);
 
-  const [employeesByrole, setEmployeesByrole] = useState([]);
+  const [employeesByrole, setEmployeesbyrole] = useState([]);
 
   const getEmployeesByrole = async () => {
     try {
@@ -63,18 +51,27 @@ const create = () => {
             userDetail().dept
         )
         .then((res) => {
-          setEmployeesByrole(
-            res.data.employees.map((employee) => ({
-              value: employee.full_name,
+          setEmployeesbyrole(
+            res.data.employees.map((employee, index) => ({
+              value: employee.id,
               label: employee.full_name,
+              // label: employee.code+" | "+employee.full_name+" | "+employee.position,
               code: employee.code,
-              cost: employee.cost,
+              cost: employee.business_group,
             }))
           );
         });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const [selected, setSelected] = useState([]);
+
+  const submitEmployee = async () => {
+    selected.forEach((item) => {
+      append({ option: item });
+    });
   };
 
   const getEmployees = async () => {
@@ -117,7 +114,7 @@ const create = () => {
   };
 
   const handleCreateSubmit = async (data) => {
-    const newData = JSON.parse(JSON.stringify(data))
+    const newData = JSON.parse(JSON.stringify(data));
 
     newData.test = newData.test.map((item) => ({
       ...item,
@@ -179,7 +176,7 @@ const create = () => {
     getApprover();
     deptFilter();
     getEmployeesByrole();
-  }, [time,code,costType]);
+  }, [time]);
 
   return (
     <>
@@ -196,7 +193,9 @@ const create = () => {
                     <a href="#">หน้าหลัก</a>
                   </li>
                   <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
-                  <li className="breadcrumb-item active">เพิ่มคำร้องขออนุมัติ</li>
+                  <li className="breadcrumb-item active">
+                    เพิ่มคำร้องขออนุมัติ
+                  </li>
                 </ol>
               </div>
             </div>
@@ -209,7 +208,7 @@ const create = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-12">
+                      <div className="col-md-12 mt-3">
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
@@ -291,7 +290,7 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
                                   <Controller
-                                  rules={{ required: true }}
+                                    rules={{ required: true }}
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
@@ -307,7 +306,8 @@ const create = () => {
                                         selected={field.value}
                                       />
                                     )}
-                                  /><br/>
+                                  />
+                                  <br />
                                   {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
@@ -458,6 +458,8 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">จำนวนชั่วโมง</label>
                                   <input
+                                    readOnly
+                                    placeholder="0"
                                     className="form-control"
                                     {...register("total_date", {
                                       required: true,
@@ -475,7 +477,93 @@ const create = () => {
                             </div>
                           </div>
                         </div>
-                        {fields.map((item, index) => (
+                        <div className="card">
+                          <div className="card-body">
+                            <div className="row">
+                              <div className="col-md-12 mb-3">
+                                <DualListBox
+                                  canFilter
+                                  required
+                                  options={employeesByrole}
+                                  selected={selected}
+                                  onChange={(newValue) => setSelected(newValue)}
+                                />
+                              </div>
+                              <div className="col-md-12">
+                                <button
+                                  className="btn btn-success btn-sm float-right"
+                                  type="button"
+                                  onClick={submitEmployee}
+                                >
+                                  <i className="fas fa-plus"></i> พนักงาน
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr align="center">
+                              <th>#</th>
+                              <th>รหัสพนักงาน</th>
+                              <th>ชื่อพนักงาน</th>
+                              <th>ประเภทค่าแรง</th>
+                              <th>ชนิดงานที่ทำ</th>
+                              <th>เป้าหมาย</th>
+                              <th>จุดลงรถรับส่ง</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {fields.map((field, index) => (
+                              <tr key={field.id}>
+                                <td>{index + 1}</td>
+                                <td>
+                                  <input 
+                                  className="form-control" 
+                                  type="text" 
+                                  value={
+                                    employeesByrole.find(
+                                      (opt) => opt.value === field.option
+                                    )?.code
+                                  }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-control"
+                                    type="text"
+                                    value={
+                                      employeesByrole.find(
+                                        (opt) => opt.value === field.option
+                                      )?.label
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input 
+                                  className="form-control" 
+                                  type="text" 
+                                  value={
+                                    employeesByrole.find(
+                                      (opt) => opt.value === field.option
+                                    )?.cost
+                                  }
+                                  />
+                                </td>
+                                <td>
+                                  <input className="form-control" type="text" />
+                                </td>
+                                <td>
+                                  <input className="form-control" type="text" />
+                                </td>
+                                <td>
+                                  <input className="form-control" type="text" />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {/* {fields.map((item, index) => (
                           <div
                             className="card shadow-none border"
                             key={item.id}
@@ -488,7 +576,7 @@ const create = () => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      //value={code}
+                                      value={code}
                                       //readOnly
                                       {...register(`test.${index}.code`, {
                                         required: true,
@@ -504,29 +592,11 @@ const create = () => {
                                 <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">ชื่อพนักงาน :</label>
-                                    <input type="text" className="form-control" />
-                                    {/* <Select options={formattedOptions} 
-                                  
-                                    /> */}
-                                    {/* <Controller
-                                      rules={{ required: true }}
-                                      control={control}
-                                      name={`test.${index}.emp_name`}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={employeesByrole}
-                                          isClearable={true}
-                                          isLoading={isLoading}
-                                          placeholder="Please Select "
-                                          onChange={(employeesByrole) => {
-                                            field.onChange(employeesByrole);
-                                            setCode(employeesByrole.code);
-                                            setConstType(employeesByrole.cost);
-                                          }}
-                                        />
-                                      )}
-                                    /> */}
+                                    <input
+                                      type="text"
+                                      value={name}
+                                      className="form-control"
+                                    />
                                   </div>
                                 </div>
                                 <div className="col-md-2">
@@ -535,7 +605,7 @@ const create = () => {
                                     <input
                                       className="form-control"
                                       id="sel1"
-                                      //value={costType}
+                                      value={costType}
                                       //readOnly
                                       {...register(`test.${index}.cost_type`, {
                                         required: true,
@@ -624,40 +694,11 @@ const create = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-md-12">
-                                <div className="float-right">
-                                  <button
-                                    className="btn btn-secondary btn-sm"
-                                    type="button"
-                                    onClick={() =>
-                                      append({
-                                        emp_name: "",
-                                        cost_type: "",
-                                        job_type: "",
-                                        bus_stations: "",
-                                      })
-                                    }
-                                  >
-                                    <i className="fas fa-plus"></i>
-                                  </button>{" "}
-                                  <button
-                                    className="btn btn-secondary btn-sm"
-                                    type="button"
-                                    onClick={() => remove(index)}
-                                  >
-                                    <i className="fas fa-minus"></i>
-                                  </button>
-                                </div>
-                              </div>
                             </div>
                           </div>
-                        ))}
-                        <div className="col-md-12">
+                        ))} */}
+                        <div>
                           <div className="float-right">
-                            {/* <button 
-                             onClick={handleRegenerate}
-                             className="btn btn-secondary"
-                            >สร้างรหัส</button>{' '} */}
                             <button
                               onClick={handleSubmit(handleCreateSubmit)}
                               className="btn btn-primary"
