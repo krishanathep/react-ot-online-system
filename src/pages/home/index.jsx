@@ -80,7 +80,7 @@ export default function Home() {
               <div className="small-box bg-info">
                 <div className="inner">
                   <h3>{overtimes}</h3>
-                  <p>คำร้องขออนุมัติ OT ทั้งหมด</p>
+                  <p>ขออนุมัติ OT ทั้งหมด</p>
                 </div>
                 <div className="icon">
                 <i className="far fa-clock"></i>

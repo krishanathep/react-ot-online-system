@@ -33,7 +33,7 @@ const view = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">คำร้องขออนุมัติ OT / รายละเอียด</h1>
+                <h1 className="m-0">ข้อมูลคำร้องขออนุมัติ OT</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -41,7 +41,7 @@ const view = () => {
                     <a href="#">หน้าหลัก</a>
                   </li>
                   <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
-                  <li className="breadcrumb-item active">รายละเอียด</li>
+                  <li className="breadcrumb-item active">ข้อมูลคำร้องขออนุมัติ OT</li>
                 </ol>
               </div>
             </div>
@@ -56,7 +56,7 @@ const view = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="col-md-12">
-                          <table className="table table mt-5">
+                          <table className="table table-borderless mt-3">
                             <thead>
                               <tr>
                                 <td><b>เลขคำร้อง</b> :  { overtimes.ot_member_id }</td>
@@ -74,10 +74,9 @@ const view = () => {
                               </tr>
                             </thead>
                           </table>
-                          <hr />
                         </div>
                         <div className="col-md-12">
-                          <table className="table table-bordered mt-5">
+                          <table className="table table-bordered mt-3">
                             <thead>
                               <tr align={'center'}>
                                 <th>#</th>
@@ -105,13 +104,17 @@ const view = () => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className='text-danger'>รอรายงาน</td>
+                                    <td className='text-danger'>
+                                      {member.objective}
+                                    </td>
                                     <td>{ overtimes.end_date }</td>
-                                    <td className='text-danger'>รอรายงาน</td>
+                                    <td className='text-danger'>
+                                      {member.out_time}
+                                    </td>
                                     <td>{ overtimes.total_date }</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className='text-danger'>รอรายงาน</td>
+                                    <td className='text-danger'>{member.remark}</td>
                                   </tr>
                                   )
                                 })}
@@ -119,7 +122,7 @@ const view = () => {
                           </table>
                         </div>
                         <div className="col-md-12">
-                            <table className="table table mt-5">
+                            <table className="table table-borderless mt-3">
                                 <thead>
                                 <tr align="center">
                                     <th>หัวหน้าหน่วย</th>
@@ -135,9 +138,8 @@ const view = () => {
                                   </tr>
                                 </thead>
                             </table>
-                            <hr />
                           </div>
-                          <div className="col-md-12">
+                          <div className="col-md-12 mt-3">
                             <div className="float-right">
                               <Link
                                 to={"/overtime"}

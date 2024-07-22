@@ -77,6 +77,14 @@ const create = () => {
     }
   };
 
+  // Transform API data to match react-select format
+  const formattedOptions = employees.map(item => ({
+    value: item.id,
+    label: item.emp_name
+  }));
+  
+  setOptions(formattedOptions);
+
   const getEmployees = async () => {
     try {
       setLoading(true);
@@ -504,10 +512,9 @@ const create = () => {
                                 <div className="col-md-2">
                                   <div className="form-group">
                                     <label htmlFor="">ชื่อพนักงาน :</label>
-                                    <input type="text" className="form-control" />
-                                    {/* <Select options={formattedOptions} 
+                                    <Select options={formattedOptions} 
                                   
-                                    /> */}
+                                    />
                                     {/* <Controller
                                       rules={{ required: true }}
                                       control={control}

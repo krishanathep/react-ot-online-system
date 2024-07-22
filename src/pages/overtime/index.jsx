@@ -261,7 +261,7 @@ const Overtime = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">คำร้องขออนุมัติ OT</h1>
+                <h1 className="m-0">คำร้องขออนุมัติ OT ทั้งหมด</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
