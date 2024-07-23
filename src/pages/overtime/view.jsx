@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-//import { Stepper } from 'react-form-stepper'
 import axios from "axios";
 import dayjs from "dayjs";
 
-const view = () => {
+const view = ({ steps }) => {
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
@@ -12,7 +11,9 @@ const view = () => {
 
   const getData = async () => {
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id)
+      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id, {
+        timeout: 5000,
+      })
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
@@ -181,8 +182,30 @@ const view = () => {
                             </thead>
                           </table>
                         </div>
+                        {/* Stepper Function */}
                         <div className="col-md-12">
-                         
+                          {/* <div className="card shadow-none border mt-5">
+                            <div className="card-boyd"> */}
+                            <div className="stepper-wrapper">
+                            <div className="stepper-item completed">
+                              <div className="step-counter text-white">1</div>
+                              <div className="step-name">First</div>
+                            </div>
+                            <div className="stepper-item">
+                              <div className="step-counter text-white">2</div>
+                              <div className="step-name">Second</div>
+                            </div>
+                            <div className="stepper-item">
+                              <div className="step-counter text-white">3</div>
+                              <div className="step-name">Third</div>
+                            </div>
+                            <div className="stepper-item">
+                              <div className="step-counter text-white">4</div>
+                              <div className="step-name">Forth</div>
+                            </div>
+                          </div>
+                            {/* </div>
+                          </div> */}
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">

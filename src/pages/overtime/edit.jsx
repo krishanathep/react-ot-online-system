@@ -233,6 +233,33 @@ const edit = () => {
                             </thead>
                           </table>
                         </div>
+                        {/* Stepper Function */}
+                        <div className="col-md-12">
+                          {/* <div className="card shadow-none border mt-5">
+                            <div className="card-boyd"> */}
+                              <div className="stepper-wrapper">
+                                <div className="stepper-item completed">
+                                  <div className="step-counter text-white">
+                                    1
+                                  </div>
+                                  <div className="step-name">First</div>
+                                </div>
+                                <div className="stepper-item">
+                                  <div className="step-counter text-white">
+                                    2
+                                  </div>
+                                  <div className="step-name">Second</div>
+                                </div>
+                                <div className="stepper-item">
+                                  <div className="step-counter text-white">
+                                    3
+                                  </div>
+                                  <div className="step-name">Third</div>
+                                </div>
+                              </div>
+                            {/* </div>
+                          </div> */}
+                        </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <button
