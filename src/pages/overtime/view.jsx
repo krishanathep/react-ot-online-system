@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+//import { Stepper } from 'react-form-stepper'
+import axios from "axios";
 import dayjs from "dayjs";
 
 const view = () => {
-
   const { id } = useParams();
 
-  const [overtimes, setOvertimes]=useState({})
-  const [members, setMemebers]=useState([])
+  const [overtimes, setOvertimes] = useState({});
+  const [members, setMemebers] = useState([]);
 
   const getData = async () => {
     await axios
-      .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest/"+id
-      )
+      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id)
       .then((res) => {
         setOvertimes(res.data.data);
-        setMemebers(res.data.data.employees)
-        console.log(res.data.data)
+        setMemebers(res.data.data.employees);
+        console.log(res.data.data);
       });
   };
 
@@ -41,7 +39,9 @@ const view = () => {
                     <a href="#">หน้าหลัก</a>
                   </li>
                   <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
-                  <li className="breadcrumb-item active">ข้อมูลคำร้องขออนุมัติ OT</li>
+                  <li className="breadcrumb-item active">
+                    ข้อมูลคำร้องขออนุมัติ OT
+                  </li>
                 </ol>
               </div>
             </div>
@@ -51,7 +51,7 @@ const view = () => {
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-12">
-              <div className="card card-outline card-primary">
+                <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
@@ -59,18 +59,43 @@ const view = () => {
                           <table className="table table-borderless mt-3">
                             <thead>
                               <tr>
-                                <td><b>เลขคำร้อง</b> :  { overtimes.ot_member_id }</td>
-                                <td><b>ผู้จัดการฝ่าย</b>  : { overtimes.department_name }</td>
-                                <td><b>ผู้ควบคุมงาน</b>  : { overtimes.create_name }</td>
-                                <td><b>หน่วยงาน</b>  :  { overtimes.department }</td>
-                                <td><b>ประเภทงาน</b>  : { overtimes.work_type }</td>
+                                <td>
+                                  <b>เลขคำร้อง</b> : {overtimes.ot_member_id}
+                                </td>
+                                <td>
+                                  <b>ผู้จัดการฝ่าย</b> :{" "}
+                                  {overtimes.department_name}
+                                </td>
+                                <td>
+                                  <b>ผู้ควบคุมงาน</b> : {overtimes.create_name}
+                                </td>
+                                <td>
+                                  <b>หน่วยงาน</b> : {overtimes.department}
+                                </td>
+                                <td>
+                                  <b>ประเภทงาน</b> : {overtimes.work_type}
+                                </td>
                               </tr>
                               <tr>
-                                <td><b>วันที่ทำงาน</b>  : { dayjs(overtimes.ot_date).format("DD-MM-YYYY") }</td>
-                                <td><b>เวลาเริ่มต้น</b>  : {overtimes.start_date } น.</td>
-                                <td><b>เวลาสิ้นสุด</b>  : { overtimes.end_date } น.</td>
-                                <td><b>เวลาทั้งหมด</b>  : { overtimes.total_date }</td>
-                                <td><b>จำนวนพนักงาน</b> : 1 คน</td>
+                                <td>
+                                  <b>วันที่ทำงาน</b> :{" "}
+                                  {dayjs(overtimes.ot_date).format(
+                                    "DD-MM-YYYY"
+                                  )}
+                                </td>
+                                <td>
+                                  <b>เวลาเริ่มต้น</b> : {overtimes.start_date}{" "}
+                                  น.
+                                </td>
+                                <td>
+                                  <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
+                                </td>
+                                <td>
+                                  <b>เวลาทั้งหมด</b> : {overtimes.total_date}
+                                </td>
+                                <td>
+                                  <b>จำนวนพนักงาน</b> : 1 คน
+                                </td>
                               </tr>
                             </thead>
                           </table>
@@ -78,7 +103,7 @@ const view = () => {
                         <div className="col-md-12">
                           <table className="table table-bordered mt-3">
                             <thead>
-                              <tr align={'center'}>
+                              <tr align={"center"}>
                                 <th>#</th>
                                 <th>รหัส</th>
                                 <th>ชื่อพนักงาน</th>
@@ -95,60 +120,77 @@ const view = () => {
                               </tr>
                             </thead>
                             <tbody>
-                                {members.map((member, index)=>{
-                                  return(
-                                    <tr align='center' key={member.id}>
-                                    <td>{index +1}</td>
-                                    <td>{member.code }</td>
+                              {members.map((member, index) => {
+                                return (
+                                  <tr align="center" key={member.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{member.code}</td>
                                     <td>{member.emp_name}</td>
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className='text-danger'>
-                                      {member.objective}
+                                    <td className="text-primary">
+                                      {member.objective === null ? (
+                                        <i className="fas fa-edit"></i>
+                                      ) : (
+                                        member.objective
+                                      )}
                                     </td>
-                                    <td>{ overtimes.end_date }</td>
-                                    <td className='text-danger'>
-                                      {member.out_time}
+                                    <td>{overtimes.end_date}</td>
+                                    <td className="text-primary">
+                                      {member.out_time === null ? (
+                                        <i className="fas fa-edit"></i>
+                                      ) : (
+                                        member.out_time
+                                      )}
                                     </td>
-                                    <td>{ overtimes.total_date }</td>
+                                    <td>{overtimes.total_date}</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className='text-danger'>{member.remark}</td>
+                                    <td className="text-primary">
+                                      {member.remark === null ? (
+                                        <i className="fas fa-edit"></i>
+                                      ) : (
+                                        member.remark
+                                      )}
+                                    </td>
                                   </tr>
-                                  )
-                                })}
+                                );
+                              })}
                             </tbody>
                           </table>
                         </div>
                         <div className="col-md-12">
-                            <table className="table table-borderless mt-3">
-                                <thead>
-                                <tr align="center">
-                                    <th>หัวหน้าหน่วย</th>
-                                    <th>หัวหน้าส่วน</th>
-                                    <th>ผู้จัดการฝ่าย</th>
-                                    <th>ผู้จัดการอาวุโส</th>
-                                  </tr>
-                                  <tr align="center">
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.department_name }</td>
-                                    <td>{ overtimes.department_name }</td>
-                                  </tr>
-                                </thead>
-                            </table>
+                          <table className="table table-borderless mt-5">
+                            <thead>
+                              <tr align="center">
+                                <td>
+                                  <b>หัวหน้าหน่วย</b> : {overtimes.name_app_1}
+                                </td>
+                                <td>
+                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}
+                                </td>
+                                <td>
+                                  <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
+                                </td>
+                                <td>
+                                  <b>ผู้จัดการอาวุโส</b> :{" "}
+                                  {overtimes.name_app_4}
+                                </td>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                        <div className="col-md-12">
+                         
+                        </div>
+                        <div className="col-md-12 mt-3">
+                          <div className="float-right">
+                            <Link to={"/overtime"} className="btn btn-danger">
+                              ย้อนกลับ
+                            </Link>{" "}
                           </div>
-                          <div className="col-md-12 mt-3">
-                            <div className="float-right">
-                              <Link
-                                to={"/overtime"}
-                                className="btn btn-danger"
-                              >
-                                ย้อนกลับ
-                              </Link>{" "}
-                            </div>
-                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -159,7 +201,7 @@ const view = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default view
+export default view;

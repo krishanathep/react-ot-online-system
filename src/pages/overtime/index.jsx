@@ -3,8 +3,8 @@ import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
-
 import Swal from "sweetalert2";
+
 import dayjs from "dayjs";
 import axios from "axios";
 
@@ -248,7 +248,10 @@ const Overtime = () => {
 
   const getApprover = async () => {
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/approve-role?data="+userDatail().dept)
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/approve-role?data=" +
+          userDatail().dept
+      )
       .then((res) => {
         setApprover(res.data.approver);
       });
@@ -324,10 +327,12 @@ const Overtime = () => {
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
-                                    nameFilter(event.target.value)
+                                      nameFilter(event.target.value)
                                     }
                                   >
-                                    <option value="">กรุณาเลือกผู้ควบคุมงาน</option>
+                                    <option value="">
+                                      กรุณาเลือกผู้ควบคุมงาน
+                                    </option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -339,8 +344,7 @@ const Overtime = () => {
                                   </select>
                                 </div>
                               </div>
-                              
-                              
+
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">หน่วยงาน</label>
@@ -353,10 +357,7 @@ const Overtime = () => {
                                   >
                                     <option value="">กรุณาเลือกหน่วยงาน</option>
                                     {approver.map((item) => (
-                                      <option
-                                        key={item.id}
-                                        value={item.agency}
-                                      >
+                                      <option key={item.id} value={item.agency}>
                                         {item.agency}
                                       </option>
                                     ))}
@@ -377,21 +378,28 @@ const Overtime = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกสถานะการอนุมัติ
                                     </option>
-                                    <option value="รออนุมัติ">
-                                      รออนุมัติ
-                                    </option>
+                                    <option value="รออนุมัติ">รออนุมัติ</option>
                                     <option value="อนุมัติ">อนุมัติ</option>
-                                    <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                                    <option value="ไม่อนุมัติ">
+                                      ไม่อนุมัติ
+                                    </option>
                                   </select>
                                 </div>
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
+                                  {/* <DatePicker/> */}
                                   <input
                                     type="date"
                                     className="form-control"
-                                    onChange={(event) => dateFilter(dayjs(event.target.value).format("YYYY-MM-DD"))}
+                                    onChange={(event) =>
+                                      dateFilter(
+                                        dayjs(event.target.value).format(
+                                          "YYYY-MM-DD"
+                                        )
+                                      )
+                                    }
                                   />
                                 </div>
                               </div>
@@ -425,7 +433,11 @@ const Overtime = () => {
                           title: "เลขที่ใบคำร้อง",
                           textAlignment: "center",
                         },
-                        { accessor: "department_name", title: "ผู้จัดการฝ่าย",textAlignment: "center", },
+                        {
+                          accessor: "department_name",
+                          title: "ผู้จัดการฝ่าย",
+                          textAlignment: "center",
+                        },
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
@@ -460,13 +472,13 @@ const Overtime = () => {
                           accessor: "start_date",
                           title: "เวลาเริ่มต้น",
                           textAlignment: "center",
-                          render:({start_date})=>start_date +' น.'
+                          render: ({ start_date }) => start_date + " น.",
                         },
                         {
                           accessor: "end_date",
                           title: "เวลาสิ้นสุด",
                           textAlignment: "center",
-                          render:({end_date})=>end_date +' น.',
+                          render: ({ end_date }) => end_date + " น.",
                         },
                         {
                           accessor: "actions",
@@ -483,8 +495,11 @@ const Overtime = () => {
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
+                                // hidden={
+                                //   blogs.status === "รออนุมัติ" ? true : false
+                                // }
                               >
-                                รายงานผล
+                                รายงาน
                               </Link>{" "}
                               {/* <button
                                 className="btn btn-danger"

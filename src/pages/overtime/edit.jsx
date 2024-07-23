@@ -28,7 +28,7 @@ const edit = () => {
       .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id)
       .then((res) => {
         setOvertimes(res.data.data);
-        setMemebers(res.data.data.employees); 
+        setMemebers(res.data.data.employees);
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
@@ -36,7 +36,7 @@ const edit = () => {
             out_time: employee.out_time,
             remark: employee.remark,
           })),
-        })
+        });
       });
   };
 
@@ -44,7 +44,8 @@ const edit = () => {
     await axios
       .put(
         "http://localhost/laravel_auth_jwt_api/public/api/otrequest-update-report/" +
-          id,data
+          id,
+        data
       )
       .then((res) => {
         Swal.fire({
@@ -59,7 +60,7 @@ const edit = () => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -175,7 +176,7 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="เพิ่มข้อมูล"
+                                        placeholder="รายงานผล"
                                         {...register(
                                           `test.${index}.objective`,
                                           {}
@@ -188,7 +189,7 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="เพิ่มข้อมูล"
+                                        placeholder="รายงานผล"
                                         {...register(
                                           `test.${index}.out_time`,
                                           {}
@@ -203,7 +204,7 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="เพิ่มข้อมูล"
+                                        placeholder="รายงานผล"
                                         {...register(
                                           `test.${index}.remark`,
                                           {}
@@ -217,29 +218,26 @@ const edit = () => {
                           </table>
                         </div>
                         <div className="col-md-12">
-                            <table className="table table-borderless mt-3">
-                                <thead>
-                                <tr align="center">
-                                    <th width='20%'></th>
-                                    <th>หัวหน้าส่วน</th>
-                                    <th>ผู้จัดการฝ่าย</th>
-                                    <th width='20%'></th>
-                                  </tr>
-                                  <tr align="center">
-                                    <td></td>
-                                    <td>{ overtimes.create_name }</td>
-                                    <td>{ overtimes.department_name }</td>
-                                    <td></td>
-                                  </tr>
-                                </thead>
-                            </table>
-               
-                          </div>
+                          <table className="table table-borderless mt-5">
+                            <thead>
+                              <tr align="center">
+                                <td width="20%"></td>
+                                <td>
+                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}
+                                </td>
+                                <td>
+                                  <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_2}
+                                </td>
+                                <td width="20%"></td>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <button 
-                            className="btn btn-primary"
-                            onClick={handleSubmit(handleUpdateSubmit)}
+                            <button
+                              className="btn btn-primary"
+                              onClick={handleSubmit(handleUpdateSubmit)}
                             >
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}
