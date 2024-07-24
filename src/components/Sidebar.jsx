@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink as Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 
 export default function Sidebar() {
+  const userdetail = useAuthUser()
   return (
     <>
       <aside className="main-sidebar nav-pills sidebar-dark-primary sidebar-no-expand elevation-1">
@@ -29,10 +31,16 @@ export default function Sidebar() {
                   <p>หน้าหลัก</p>
                 </Link>
               </li>
-              <li className="nav-item">
+                <li className="nav-item">
                 <Link to="/overtime" className="nav-link">
-                  <i className="nav-icon fas fa-clock"></i>
+                  <i className="nav-icon fas fa-calendar-plus"></i>
                   <p>ขออนุมัติ OT</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/approver" className="nav-link">
+                  <i className="nav-icon fas fa-user-check"></i>
+                  <p>การอนุมัติ OT</p>
                 </Link>
               </li>
             </ul>

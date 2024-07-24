@@ -166,6 +166,7 @@ const create = () => {
           email_app_2: res.data.approver.app_email_2,
           email_app_3: res.data.approver.app_email_3,
           email_app_4: res.data.approver.app_email_4,
+          dept: res.data.approver.dept,
         });
       });
   };
@@ -385,6 +386,36 @@ const create = () => {
                                     <option value="OT หลังเลิกงาน-พัก 20 นาที">
                                       OT วันหยุด หลังเลิกงาน-พัก 20 นาที
                                     </option>
+                                    <option value="">
+                                      OT วันธรรมดา ประเภท 1 ก่อนเข้ากะ
+                                    </option>
+                                    <option value="">
+                                      OT วันธรรมดา ประเภท 1 หลังกะ
+                                    </option>
+                                    <option value="">
+                                      OT วันหยุด ประเภท 1 วันหยุดปกติ
+                                    </option>
+                                    <option value="">
+                                      OT วันหยุด ประเภท 1 ก่อนเข้ากะ
+                                    </option>
+                                    <option value="">
+                                      OT วันหยุด ประเภท 1 หลังกะ
+                                    </option>
+                                    <option value="">
+                                      OT วันธรรมดา ประเภท 2 ก่อนเข้ากะ
+                                    </option>
+                                    <option value="">
+                                      OT วันธรรมดา ประเภท 2 หลังกะ
+                                    </option>
+                                    <option value="">
+                                      OT วันหยุด ประเภท 2 วันหยุดปกติ
+                                    </option>
+                                    <option value="">
+                                      OT วันหยุด ประเภท 2 ก่อนเข้ากะ
+                                    </option> 
+                                    <option value="">
+                                      OT วันหยุด ประเภท 2 หลังกะ
+                                    </option>
                                   </select>
                                   {errors.ot_type && (
                                     <span className="text-danger">
@@ -476,6 +507,7 @@ const create = () => {
                                 <input type="text"{...register("email_app_1", {required: true,})} /> <input type="text"{...register("email_app_3", {required: true,})} />{" "}
                                 <input type="text"{...register("name_app_2", {required: true,})} /> <input type="text"{...register("name_app_4", {required: true,})} />{" "}
                                 <input type="text"{...register("email_app_2", {required: true,})} /> <input type="text"{...register("email_app_4", {required: true,})} />
+                                <input type="text" {...register("dept", {required: true,})}/>
                               </div>
                             </div>
                           </div>

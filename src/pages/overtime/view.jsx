@@ -61,7 +61,7 @@ const view = ({ steps }) => {
                             <thead>
                               <tr>
                                 <td>
-                                  <b>เลขคำร้อง</b> : {overtimes.ot_member_id}
+                                  <b>เลขที่คำร้อง</b> : {overtimes.ot_member_id}
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> :{" "}
@@ -183,30 +183,26 @@ const view = ({ steps }) => {
                           </table>
                         </div>
                         {/* Stepper Function */}
-                        <div className="col-md-12">
-                          {/* <div className="card shadow-none border mt-5">
-                            <div className="card-boyd"> */}
+                        {/* <div className="col-md-12">
                             <div className="stepper-wrapper">
-                            <div className="stepper-item completed">
+                            <div className={`stepper-item completed`}>
                               <div className="step-counter text-white">1</div>
                               <div className="step-name">First</div>
                             </div>
-                            <div className="stepper-item">
+                            <div className="stepper-item completed">
                               <div className="step-counter text-white">2</div>
                               <div className="step-name">Second</div>
                             </div>
-                            <div className="stepper-item">
+                            <div className="stepper-item completed">
                               <div className="step-counter text-white">3</div>
                               <div className="step-name">Third</div>
                             </div>
-                            <div className="stepper-item">
+                            <div className="stepper-item completed">
                               <div className="step-counter text-white">4</div>
                               <div className="step-name">Forth</div>
                             </div>
                           </div>
-                            {/* </div>
-                          </div> */}
-                        </div>
+                        </div> */}
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <Link to={"/overtime"} className="btn btn-danger">

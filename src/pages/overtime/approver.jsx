@@ -10,7 +10,7 @@ import axios from "axios";
 
 const PAGE_SIZES = [10, 20, 30];
 
-const Overtime = () => {
+const Approver = () => {
 
   //user login
   const userDatail = useAuthUser();
@@ -283,7 +283,7 @@ const Overtime = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="float-right">
+                        {/* <div className="float-right">
                           <button
                             onClick={textExport}
                             className="btn btn-secondary mb-3"
@@ -302,7 +302,7 @@ const Overtime = () => {
                           >
                             <i className="fa fa-plus"></i> คำร้องใหม่
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="row">
@@ -500,24 +500,50 @@ const Overtime = () => {
                           title: "ดำเนินการ",
                           render: (blogs) => (
                             <>
-                              <Link
+                             <Link
                                 to={"/overtime/view/" + blogs.id}
                                 className="btn btn-info"
                               >
-                                รายละเอียด
+                                ดูข้อมูล
                               </Link>{" "}
-                              <Link
-                                to={"/overtime/edit/" + blogs.id}
-                                className="btn btn-primary"
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_1'?false:true}
+                                disabled={blogs.status==='approver_1'?false:true}
                               >
-                                รายงานผล
-                              </Link>{" "}
-                              {/* <button
+                                อนุมัติ 1
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_2'?false:true}
+                                disabled={blogs.status==='approver_2'?false:true}
+                              >
+                                อนุมัติ 2
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_3'?false:true}
+                                disabled={blogs.status==='approver_3'?false:true}
+                              >
+                                อนุมัติ 3
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_4'?false:true}
+                                disabled={blogs.status==='approver_4'?false:true}
+                              >
+                                อนุมัติ 4
+                              </button>{" "}
+                              <button
                                 className="btn btn-danger"
-                                onClick={() => hanldeDelete(blogs)}
+                                onClick={() => handleRejectSubmit(blogs)}
                               >
-                                ลบ
-                              </button> */}
+                                ไม่อนุมัติ
+                              </button>
                             </>
                           ),
                         },
@@ -542,4 +568,4 @@ const Overtime = () => {
   );
 };
 
-export default Overtime;
+export default Approver;

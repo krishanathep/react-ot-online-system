@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
 
 export default function Home() {
+
+  //user login
+  const userDatail = useAuthUser();
 
   const [overtimes, setOvertimes] = useState(0);
   const [inprogress, setInprogress] = useState(0);
@@ -11,17 +15,17 @@ export default function Home() {
   const getAll = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests"
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data="+ userDatail().dept
       )
       .then((res) => {
-        setOvertimes(res.data.data.length);
+        setOvertimes(res.data.otrequests.length);
       });
   };
 
   const getInprogress = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-inprogress"
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-inprogress?data="+ userDatail().dept
       )
       .then((res) => {
         setInprogress(res.data.otrequests.length);
@@ -31,7 +35,7 @@ export default function Home() {
   const getApproved = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-approved"
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-approved?data="+ userDatail().dept
       )
       .then((res) => {
         setApproved(res.data.otrequests.length);
@@ -41,7 +45,7 @@ export default function Home() {
   const getRejected = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-rejected"
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-rejected?data="+ userDatail().dept
       )
       .then((res) => {
         setRejected(res.data.otrequests.length);
@@ -105,7 +109,7 @@ export default function Home() {
                   <p>ได้รับการอนุมัติ</p>
                 </div>
                 <div className="icon">
-                <i className="far fa-check-circle"></i>
+                <i className="fas fa-check"></i>
                 </div>
               </div>
             </div>
@@ -116,7 +120,7 @@ export default function Home() {
                   <p>ไม่ได้รับการอนุมัติ</p>
                 </div>
                 <div className="icon">
-                <i className="far fa-times-circle"></i>
+                <i className="fas fa-times"></i>
                 </div>
               </div>
             </div>

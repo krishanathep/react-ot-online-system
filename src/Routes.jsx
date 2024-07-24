@@ -14,6 +14,7 @@ import Overtime from './pages/overtime'
 import OvertimeCreate from './pages/overtime/create'
 import OvertimeView from './pages/overtime/view'
 import OvertimeEdit from './pages/overtime/edit'
+import Approver from "./pages/overtime/approver";
 
 const RoutesPage = () => {
   return (
@@ -35,6 +36,7 @@ const RoutesPage = () => {
           <Route path="/overtime/create" element={<OvertimeCreate />} />
           <Route path="/overtime/view/:id" element={<OvertimeView />} />
           <Route path="/overtime/edit/:id" element={<OvertimeEdit />} />
+          <Route path="/approver" element={<Approver />} />
         </Route>
       </Routes>
     </Router>
