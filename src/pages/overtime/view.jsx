@@ -3,11 +3,18 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 
-const view = ({ steps }) => {
+const view = () => {
+
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
+
+  //stepper complete state
+  const [complete_1, setComplete_1] = useState(false)
+  const [complete_2, setComplete_2] = useState(false)
+  const [complete_3, setComplete_3] = useState(false)
+  const [complete_4, setComplete_4] = useState(false)
 
   const getData = async () => {
     await axios
@@ -17,7 +24,17 @@ const view = ({ steps }) => {
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
-        console.log(res.data.data);
+        //console.log(res.data.data.status);
+        //stepper complete
+        if(res.data.data.status==='approver_1'){
+          setComplete_1(true)
+        } if(res.data.data.status==='approver_2'){
+          setComplete_1(true),setComplete_2(true)
+        } if(res.data.data.status==='approver_3'){
+          setComplete_1(true),setComplete_2(true),setComplete_3(true)
+        } if(res.data.data.status==='approver_4'){
+          setComplete_1(true),setComplete_2(true),setComplete_3(true),setComplete_4(true)
+        }
       });
   };
 
@@ -130,7 +147,7 @@ const view = ({ steps }) => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className="text-primary">
+                                    <td className="text-muted">
                                       {member.objective === null ? (
                                         <i className="fas fa-edit"></i>
                                       ) : (
@@ -138,7 +155,7 @@ const view = ({ steps }) => {
                                       )}
                                     </td>
                                     <td>{overtimes.end_date}</td>
-                                    <td className="text-primary">
+                                    <td className="text-muted">
                                       {member.out_time === null ? (
                                         <i className="fas fa-edit"></i>
                                       ) : (
@@ -148,7 +165,7 @@ const view = ({ steps }) => {
                                     <td>{overtimes.total_date}</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className="text-primary">
+                                    <td className="text-muted">
                                       {member.remark === null ? (
                                         <i className="fas fa-edit"></i>
                                       ) : (
@@ -183,26 +200,26 @@ const view = ({ steps }) => {
                           </table>
                         </div>
                         {/* Stepper Function */}
-                        {/* <div className="col-md-12">
+                        <div className="col-md-12">
                             <div className="stepper-wrapper">
-                            <div className={`stepper-item completed`}>
+                            <div className={`stepper-item ${(!complete_1)?(null):('completed')}`}>
                               <div className="step-counter text-white">1</div>
                               <div className="step-name">First</div>
                             </div>
-                            <div className="stepper-item completed">
+                            <div className={`stepper-item ${(!complete_2)?(null):('completed')}`}>
                               <div className="step-counter text-white">2</div>
                               <div className="step-name">Second</div>
                             </div>
-                            <div className="stepper-item completed">
+                            <div className={`stepper-item ${(!complete_3)?(null):('completed')}`}>
                               <div className="step-counter text-white">3</div>
                               <div className="step-name">Third</div>
                             </div>
-                            <div className="stepper-item completed">
+                            <div className={`stepper-item ${(!complete_4)?(null):('completed')}`}>
                               <div className="step-counter text-white">4</div>
                               <div className="step-name">Forth</div>
                             </div>
                           </div>
-                        </div> */}
+                        </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <Link to={"/overtime"} className="btn btn-danger">

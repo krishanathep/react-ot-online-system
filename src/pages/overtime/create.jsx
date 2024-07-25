@@ -28,7 +28,7 @@ const create = () => {
     },
   });
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const [nullTable, setNullTable] = useState(true)
 
@@ -111,6 +111,7 @@ const create = () => {
       )
       .then((res) => {
         setTime(res.data.time.ot_total);
+        console.log(time)
       });
   };
 
@@ -298,6 +299,7 @@ const create = () => {
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
+                                        id="ot_date"
                                         className="form-control"
                                         placeholderText="กรุณาเลือกข้อมูล"
                                         onChange={(date) =>
@@ -586,7 +588,7 @@ const create = () => {
                                   type="button"
                                   onClick={submitEmployee}
                                 >
-                                  <i className="fas fa-plus"></i> เพิ่มพนักงาน
+                                  เพิ่มพนักงาน
                                 </button>
                               </div>
                             </div>
@@ -698,9 +700,9 @@ const create = () => {
                             ))}
                             {(nullTable)?(
                                <tr>
-                               <td colspan="7" align="center">
+                               <td colSpan="7" align="center">
                                 <div className="text-muted">
-                                  <i className="fas fa-user-plus"></i>  กรุณาเพิ่มข้อมูลพนักงาน
+                                  <i className="fas fa-user-plus"></i>  กรุณาเพิ่มพนักงาน
                                 </div>
                                </td>
                              </tr> 
