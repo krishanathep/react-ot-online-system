@@ -30,6 +30,8 @@ const create = () => {
 
   const [startDate, setStartDate] = useState(new Date());
 
+  const [nullTable, setNullTable] = useState(true)
+
   const [approver, setApprover] = useState([]);
   const userDetail = useAuthUser();
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const create = () => {
           setEmployeesbyrole(
             res.data.employees.map((employee, index) => ({
               value: employee.full_name,
-              label: employee.code+" | "+employee.full_name+" | "+employee.position,
+              label: employee.code + " | " + employee.full_name,
               code: employee.code,
               cost: employee.business_group,
             }))
@@ -70,6 +72,7 @@ const create = () => {
     selected.forEach((item) => {
       append({ option: item });
     });
+    setNullTable(false)
   };
 
   const getEmployees = async () => {
@@ -386,34 +389,35 @@ const create = () => {
                                     <option value="OT หลังเลิกงาน-พัก 20 นาที">
                                       OT วันหยุด หลังเลิกงาน-พัก 20 นาที
                                     </option>
-                                    <option value="">
+                                    {/* OT ประเภท ทำงานเป็นกะ */}
+                                    <option value="วันธรรมดา ก่อนเข้ากะ 1">
                                       OT วันธรรมดา ประเภท 1 ก่อนเข้ากะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันธรรมดา หลังกะ 1">
                                       OT วันธรรมดา ประเภท 1 หลังกะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันหยุดปกติ 1">
                                       OT วันหยุด ประเภท 1 วันหยุดปกติ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันหยุด ก่อนเข้ากะ 1">
                                       OT วันหยุด ประเภท 1 ก่อนเข้ากะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันหยุด หลังกะ 1">
                                       OT วันหยุด ประเภท 1 หลังกะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันธรรมดา ก่อนเข้ากะ 2">
                                       OT วันธรรมดา ประเภท 2 ก่อนเข้ากะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันธรรมดา หลังกะ 2">
                                       OT วันธรรมดา ประเภท 2 หลังกะ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันหยุดปกติ 2">
                                       OT วันหยุด ประเภท 2 วันหยุดปกติ
                                     </option>
-                                    <option value="">
+                                    <option value="OT วันหยุด ก่อนเข้ากะ 2">
                                       OT วันหยุด ประเภท 2 ก่อนเข้ากะ
-                                    </option> 
-                                    <option value="">
+                                    </option>
+                                    <option value="OT วันหยุด หลังกะ 2">
                                       OT วันหยุด ประเภท 2 หลังกะ
                                     </option>
                                   </select>
@@ -503,16 +507,63 @@ const create = () => {
                               </div>
                               {/* field hidden */}
                               <div className="col-md-12" hidden>
-                                <input type="text"{...register("name_app_1", {required: true,})} /> <input type="text"{...register("name_app_3", {required: true,})} />{" "}
-                                <input type="text"{...register("email_app_1", {required: true,})} /> <input type="text"{...register("email_app_3", {required: true,})} />{" "}
-                                <input type="text"{...register("name_app_2", {required: true,})} /> <input type="text"{...register("name_app_4", {required: true,})} />{" "}
-                                <input type="text"{...register("email_app_2", {required: true,})} /> <input type="text"{...register("email_app_4", {required: true,})} />
-                                <input type="text" {...register("dept", {required: true,})}/>
+                                <input
+                                  type="text"
+                                  {...register("name_app_1", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("name_app_3", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("email_app_1", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("email_app_3", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("name_app_2", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("name_app_4", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("email_app_2", {
+                                    required: true,
+                                  })}
+                                />{" "}
+                                <input
+                                  type="text"
+                                  {...register("email_app_4", {
+                                    required: true,
+                                  })}
+                                />
+                                <input
+                                  type="text"
+                                  {...register("dept", { required: true })}
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div className="card">
+                        <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
                               <div className="col-md-12 mb-3">
@@ -535,7 +586,7 @@ const create = () => {
                                   type="button"
                                   onClick={submitEmployee}
                                 >
-                                  <i className="fas fa-plus"></i> พนักงาน
+                                  <i className="fas fa-plus"></i> เพิ่มพนักงาน
                                 </button>
                               </div>
                             </div>
@@ -645,6 +696,15 @@ const create = () => {
                                 </td>
                               </tr>
                             ))}
+                            {(nullTable)?(
+                               <tr>
+                               <td colspan="7" align="center">
+                                <div className="text-muted">
+                                  <i className="fas fa-user-plus"></i>  กรุณาเพิ่มข้อมูลพนักงาน
+                                </div>
+                               </td>
+                             </tr> 
+                            ):("")}
                           </tbody>
                         </table>
                         <div>
