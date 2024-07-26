@@ -476,6 +476,26 @@ const Overtime = () => {
                           ),
                         },
                         {
+                          accessor: "result",
+                          title: "สถานะรายงาน",
+                          textAlignment: "center",
+                          render: ({ result }) => (
+                            <>
+                              <h5>
+                                {result === "รอการรายงาน" ? (
+                                  <Badge bg="secondary">{result}</Badge>
+                                ) : result === "รอการปิด (ส่วน)" ? (
+                                  <Badge bg="info">{result}</Badge>
+                                ) : result === "รอการปิด (ผจก)" ? (
+                                  <Badge bg="primary">{result}</Badge>
+                                ) : (
+                                  <Badge bg="success">{result}</Badge>
+                                )}
+                              </h5>
+                            </>
+                          ),
+                        },
+                        {
                           accessor: "created_at",
                           title: "วันที่จัดทำ",
                           textAlignment: "center",

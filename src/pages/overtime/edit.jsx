@@ -20,6 +20,11 @@ const edit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  //stepper complete state
+  const [complete_1, setComplete_1] = useState(false);
+  const [complete_2, setComplete_2] = useState(false);
+  const [complete_3, setComplete_3] = useState(false);
+
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
 
@@ -37,6 +42,16 @@ const edit = () => {
             remark: employee.remark,
           })),
         });
+        //stepper complete
+        if (res.data.data.result === "รอการปิด (ส่วน)") {
+          setComplete_1(true);
+        }
+        if (res.data.data.result === "รอการปิด (ผจก)") {
+          setComplete_1(true), setComplete_2(true);
+        }
+        if (res.data.data.result === "ปิดการรายงาน") {
+          setComplete_1(true), setComplete_2(true),setComplete_3(true);
+        }
       });
   };
 
@@ -215,7 +230,7 @@ const edit = () => {
                             </tbody>
                           </table>
                         </div>
-                        <div className="col-md-12">
+                        <div className="col-md-10 offset-1">
                           <table className="table table-borderless mt-5">
                             <thead>
                               <tr align="center">
@@ -232,22 +247,34 @@ const edit = () => {
                           </table>
                         </div>
                         {/* Stepper Function */}
-                        {/* <div className="col-md-12">
-                          <div className="stepper-wrapper">
-                            <div className="stepper-item completed">
-                              <div className="step-counter text-white">1</div>
-                              <div className="step-name">First</div>
+                        <div className="col-md-6 offset-3">
+                          <div className="stepper-wrapper" style={{fontFamily: "Prompt",}}>
+                            <div
+                              className={`stepper-item ${
+                                !complete_1 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-name">รายงานผล</div>
                             </div>
-                            <div className="stepper-item">
-                              <div className="step-counter text-white">2</div>
-                              <div className="step-name">Second</div>
+                            <div
+                              className={`stepper-item ${
+                                !complete_2 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 1</div>
                             </div>
-                            <div className="stepper-item">
-                              <div className="step-counter text-white">3</div>
-                              <div className="step-name">Third</div>
+                            <div
+                              className={`stepper-item ${
+                                !complete_3 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 2</div>
                             </div>
                           </div>
-                        </div> */}
+                        </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <button

@@ -11,7 +11,6 @@ import axios from "axios";
 const PAGE_SIZES = [10, 20, 30];
 
 const Approver = () => {
-
   //user login
   const userDatail = useAuthUser();
 
@@ -33,13 +32,15 @@ const Approver = () => {
 
     // get ot requrst data from dept by user login
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED")
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
+      )
       .then((res) => {
         //Change api name
         setOvertimes(res.data.otrequests);
         setRecords(res.data.otrequests.slice(from, to));
         setLoading(false);
-      })
+      });
   };
 
   //filter function by ot code
@@ -103,7 +104,9 @@ const Approver = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${userDatail().dept}&data=${key}`
+        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -120,7 +123,9 @@ const Approver = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${userDatail().dept}&data=${key}`
+        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -135,40 +140,103 @@ const Approver = () => {
     getApprover();
   }, [page, pageSize]);
 
-  const hanldeDelete = (blogs) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
+  // Approver 2 update status
+  const handleApproverSubmit2 = async (blogs, data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
+          blogs.id,
+        data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
         Swal.fire({
           icon: "success",
-          title: "Your blog has been deleted",
+          title: "Your OT request has been status update",
           showConfirmButton: false,
           timer: 2000,
         });
-        axios
-          .delete(
-            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-delete/" +
-              blogs.id
-          )
-          .then((res) => {
-            console.log(res);
-            getData();
-          });
-      }
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const handleApproverSubmit = async (blogs, data) => {
+  // Approver 3 update status
+  const handleApproverSubmit3 = async (blogs, data) => {
     await axios
       .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve/" +
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
+          blogs.id,
+        data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been status update",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // Approver 4 update status
+  const handleApproverSubmit4 = async (blogs, data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
+          blogs.id,
+        data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been status update",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // Approver 5 update status
+  const handleApproverSubmit5 = async (blogs, data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
+          blogs.id,
+        data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been status update",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // Approver 6 update status
+  const handleApproverSubmit6 = async (blogs, data) => {
+    await axios
+      .put(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
           blogs.id,
         data
       )
@@ -310,9 +378,7 @@ const Approver = () => {
                                       nameFilter(event.target.value)
                                     }
                                   >
-                                    <option value="">
-                                      กรุณาเลือกข้อมูล
-                                    </option>
+                                    <option value="">กรุณาเลือกข้อมูล</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -430,23 +496,42 @@ const Approver = () => {
                         },
                         {
                           accessor: "status",
-                          title: "สถานะ",
+                          title: "สถานะการอนุมัติ",
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
                               <h5>
                                 {status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary">{ status }</Badge>
+                                  <Badge bg="secondary">{status}</Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="info">{ status }</Badge>
+                                  <Badge bg="info">{status}</Badge>
                                 ) : status === "รอการอนุมัติ 4" ? (
-                                  <Badge bg="primary">{ status }</Badge>
+                                  <Badge bg="primary">{status}</Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success">{ status }</Badge>
+                                  <Badge bg="success">{status}</Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
-                                ) 
-                                }
+                                )}
+                              </h5>
+                            </>
+                          ),
+                        },
+                        {
+                          accessor: "result",
+                          title: "สถานะรายงาน",
+                          textAlignment: "center",
+                          render: ({ result }) => (
+                            <>
+                              <h5>
+                                {result === "รอการรายงาน" ? (
+                                  <Badge bg="secondary">{result}</Badge>
+                                ) : result === "รอการปิด (ส่วน)" ? (
+                                  <Badge bg="info">{result}</Badge>
+                                ) : result === "รอการปิด (ผจก)" ? (
+                                  <Badge bg="primary">{result}</Badge>
+                                ) : (
+                                  <Badge bg="success">{result}</Badge>
+                                )}
                               </h5>
                             </>
                           ),
@@ -458,61 +543,102 @@ const Approver = () => {
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MM-YYYY"),
                         },
-                        {
-                          accessor: "start_date",
-                          title: "เวลาเริ่มต้น",
-                          textAlignment: "center",
-                          render: ({ start_date }) => start_date + " น.",
-                        },
-                        {
-                          accessor: "end_date",
-                          title: "เวลาสิ้นสุด",
-                          textAlignment: "center",
-                          render: ({ end_date }) => end_date + " น.",
-                        },
+                        // {
+                        //   accessor: "start_date",
+                        //   title: "เวลาเริ่มต้น",
+                        //   textAlignment: "center",
+                        //   render: ({ start_date }) => start_date + " น.",
+                        // },
+                        // {
+                        //   accessor: "end_date",
+                        //   title: "เวลาสิ้นสุด",
+                        //   textAlignment: "center",
+                        //   render: ({ end_date }) => end_date + " น.",
+                        // },
                         {
                           accessor: "actions",
                           textAlignment: "center",
                           title: "ดำเนินการ",
                           render: (blogs) => (
                             <>
-                             <Link
+                              <Link
                                 to={"/approver/view/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                              <i className="fas fa-eye"></i> ดูข้อมูล
+                                <i className="fas fa-eye"></i> ดูข้อมูล
                               </Link>{" "}
                               <button
                                 className="btn btn-success"
-                                onClick={() => handleApproverSubmit(blogs)}
-                                hidden={userDatail().role==='approver_1'?false:true}
-                                disabled={blogs.status==='รอการอนุมัติ 2'?false:true}
+                                onClick={() => handleApproverSubmit2(blogs)}
+                                hidden={
+                                  userDatail().role === "approver_1"
+                                    ? false
+                                    : true
+                                }
+                                disabled={
+                                  blogs.status === "รอการอนุมัติ 2"
+                                    ? false
+                                    : true
+                                }
                               >
-                              <i className="fas fa-check-circle"></i> อนุมัติ 1
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                2
                               </button>{" "}
                               <button
                                 className="btn btn-success"
-                                onClick={() => handleApproverSubmit(blogs)}
-                                hidden={userDatail().role==='approver_2'?false:true}
-                                disabled={blogs.status==='รอการอนุมัติ 3'?false:true}
+                                onClick={() => handleApproverSubmit3(blogs)}
+                                hidden={
+                                  userDatail().role === "approver_3"
+                                    ? false
+                                    : true
+                                }
+                                disabled={
+                                  blogs.status === "รอการอนุมัติ 3"
+                                    ? false
+                                    : true
+                                }
                               >
-                              <i className="fas fa-check-circle"></i> อนุมัติ 2
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                3
                               </button>{" "}
                               <button
                                 className="btn btn-success"
-                                onClick={() => handleApproverSubmit(blogs)}
+                                onClick={() => handleApproverSubmit4(blogs)}
                                 hidden={userDatail().role==='approver_3'?false:true}
-                                disabled={blogs.status==='รอการอนุมัติ 4'?false:true}
+                                disabled={
+                                  blogs.status === "รอการอนุมัติ 4"
+                                    ? false
+                                    : true
+                                }
                               >
-                              <i className="fas fa-check-circle"></i> อนุมัติ 3
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                4
                               </button>{" "}
                               <button
                                 className="btn btn-success"
-                                onClick={() => handleApproverSubmit(blogs)}
-                                hidden={userDatail().role==='approver_4'?false:true}
-                                disabled={blogs.status==='approver_4'?false:true}
+                                onClick={() => handleApproverSubmit5(blogs)}
+                                hidden={
+                                  userDatail().role === "approver_3"
+                                    ? false
+                                    : true
+                                }
+                                disabled={
+                                  blogs.result === "รอการปิด (ส่วน)" ? false : true
+                                }
                               >
-                              <i className="fas fa-check-circle"></i> อนุมัติ 4
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                5
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit6(blogs)}
+                                hidden={userDatail().role==='approver_3'?false:true}
+                                disabled={
+                                  blogs.result === "รอการปิด (ผจก)" ? false : true
+                                }
+                              >
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                6
                               </button>{" "}
                               <button
                                 className="btn btn-danger"

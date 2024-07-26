@@ -40,14 +40,14 @@ export default function Sidebar() {
               <li className="nav-header">OTHER MENU</li>
               <li className="nav-item">
                 <Link to="/approver" className="nav-link">
-                  <i className="nav-icon fas fa-check-square"></i>
+                <i className="nav-icon fas fa-check-circle"></i>
                   <p>การอนุมัติ OT</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/officecar" className="nav-link">
                 <i className="nav-icon fas fa-truck"></i>
-                  <p>รถรับส่ง</p>
+                  <p>ข้อมูลรถรับส่ง</p>
                 </Link>
               </li>
             </ul>
