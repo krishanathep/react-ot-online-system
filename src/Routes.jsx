@@ -14,7 +14,9 @@ import Overtime from './pages/overtime'
 import OvertimeCreate from './pages/overtime/create'
 import OvertimeView from './pages/overtime/view'
 import OvertimeEdit from './pages/overtime/edit'
-import Approver from "./pages/overtime/approver";
+import Approver from "./pages/approver";
+import AppView from './pages/approver/view'
+import OfficeCar from "./pages/officecar";
 
 const RoutesPage = () => {
   return (
@@ -37,6 +39,8 @@ const RoutesPage = () => {
           <Route path="/overtime/view/:id" element={<OvertimeView />} />
           <Route path="/overtime/edit/:id" element={<OvertimeEdit />} />
           <Route path="/approver" element={<Approver />} />
+          <Route path="/approver/view/:id" element={<AppView />} />
+          <Route path="/officecar" element={<OfficeCar/>} />
         </Route>
       </Routes>
     </Router>

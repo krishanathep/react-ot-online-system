@@ -4,18 +4,16 @@ import axios from "axios";
 import dayjs from "dayjs";
 
 const view = () => {
-
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
-  const [empcount, setEmpcount]= useState(0)
 
   //stepper complete state
-  const [complete_1, setComplete_1] = useState(false)
-  const [complete_2, setComplete_2] = useState(false)
-  const [complete_3, setComplete_3] = useState(false)
-  const [complete_4, setComplete_4] = useState(false)
+  const [complete_1, setComplete_1] = useState(false);
+  const [complete_2, setComplete_2] = useState(false);
+  const [complete_3, setComplete_3] = useState(false);
+  const [complete_4, setComplete_4] = useState(false);
 
   const getData = async () => {
     await axios
@@ -25,10 +23,9 @@ const view = () => {
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
-        setEmpcount(res.data.data.employees.length);
-  
-        //stepper complete
-        if(res.data.data.status==='รอการอนุมัติ 2'){
+        
+         //stepper complete
+         if(res.data.data.status==='รอการอนุมัติ 2'){
           setComplete_1(true)
         } if(res.data.data.status==='รอการอนุมัติ 3'){
           setComplete_1(true),setComplete_2(true)
@@ -114,7 +111,7 @@ const view = () => {
                                   <b>เวลาทั้งหมด</b> : {overtimes.total_date}
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : {empcount} คน
+                                  <b>จำนวนพนักงาน</b> : 1 คน
                                 </td>
                               </tr>
                             </thead>
@@ -151,7 +148,7 @@ const view = () => {
                                     <td>{member.target}</td>
                                     <td className="text-success">
                                       {member.objective === null ? (
-                                       <i className="fas fa-pencil-alt"></i>
+                                        <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         member.objective
                                       )}
@@ -201,8 +198,8 @@ const view = () => {
                             </thead>
                           </table>
                         </div>
-                        {/* Stepper Function */}
-                        <div className="col-md-12">
+                           {/* Stepper Function */}
+                           <div className="col-md-12">
                             <div className="stepper-wrapper" style={{fontFamily: "Prompt",}}>
                             <div className={`stepper-item ${(!complete_1)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
@@ -224,7 +221,7 @@ const view = () => {
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <Link to={"/overtime"} className="btn btn-danger">
+                            <Link to={"/approver"} className="btn btn-danger">
                               ย้อนกลับ
                             </Link>{" "}
                           </div>

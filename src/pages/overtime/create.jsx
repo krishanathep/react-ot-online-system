@@ -23,14 +23,14 @@ const create = () => {
   const { fields, append } = useFieldArray({
     control,
     name: "test",
-    rules: {
-      required: "This field is required",
-    },
+    // rules: {
+    //   required: "This field is required",
+    // },
   });
 
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const [nullTable, setNullTable] = useState(true)
+  const [nullTable, setNullTable] = useState(true);
 
   const [approver, setApprover] = useState([]);
   const userDetail = useAuthUser();
@@ -72,7 +72,7 @@ const create = () => {
     selected.forEach((item) => {
       append({ option: item });
     });
-    setNullTable(false)
+    setNullTable(false);
   };
 
   const getEmployees = async () => {
@@ -111,7 +111,7 @@ const create = () => {
       )
       .then((res) => {
         setTime(res.data.time.ot_total);
-        console.log(time)
+        console.log(time);
       });
   };
 
@@ -294,12 +294,12 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
                                   <Controller
-                                    rules={{ required: true }}
+                                   
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
-                                        id="ot_date"
+                                        required
                                         className="form-control"
                                         placeholderText="กรุณาเลือกข้อมูล"
                                         onChange={(date) =>
@@ -322,7 +322,7 @@ const create = () => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">ประเภทงาน</label>
+                                  <label htmlFor="">ประเภทการทำงาน OT</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
@@ -571,24 +571,19 @@ const create = () => {
                               <div className="col-md-12 mb-3">
                                 <DualListBox
                                   canFilter
-                                  //emp_name='required'
                                   required
-                                  showRequiredMessage
                                   options={employeesByrole}
                                   selected={selected}
                                   onChange={(newValue) => setSelected(newValue)}
                                 />
-                                <span className="text-danger">
-                                  {errors.test?.root.message}
-                                </span>
                               </div>
                               <div className="col-md-12">
                                 <button
-                                  className="btn btn-success btn-sm float-right"
+                                  className="btn btn-success float-right"
                                   type="button"
                                   onClick={submitEmployee}
                                 >
-                                  เพิ่มพนักงาน
+                                  <i className="fas fa-plus-square"></i> พนักงาน
                                 </button>
                               </div>
                             </div>
@@ -693,20 +688,25 @@ const create = () => {
                                     <option value={"จุดที่ 4"}>
                                       จุดที่ 4 สายวงเวียนใหญ่
                                     </option>
-                                    <option value={"ไม่ระส่ง"}>ไม่ระบุ</option>
+                                    <option value={"ไม่ระส่ง"}>
+                                      ไม่ใช้บริการรถรับส่ง
+                                    </option>
                                   </select>
                                 </td>
                               </tr>
                             ))}
-                            {(nullTable)?(
-                               <tr>
-                               <td colSpan="7" align="center">
-                                <div className="text-muted">
-                                  <i className="fas fa-user-plus"></i>  กรุณาเพิ่มพนักงาน
-                                </div>
-                               </td>
-                             </tr> 
-                            ):("")}
+                            {nullTable ? (
+                              <tr>
+                                <td colSpan="7" align="center">
+                                  <div className="text-muted">
+                                    <i className="fas fa-user-plus"></i>{" "}
+                                    กรุณาเพิ่มพนักงาน
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : (
+                              ""
+                            )}
                           </tbody>
                         </table>
                         <div>

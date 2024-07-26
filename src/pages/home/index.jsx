@@ -87,7 +87,7 @@ export default function Home() {
                   <p>ขออนุมัติ OT ทั้งหมด</p>
                 </div>
                 <div className="icon">
-                <i className="far fa-clock"></i>
+                <i className="fas fa-calendar-plus"></i>
                 </div>
               </div>
             </div>
@@ -98,7 +98,7 @@ export default function Home() {
                   <p>รอการอนุมัติ</p>
                 </div>
                 <div className="icon">
-                <i className="fas fa-cogs"></i>
+                <i className="far fa-clock"></i>
                 </div>
               </div>
             </div>

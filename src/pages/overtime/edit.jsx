@@ -179,7 +179,7 @@ const edit = () => {
                                         placeholder="รายงานผล"
                                         {...register(
                                           `test.${index}.objective`,
-                                          {}
+                                          { required: true }
                                         )}
                                       />
                                     </td>
@@ -190,10 +190,9 @@ const edit = () => {
                                         type="text"
                                         size="1"
                                         placeholder="รายงานผล"
-                                        {...register(
-                                          `test.${index}.out_time`,
-                                          {}
-                                        )}
+                                        {...register(`test.${index}.out_time`, {
+                                          required: true,
+                                        })}
                                       />
                                     </td>
                                     <td>{overtimes.total_date}</td>
@@ -205,10 +204,9 @@ const edit = () => {
                                         type="text"
                                         size="1"
                                         placeholder="รายงานผล"
-                                        {...register(
-                                          `test.${index}.remark`,
-                                          {}
-                                        )}
+                                        {...register(`test.${index}.remark`, {
+                                          required: true,
+                                        })}
                                       />
                                     </td>
                                   </tr>
@@ -255,6 +253,11 @@ const edit = () => {
                             <button
                               className="btn btn-primary"
                               onClick={handleSubmit(handleUpdateSubmit)}
+                              disabled={
+                                overtimes.status === "ผ่านการอนุมัติ"
+                                  ? false
+                                  : true
+                              }
                             >
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}

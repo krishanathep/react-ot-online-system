@@ -10,7 +10,7 @@ import axios from "axios";
 
 const PAGE_SIZES = [10, 20, 30];
 
-const Overtime = () => {
+const Approver = () => {
 
   //user login
   const userDatail = useAuthUser();
@@ -282,30 +282,6 @@ const Overtime = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-12">
-                        <div className="float-right">
-                          <button
-                            onClick={textExport}
-                            className="btn btn-secondary mb-3"
-                            hidden={
-                              userDatail().role === "approver" ? true : false
-                            }
-                          >
-                            <i className="fas fa-download"></i> ดึงข้อมูล
-                          </button>{" "}
-                          <Link
-                            to={"/overtime/create"}
-                            className="btn btn-success mb-3"
-                            hidden={
-                              userDatail().role === "approver" ? true : false
-                            }
-                          >
-                            <i className="fa fa-plus"></i> คำร้องใหม่
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
                       <div className="col-lg-12">
                         <div className="card shadow-none border">
                           <div className="card-body">
@@ -500,25 +476,51 @@ const Overtime = () => {
                           title: "ดำเนินการ",
                           render: (blogs) => (
                             <>
-                              <Link
-                                to={"/overtime/view/" + blogs.id}
-                                className="btn btn-info"
-                              >
-                              <i className="fas fa-eye"></i> รายละเอียด
-                              </Link>{" "}
-                              <Link
-                                to={"/overtime/edit/" + blogs.id}
+                             <Link
+                                to={"/approver/view/" + blogs.id}
                                 className="btn btn-primary"
-                                
                               >
-                              <i className="fas fa-pencil-alt"></i>  รายงานผล
+                              <i className="fas fa-eye"></i> ดูข้อมูล
                               </Link>{" "}
-                              {/* <button
-                                className="btn btn-danger"
-                                onClick={() => hanldeDelete(blogs)}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_1'?false:true}
+                                disabled={blogs.status==='รอการอนุมัติ 2'?false:true}
                               >
-                                ลบ
-                              </button> */}
+                              <i className="fas fa-check-circle"></i> อนุมัติ 1
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_2'?false:true}
+                                disabled={blogs.status==='รอการอนุมัติ 3'?false:true}
+                              >
+                              <i className="fas fa-check-circle"></i> อนุมัติ 2
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_3'?false:true}
+                                disabled={blogs.status==='รอการอนุมัติ 4'?false:true}
+                              >
+                              <i className="fas fa-check-circle"></i> อนุมัติ 3
+                              </button>{" "}
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleApproverSubmit(blogs)}
+                                hidden={userDatail().role==='approver_4'?false:true}
+                                disabled={blogs.status==='approver_4'?false:true}
+                              >
+                              <i className="fas fa-check-circle"></i> อนุมัติ 4
+                              </button>{" "}
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => handleRejectSubmit(blogs)}
+                                disabled={blogs.status==='รอการอนุมัติ 2'?false:true}
+                              >
+                              <i className="fas fa-times-circle"></i> ไม่อนุมัติ
+                              </button>
                             </>
                           ),
                         },
@@ -543,4 +545,4 @@ const Overtime = () => {
   );
 };
 
-export default Overtime;
+export default Approver;

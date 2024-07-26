@@ -37,11 +37,17 @@ export default function Sidebar() {
                   <p>ขออนุมัติ OT</p>
                 </Link>
               </li>
-              <li className="nav-header">ADMIN MENU</li>
+              <li className="nav-header">OTHER MENU</li>
               <li className="nav-item">
                 <Link to="/approver" className="nav-link">
                   <i className="nav-icon fas fa-check-square"></i>
                   <p>การอนุมัติ OT</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/officecar" className="nav-link">
+                <i className="nav-icon fas fa-truck"></i>
+                  <p>รถรับส่ง</p>
                 </Link>
               </li>
             </ul>
