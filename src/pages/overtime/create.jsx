@@ -10,7 +10,10 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
 
-const create = () => {
+const create = ({ prefix = 'OT' }) => {
+
+  const [id, setId] = useState("");
+
   const {
     register,
     control,
@@ -41,6 +44,7 @@ const create = () => {
 
   const [time, setTime] = useState("");
   const [timeList, setTimeList] = useState([]);
+  const [timeList_2, setTimeList_2] = useState([]);
 
   const [employeesByrole, setEmployeesbyrole] = useState([]);
 
@@ -100,7 +104,17 @@ const create = () => {
       .then((res) => {
         setTimeList(res.data.time);
       });
+
+      await axios
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-list_2?data=" +
+          key
+      )
+      .then((res) => {
+        setTimeList_2(res.data.time);
+      });
   };
+
 
   //filter function by ot time finish
   const finishFilter = async (key) => {
@@ -159,14 +173,14 @@ const create = () => {
       )
       .then((res) => {
         reset({
-          create_name: res.data.approver.app_name_1,
+          //create_name: res.data.approver.app_name_1,
           department_name: res.data.approver.app_name_2,
           department: res.data.approver.agency,
-          name_app_1: res.data.approver.app_name_1,
+          //name_app_1: res.data.approver.app_name_1,
           name_app_2: res.data.approver.app_name_2,
           name_app_3: res.data.approver.app_name_3,
           name_app_4: res.data.approver.app_name_4,
-          email_app_1: res.data.approver.app_email_1,
+          //email_app_1: res.data.approver.app_email_1,
           email_app_2: res.data.approver.app_email_2,
           email_app_3: res.data.approver.app_email_3,
           email_app_4: res.data.approver.app_email_4,
@@ -180,7 +194,18 @@ const create = () => {
     getApprover();
     deptFilter();
     getEmployeesByrole();
-  }, [time]);
+    const generateId = () => {
+      const date = new Date();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear().toString().slice(-2);
+      const randomNum = Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(4, "0");
+      return `${prefix}${month}${year}${randomNum}`;
+    };
+
+    setId(generateId());
+  }, [time, prefix]);
 
   return (
     <>
@@ -222,7 +247,7 @@ const create = () => {
                                   <input
                                     //readOnly
                                     type="text"
-                                    value={"OT24070931"}
+                                    value={id}
                                     className="form-control"
                                     {...register("ot_member_id", {
                                       required: true,
@@ -259,7 +284,7 @@ const create = () => {
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <input
                                     className="form-control"
-                                    id="sel1"
+                                    placeholder="กรุณากรอกข้อมูล"
                                     {...register("create_name", {
                                       required: true,
                                     })}
@@ -294,7 +319,6 @@ const create = () => {
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
                                   <Controller
-                                   
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
@@ -471,7 +495,7 @@ const create = () => {
                                     }
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
-                                    {timeList.map((item) => (
+                                    {timeList_2.map((item) => (
                                       <option
                                         key={item.id}
                                         value={item.ot_finish}
@@ -511,6 +535,7 @@ const create = () => {
                               <div className="col-md-12" hidden>
                                 <input
                                   type="text"
+                                  value={userDetail().name}
                                   {...register("name_app_1", {
                                     required: true,
                                   })}
@@ -523,6 +548,7 @@ const create = () => {
                                 />{" "}
                                 <input
                                   type="text"
+                                  value={userDetail().email}
                                   {...register("email_app_1", {
                                     required: true,
                                   })}

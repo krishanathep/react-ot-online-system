@@ -131,7 +131,7 @@ const view = () => {
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
                                 <th>ทำได้จริง</th>
-                                <th>ข้อมูลแสกน</th>
+                                <th>ข้อมูลแสกนนิ้ว</th>
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
@@ -156,7 +156,8 @@ const view = () => {
                                         member.objective
                                       )}
                                     </td>
-                                    <td>{overtimes.end_date}</td>
+                                    {/* ลิ้งกับระบบแสกนนิ้วมือเพื่อดึงข้อมูลมาแสดง */}
+                                    <td>8.00 - 17.30</td>
                                     <td className="text-success">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
@@ -164,7 +165,8 @@ const view = () => {
                                         member.out_time
                                       )}
                                     </td>
-                                    <td>{overtimes.total_date}</td>
+                                    {/* คำนวนเวลาเริ่มต้น และ เวลาเลิกงานจริง */}
+                                    <td>{member.out_time - overtimes.start_date} ชม.</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
                                     <td className="text-success">
@@ -185,7 +187,7 @@ const view = () => {
                             <thead>
                               <tr align="center">
                                 <td>
-                                  <b>หัวหน้าหน่วย</b> : {overtimes.name_app_1}
+                                  <b>หัวหน้าหน่วย/ผู้จัดทำ</b> : {overtimes.name_app_1}
                                 </td>
                                 <td>
                                   <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}

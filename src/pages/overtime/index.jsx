@@ -11,7 +11,6 @@ import axios from "axios";
 const PAGE_SIZES = [10, 20, 30];
 
 const Overtime = () => {
-
   //user login
   const userDatail = useAuthUser();
 
@@ -33,13 +32,15 @@ const Overtime = () => {
 
     // get ot requrst data from dept by user login
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED")
+      .get(
+        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
+      )
       .then((res) => {
         //Change api name
         setOvertimes(res.data.otrequests);
         setRecords(res.data.otrequests.slice(from, to));
         setLoading(false);
-      })
+      });
   };
 
   //filter function by ot code
@@ -103,7 +104,9 @@ const Overtime = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${userDatail().dept}&data=${key}`
+        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -120,7 +123,9 @@ const Overtime = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${userDatail().dept}&data=${key}`
+        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -163,50 +168,6 @@ const Overtime = () => {
           });
       }
     });
-  };
-
-  const handleApproverSubmit = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
-        Swal.fire({
-          icon: "success",
-          title: "Your OT request has been status update",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleRejectSubmit = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-reject/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
-        Swal.fire({
-          icon: "success",
-          title: "Your OT request has been status update",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const today = new Date();
@@ -334,9 +295,7 @@ const Overtime = () => {
                                       nameFilter(event.target.value)
                                     }
                                   >
-                                    <option value="">
-                                      กรุณาเลือกข้อมูล
-                                    </option>
+                                    <option value="">กรุณาเลือกข้อมูล</option>
                                     {approver.map((item) => (
                                       <option
                                         key={item.id}
@@ -460,17 +419,16 @@ const Overtime = () => {
                             <>
                               <h5>
                                 {status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary">{ status }</Badge>
+                                  <Badge bg="secondary">{status}</Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="info">{ status }</Badge>
+                                  <Badge bg="info">{status}</Badge>
                                 ) : status === "รอการอนุมัติ 4" ? (
-                                  <Badge bg="primary">{ status }</Badge>
+                                  <Badge bg="primary">{status}</Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success">{ status }</Badge>
+                                  <Badge bg="success">{status}</Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
-                                ) 
-                                }
+                                )}
                               </h5>
                             </>
                           ),
@@ -488,8 +446,10 @@ const Overtime = () => {
                                   <Badge bg="info">{result}</Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
                                   <Badge bg="primary">{result}</Badge>
-                                ) : (
+                                ) : result === "ปิดการรายงาน" ? (
                                   <Badge bg="success">{result}</Badge>
+                                ) : (
+                                  <Badge bg="danger">{result}</Badge>
                                 )}
                               </h5>
                             </>
@@ -503,16 +463,20 @@ const Overtime = () => {
                             dayjs(created_at).format("DD-MM-YYYY"),
                         },
                         {
-                          accessor: "start_date",
-                          title: "เวลาเริ่มต้น",
+                          accessor: "bus_point_1",
+                          title: "จุดรถรับส่ง",
                           textAlignment: "center",
-                          render: ({ start_date }) => start_date + " น.",
-                        },
-                        {
-                          accessor: "end_date",
-                          title: "เวลาสิ้นสุด",
-                          textAlignment: "center",
-                          render: ({ end_date }) => end_date + " น.",
+                          render: ({
+                            bus_point_1,
+                            bus_point_2,
+                            bus_point_3,
+                            bus_point_4,
+                          }) => (
+                            <span>
+                              {bus_point_1} : {bus_point_2} : {bus_point_3} :{" "}
+                              {bus_point_4}
+                            </span>
+                          ),
                         },
                         {
                           accessor: "actions",
@@ -524,14 +488,13 @@ const Overtime = () => {
                                 to={"/overtime/view/" + blogs.id}
                                 className="btn btn-info"
                               >
-                              <i className="fas fa-eye"></i> รายละเอียด
+                                <i className="fas fa-eye"></i> รายละเอียด
                               </Link>{" "}
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
-                                
                               >
-                              <i className="fas fa-pencil-alt"></i>  รายงานผล
+                                <i className="fas fa-pencil-alt"></i> รายงานผล
                               </Link>{" "}
                               {/* <button
                                 className="btn btn-danger"

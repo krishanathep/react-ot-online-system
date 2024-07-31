@@ -153,7 +153,7 @@ const view = () => {
                                         member.objective
                                       )}
                                     </td>
-                                    <td>{overtimes.end_date}</td>
+                                    <td>8.30-17.30</td>
                                     <td className="text-success">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
@@ -182,7 +182,7 @@ const view = () => {
                             <thead>
                               <tr align="center">
                                 <td>
-                                  <b>หัวหน้าหน่วย</b> : {overtimes.name_app_1}
+                                  <b>หัวหน้าหน่วย/ผู้จัดทำ</b> : {overtimes.name_app_1}
                                 </td>
                                 <td>
                                   <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}

@@ -17,6 +17,7 @@ import OvertimeEdit from './pages/overtime/edit'
 import Approver from "./pages/approver";
 import AppView from './pages/approver/view'
 import OfficeCar from "./pages/officecar";
+import OfficeCarEdit from './pages/officecar/edit'
 
 const RoutesPage = () => {
   return (
@@ -41,6 +42,7 @@ const RoutesPage = () => {
           <Route path="/approver" element={<Approver />} />
           <Route path="/approver/view/:id" element={<AppView />} />
           <Route path="/officecar" element={<OfficeCar/>} />
+          <Route path="/officecar/edit/:id" element={<OfficeCarEdit/>} />
         </Route>
       </Routes>
     </Router>

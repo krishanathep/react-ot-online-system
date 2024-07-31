@@ -141,140 +141,223 @@ const Approver = () => {
   }, [page, pageSize]);
 
   // Approver 2 update status
-  const handleApproverSubmit2 = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+  const handleApproverSubmit2 = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been status update",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   // Approver 3 update status
-  const handleApproverSubmit3 = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+  const handleApproverSubmit3 = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been status update",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
-
   // Approver 4 update status
-  const handleApproverSubmit4 = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+  const handleApproverSubmit4 = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been status update",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   // Approver 5 update status
-  const handleApproverSubmit5 = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+  const handleApproverSubmit5 = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been status update",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+            Swal.fire({
+              icon: "success",
+              title: "Your OT request has been status update",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   // Approver 6 update status
-  const handleApproverSubmit6 = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+  const handleApproverSubmit6 = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Your OT request has been status update",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   const handleRejectSubmit = async (blogs, data) => {
-    await axios
-      .put(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-reject/" +
-          blogs.id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
+    await Swal.fire({
+      title: "ยืนยันการไม่อนุมัติ OT",
+      text: "คุณไม่ต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "error",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
-          icon: "success",
-          title: "Your OT request has been status update",
+          icon: "error",
+          title: "ระบบได้ทำการไม่อนุมัติ OT เรียบร้อยแล้ว",
           showConfirmButton: false,
           timer: 2000,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        axios
+          .put(
+            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-reject/" +
+              blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   const today = new Date();
@@ -529,8 +612,10 @@ const Approver = () => {
                                   <Badge bg="info">{result}</Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
                                   <Badge bg="primary">{result}</Badge>
-                                ) : (
+                                ) : result === "ปิดการรายงาน" ? (
                                   <Badge bg="success">{result}</Badge>
+                                ) : (
+                                  <Badge bg="danger">{result}</Badge>
                                 )}
                               </h5>
                             </>
@@ -588,7 +673,7 @@ const Approver = () => {
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit3(blogs)}
                                 hidden={
-                                  userDatail().role === "approver_3"
+                                  userDatail().role === "approver_2"
                                     ? false
                                     : true
                                 }
@@ -604,7 +689,11 @@ const Approver = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit4(blogs)}
-                                hidden={userDatail().role==='approver_3'?false:true}
+                                hidden={
+                                  userDatail().role === "approver_3"
+                                    ? false
+                                    : true
+                                }
                                 disabled={
                                   blogs.status === "รอการอนุมัติ 4"
                                     ? false
@@ -615,26 +704,34 @@ const Approver = () => {
                                 4
                               </button>{" "}
                               <button
-                                className="btn btn-success"
+                                className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit5(blogs)}
                                 hidden={
-                                  userDatail().role === "approver_3"
+                                  userDatail().role === "approver_2"
                                     ? false
                                     : true
                                 }
                                 disabled={
-                                  blogs.result === "รอการปิด (ส่วน)" ? false : true
+                                  blogs.result === "รอการปิด (ส่วน)"
+                                    ? false
+                                    : true
                                 }
                               >
                                 <i className="fas fa-check-circle"></i> อนุมัติ
                                 5
                               </button>{" "}
                               <button
-                                className="btn btn-success"
+                                className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit6(blogs)}
-                                hidden={userDatail().role==='approver_3'?false:true}
+                                hidden={
+                                  userDatail().role === "approver_3"
+                                    ? false
+                                    : true
+                                }
                                 disabled={
-                                  blogs.result === "รอการปิด (ผจก)" ? false : true
+                                  blogs.result === "รอการปิด (ผจก)"
+                                    ? false
+                                    : true
                                 }
                               >
                                 <i className="fas fa-check-circle"></i> อนุมัติ
@@ -643,9 +740,14 @@ const Approver = () => {
                               <button
                                 className="btn btn-danger"
                                 onClick={() => handleRejectSubmit(blogs)}
-                                disabled={blogs.status==='รอการอนุมัติ 2'?false:true}
+                                // disabled={
+                                //   blogs.status === "รอการอนุมัติ 2"
+                                //     ? false
+                                //     : true
+                                // }
                               >
-                              <i className="fas fa-times-circle"></i> ไม่อนุมัติ
+                                <i className="fas fa-times-circle"></i>{" "}
+                                ไม่อนุมัติ
                               </button>
                             </>
                           ),
