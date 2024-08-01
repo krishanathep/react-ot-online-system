@@ -14,7 +14,7 @@ export default function Sidebar() {
             className="brand-image img-circle elevation-1"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">OT-REQUEST</span>
+          <span className="brand-text font-weight-light">OT-SYSTEM</span>
         </Link>
         <div className="sidebar">
           <nav className="mt-2">

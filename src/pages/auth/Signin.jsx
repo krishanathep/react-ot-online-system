@@ -12,7 +12,7 @@ export default function Signin() {
   const signIn = useSignIn()
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const REACT_APP_API = 'http://localhost/laravel_auth_jwt_api/public/api/auth/login'
+  const REACT_APP_API = import.meta.env.VITE_API_KEY+'/laravel_auth_jwt_api/public/api/auth/login'
   
 
   const onSubmit = async data => {
@@ -64,12 +64,13 @@ export default function Signin() {
         <div className="login-box">
           <div className="login-logo">
             <a href="#">
-              <b>OT-</b>REQUEST
+              {/* <b>OT-</b>REQUEST */}
+              <img src="/assets/imgs/logo.png" width='40%' alt="" />
             </a>
           </div>
           <div  id="auth_bg" className="card">
             <div className="card-body login-card-body">
-              <p className="login-box-msg">Sign in to start your session</p>
+              <p className="login-box-msg">Sign in to start your OT request</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="input-group mb-3">
                 <input className="form-control"   type="email" {...register("email", { required: true })} placeholder="Email" />
