@@ -78,7 +78,7 @@ const OfficeCar = () => {
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item active">รถรับส่งพนักงาน OT</li>
+                  <li className="breadcrumb-item active">รถรับส่งพนักงาน</li>
                 </ol>
               </div>
             </div>
@@ -148,29 +148,29 @@ const OfficeCar = () => {
                           title: "หน่วยงาน",
                           textAlignment: "center",
                         },
-                        {
-                          accessor: "status",
-                          title: "สถานะ",
-                          textAlignment: "center",
-                          render: ({ status }) => (
-                            <>
-                              <h5>
-                                {status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary">{ status }</Badge>
-                                ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="info">{ status }</Badge>
-                                ) : status === "รอการอนุมัติ 4" ? (
-                                  <Badge bg="primary">{ status }</Badge>
-                                ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success">{ status }</Badge>
-                                ) : (
-                                  <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
-                                ) 
-                                }
-                              </h5>
-                            </>
-                          ),
-                        },
+                        // {
+                        //   accessor: "status",
+                        //   title: "สถานะ",
+                        //   textAlignment: "center",
+                        //   render: ({ status }) => (
+                        //     <>
+                        //       <h5>
+                        //         {status === "รอการอนุมัติ 2" ? (
+                        //           <Badge bg="secondary">{ status }</Badge>
+                        //         ) : status === "รอการอนุมัติ 3" ? (
+                        //           <Badge bg="info">{ status }</Badge>
+                        //         ) : status === "รอการอนุมัติ 4" ? (
+                        //           <Badge bg="primary">{ status }</Badge>
+                        //         ) : status === "ผ่านการอนุมัติ" ? (
+                        //           <Badge bg="success">{ status }</Badge>
+                        //         ) : (
+                        //           <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
+                        //         ) 
+                        //         }
+                        //       </h5>
+                        //     </>
+                        //   ),
+                        // },
                         {
                           accessor: "created_at",
                           title: "วันที่จัดทำ",

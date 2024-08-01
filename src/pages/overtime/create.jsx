@@ -10,8 +10,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import axios from "axios";
 
-const create = ({ prefix = 'OT' }) => {
-
+const create = ({ prefix = "OT" }) => {
   const [id, setId] = useState("");
 
   const {
@@ -27,11 +26,9 @@ const create = ({ prefix = 'OT' }) => {
     control,
     name: "test",
     // rules: {
-    //   required: "This field is required",
+    //   required: "Some fields is required",
     // },
   });
-
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const [nullTable, setNullTable] = useState(true);
 
@@ -105,7 +102,7 @@ const create = ({ prefix = 'OT' }) => {
         setTimeList(res.data.time);
       });
 
-      await axios
+    await axios
       .get(
         "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-list_2?data=" +
           key
@@ -114,7 +111,6 @@ const create = ({ prefix = 'OT' }) => {
         setTimeList_2(res.data.time);
       });
   };
-
 
   //filter function by ot time finish
   const finishFilter = async (key) => {
@@ -125,13 +121,11 @@ const create = ({ prefix = 'OT' }) => {
       )
       .then((res) => {
         setTime(res.data.time.ot_total);
-        console.log(time);
       });
   };
 
   const handleCreateSubmit = async (data) => {
     try {
-      //alert(JSON.stringify(data))
       await axios
         .post(
           "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
@@ -195,13 +189,14 @@ const create = ({ prefix = 'OT' }) => {
     deptFilter();
     getEmployeesByrole();
     const generateId = () => {
+      const dept_cut = userDetail().dept.slice(0, -1)
       const date = new Date();
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
       const year = date.getFullYear().toString().slice(-2);
       const randomNum = Math.floor(Math.random() * 1000)
         .toString()
-        .padStart(4, "0");
-      return `${prefix}${month}${year}${randomNum}`;
+        .padStart(3, "0");
+      return `${prefix}-${dept_cut}-${month}${year}-${randomNum}`;
     };
 
     setId(generateId());
@@ -318,7 +313,7 @@ const create = ({ prefix = 'OT' }) => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่เริ่มต้น</label>
-                                  <Controller
+                                  {/* <Controller
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
@@ -335,8 +330,19 @@ const create = ({ prefix = 'OT' }) => {
                                         selected={field.value}
                                       />
                                     )}
+                                  /> */}
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    onChange={(event) =>
+                                      dayjs(event.target.value).format(
+                                        "YYYY-MM-DD"
+                                      )
+                                    }
+                                    {...register("ot_date", {
+                                      required: true,
+                                    })}
                                   />
-                                  <br />
                                   {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
@@ -388,7 +394,7 @@ const create = ({ prefix = 'OT' }) => {
                                       required: true,
                                     })}
                                     className="form-control"
-                                    id="sel2"
+                                    id="sel3"
                                     onChange={(event) =>
                                       listFilter(event.target.value)
                                     }
@@ -682,6 +688,11 @@ const create = ({ prefix = 'OT' }) => {
                                       required: true,
                                     })}
                                   />
+                                  {errors.test && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </td>
                                 <td>
                                   <input
@@ -692,6 +703,11 @@ const create = ({ prefix = 'OT' }) => {
                                       required: true,
                                     })}
                                   />
+                                   {errors.test && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
                                 </td>
                                 <td>
                                   <select
@@ -726,7 +742,7 @@ const create = ({ prefix = 'OT' }) => {
                                 <td colSpan="7" align="center">
                                   <div className="text-muted">
                                     <i className="fas fa-user-plus"></i>{" "}
-                                    กรุณาเพิ่มพนักงาน
+                                    กรุณาเพิ่มข้อมูล
                                   </div>
                                 </td>
                               </tr>

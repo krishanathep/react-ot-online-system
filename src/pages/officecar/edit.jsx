@@ -80,9 +80,9 @@ const edit = () => {
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item">รถรับส่งพนักงาน OT</li>
+                  <li className="breadcrumb-item">รถรับส่งพนักงาน</li>
                   <li className="breadcrumb-item active">
-                    จัดการข้อมูลรถรับส่ง
+                    จัดการข้อมูล
                   </li>
                 </ol>
               </div>
@@ -149,28 +149,28 @@ const edit = () => {
                                     <td>{overtimes.department}</td>
                                     <td>
                                       {member.bus_stations === "จุดที่ 1" ? (
-                                        <i className="fas fa-check-circle text-success"></i>
+                                        <i className="fas fa-check text-success"></i>
                                       ) : (
                                         ''
                                       )}
                                     </td>
                                     <td>
                                       {member.bus_stations === "จุดที่ 2" ? (
-                                        <i className="fas fa-check-circle text-success"></i>
+                                        <i className="fas fa-check text-success"></i>
                                       ) : (
                                         ''
                                       )}
                                     </td>
                                     <td>
                                       {member.bus_stations === "จุดที่ 3" ? (
-                                        <i className="fas fa-check-circle text-success"></i>
+                                        <i className="fas fa-check text-success"></i>
                                       ) : (
                                         ''
                                       )}
                                     </td>
                                     <td>
                                       {member.bus_stations === "จุดที่ 4" ? (
-                                        <i className="fas fa-check-circle text-success"></i>
+                                        <i className="fas fa-check text-success"></i>
                                       ) : (
                                        ''
                                       )}

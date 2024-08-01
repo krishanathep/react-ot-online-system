@@ -48,16 +48,16 @@ const view = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">ข้อมูลคำร้องขออนุมัติ OT</h1>
+                <h1 className="m-0">ข้อมูลการขออนุมัติ OT</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
+                  <li className="breadcrumb-item">การขออนุมัติ</li>
                   <li className="breadcrumb-item active">
-                    ข้อมูลคำร้องขออนุมัติ OT
+                    ข้อมูลการขออนุมัติ
                   </li>
                 </ol>
               </div>

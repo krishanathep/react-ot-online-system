@@ -50,7 +50,7 @@ const edit = () => {
           setComplete_1(true), setComplete_2(true);
         }
         if (res.data.data.result === "ปิดการรายงาน") {
-          setComplete_1(true), setComplete_2(true),setComplete_3(true);
+          setComplete_1(true), setComplete_2(true), setComplete_3(true);
         }
       });
   };
@@ -88,17 +88,15 @@ const edit = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">รายงานผลคำร้องขออนุมัติ OT</h1>
+                <h1 className="m-0">รายงานผลการขออนุมัติ OT</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
-                  <li className="breadcrumb-item active">
-                    รายงานผลคำร้องขออนุมัติ OT
-                  </li>
+                  <li className="breadcrumb-item">คำขออนุมัติ</li>
+                  <li className="breadcrumb-item active">รายงานผล</li>
                 </ol>
               </div>
             </div>
@@ -197,8 +195,13 @@ const edit = () => {
                                           { required: true }
                                         )}
                                       />
+                                      {errors.test && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
                                     </td>
-                                    <td>{overtimes.end_date}</td>
+                                    <td>8.30-{overtimes.end_date}</td>
                                     <td>
                                       <input
                                         className="form-control"
@@ -209,6 +212,11 @@ const edit = () => {
                                           required: true,
                                         })}
                                       />
+                                      {errors.test && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
                                     </td>
                                     <td>{overtimes.total_date}</td>
                                     <td>{member.bus_stations}</td>
@@ -223,6 +231,11 @@ const edit = () => {
                                           required: true,
                                         })}
                                       />
+                                       {errors.test && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
+                                      )}
                                     </td>
                                   </tr>
                                 );
@@ -236,10 +249,10 @@ const edit = () => {
                               <tr align="center">
                                 <td width="20%"></td>
                                 <td>
-                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}
+                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
                                 </td>
                                 <td>
-                                  <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_2}
+                                  <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
                                 </td>
                                 <td width="20%"></td>
                               </tr>
@@ -248,13 +261,18 @@ const edit = () => {
                         </div>
                         {/* Stepper Function */}
                         <div className="col-md-6 offset-3">
-                          <div className="stepper-wrapper" style={{fontFamily: "Prompt",}}>
+                          <div
+                            className="stepper-wrapper"
+                            style={{ fontFamily: "Prompt" }}
+                          >
                             <div
                               className={`stepper-item ${
                                 !complete_1 ? null : "completed"
                               }`}
                             >
-                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
                               <div className="step-name">รายงานผล</div>
                             </div>
                             <div
@@ -262,7 +280,9 @@ const edit = () => {
                                 !complete_2 ? null : "completed"
                               }`}
                             >
-                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
                               <div className="step-name">ผู้อนุมัติคนที่ 1</div>
                             </div>
                             <div
@@ -270,7 +290,9 @@ const edit = () => {
                                 !complete_3 ? null : "completed"
                               }`}
                             >
-                              <div className="step-counter text-white"><i className="fas fa-check"></i></div>
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
                               <div className="step-name">ผู้อนุมัติคนที่ 2</div>
                             </div>
                           </div>
