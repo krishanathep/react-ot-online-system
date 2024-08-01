@@ -49,7 +49,7 @@ const create = ({ prefix = "OT" }) => {
     try {
       await axios
         .get(
-          "http://localhost/laravel_auth_jwt_api/public/api/employees-role?data=" +
+          import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/employees-role?data=" +
             userDetail().dept
         )
         .then((res) => {
@@ -80,7 +80,7 @@ const create = ({ prefix = "OT" }) => {
     try {
       setLoading(true);
       await axios
-        .get("http://localhost/laravel_auth_jwt_api/public/api/employees")
+        .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/employees")
         .then((res) => {
           setEmployees(res.data.employees);
         });
@@ -95,7 +95,7 @@ const create = ({ prefix = "OT" }) => {
   const listFilter = async (key) => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-list?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-list?data=" +
           key
       )
       .then((res) => {
@@ -104,7 +104,7 @@ const create = ({ prefix = "OT" }) => {
 
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-list_2?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-list_2?data=" +
           key
       )
       .then((res) => {
@@ -116,7 +116,7 @@ const create = ({ prefix = "OT" }) => {
   const finishFilter = async (key) => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-finish?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-finish?data=" +
           key
       )
       .then((res) => {
@@ -128,7 +128,7 @@ const create = ({ prefix = "OT" }) => {
     try {
       await axios
         .post(
-          "http://localhost/laravel_auth_jwt_api/public/api/otrequest-create",
+          import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-create",
           data
         )
         .then((res) => {
@@ -150,7 +150,7 @@ const create = ({ prefix = "OT" }) => {
   const getApprover = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/approver-role?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approver-role?data=" +
           userDetail().dept
       )
       .then((res) => {
@@ -162,7 +162,7 @@ const create = ({ prefix = "OT" }) => {
   const deptFilter = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/approve-dept?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approve-dept?data=" +
           userDetail().dept
       )
       .then((res) => {

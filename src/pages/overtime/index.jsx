@@ -33,7 +33,7 @@ const Overtime = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
       )
       .then((res) => {
         //Change api name
@@ -50,7 +50,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
           key
       )
       .then((res) => {
@@ -68,7 +68,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
           key
       )
       .then((res) => {
@@ -86,7 +86,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -104,7 +104,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -123,7 +123,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        `http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -159,7 +159,7 @@ const Overtime = () => {
         });
         axios
           .delete(
-            "http://localhost/laravel_auth_jwt_api/public/api/otrequest-delete/" +
+            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-delete/" +
               blogs.id
           )
           .then((res) => {
@@ -180,7 +180,7 @@ const Overtime = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequest-export",
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -208,7 +208,7 @@ const Overtime = () => {
   const getApprover = async () => {
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/approve-role?data=" +
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approve-role?data=" +
           userDatail().dept
       )
       .then((res) => {
@@ -352,7 +352,6 @@ const Overtime = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  {/* <DatePicker/> */}
                                   <input
                                     type="date"
                                     className="form-control"

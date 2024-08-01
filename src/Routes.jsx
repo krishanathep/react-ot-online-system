@@ -18,6 +18,11 @@ import Approver from "./pages/approver";
 import AppView from './pages/approver/view'
 import OfficeCar from "./pages/officecar";
 import OfficeCarEdit from './pages/officecar/edit'
+import Employees from './pages/admin/employees'
+import EmployeeCreate from './pages/admin/employees/create'
+import EmployeeView from "./pages/admin/employees/view";
+import EmployeeEdit from "./pages/admin/employees/edit";
+
 
 const RoutesPage = () => {
   return (
@@ -43,6 +48,11 @@ const RoutesPage = () => {
           <Route path="/approver/view/:id" element={<AppView />} />
           <Route path="/officecar" element={<OfficeCar/>} />
           <Route path="/officecar/edit/:id" element={<OfficeCarEdit/>} />
+          {/* Route Employees */}
+          <Route path="/employees" element={<Employees/>} />
+          <Route path="/employees/create" element={<EmployeeCreate/>} />
+          <Route path="/employees/view/:id" element={<EmployeeView/>} />
+          <Route path="/employees/edit/:id" element={<EmployeeEdit/>} />
         </Route>
       </Routes>
     </Router>

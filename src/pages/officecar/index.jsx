@@ -33,7 +33,7 @@ const OfficeCar = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        "http://localhost/laravel_auth_jwt_api/public/api/otrequests"
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests"
       )
       .then((res) => {
         //Change api name
@@ -50,7 +50,7 @@ const OfficeCar = () => {
 
     await axios
       .get(
-      "http://localhost/laravel_auth_jwt_api/public/api/otrequests-filter-all-date?data="+key
+      import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-all-date?data="+key
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);

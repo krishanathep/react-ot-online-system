@@ -50,6 +50,13 @@ export default function Sidebar() {
                   <p>ข้อมูลรถรับส่ง</p>
                 </Link>
               </li>
+              <li className="nav-header">ADMIN MENU</li>
+              <li className="nav-item">
+                <Link to="/employees" className="nav-link">
+                <i className="nav-icon fas fa-users"></i>
+                  <p>จัดการพนักงาน</p>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

@@ -19,7 +19,7 @@ const view = () => {
 
   const getData = async () => {
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/otrequest/" + id, {
+      .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest/" + id, {
         timeout: 5000,
       })
       .then((res) => {
