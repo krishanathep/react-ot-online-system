@@ -127,17 +127,17 @@ const Employees = () => {
                           render: (record) => records.indexOf(record) + 1,
                         },
                         {
-                          accessor: "code",
+                          accessor: "emp_id",
                           title: "รหัสพนักงาน",
                           textAlignment: "center",
                         },
                         {
-                          accessor: "full_name",
+                          accessor: "emp_name",
                           title: "ชื่อพนักงาน",
                           textAlignment: "center",
                         },
                         {
-                          accessor: "business_group",
+                          accessor: "bus_group",
                           title: "กลุ่มงาน",
                           textAlignment: "center",
                         },
@@ -150,6 +150,10 @@ const Employees = () => {
                           accessor: "department",
                           title: "แผนก",
                           textAlignment: "center",
+                          render: ({department}) => 
+                            <>
+                              {department===""?(<span>ไม่ระบุข้อมูล</span>):(<span>{department}</span>)}
+                            </>
                         },
                         {
                           accessor: "company",

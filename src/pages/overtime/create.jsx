@@ -55,10 +55,10 @@ const create = ({ prefix = "OT" }) => {
         .then((res) => {
           setEmployeesbyrole(
             res.data.employees.map((employee, index) => ({
-              value: employee.full_name,
-              label: employee.code + " | " + employee.full_name,
-              code: employee.code,
-              cost: employee.business_group,
+              value: employee.emp_name,
+              label: employee.emp_id + " | " + employee.emp_name,
+              code: employee.emp_id,
+              cost: employee.bus_group,
             }))
           );
         });

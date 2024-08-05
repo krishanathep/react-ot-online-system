@@ -72,11 +72,11 @@ const EmployeeEdit = () => {
                           type="text"
                           className="form-control"
                           placeholder="กรุณาเพิ่มข้อมูล"
-                          {...register("code", {
+                          {...register("emp_id", {
                             required: true,
                           })}
                         />
-                        {errors.code && (
+                        {errors.emp_id && (
                           <span className="text-danger">
                             This field is required
                           </span>
@@ -85,56 +85,16 @@ const EmployeeEdit = () => {
                     </div>
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="">คำนำหน้า :</label>
-                        <select
-                          type="text"
-                          className="form-control"
-                          {...register("prefix", {
-                            required: true,
-                          })}
-                        >
-                        <option value={""}>กรุณาเลือกข้อมูล</option>
-                        <option value={"นาย"}>นาย</option>
-                        <option value={"นาง"}>นาง</option>
-                        <option value={"นางสาว"}>นางสาว</option>
-                        </select>
-                        {errors.prefix && (
-                          <span className="text-danger">
-                            This field is required
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <label htmlFor="">ชื่อ :</label>
+                        <label htmlFor="">ชื่อพนักงาน :</label>
                         <input
                           type="text"
                           className="form-control"
                           placeholder="กรุณาเพิ่มข้อมูล"
-                          {...register("first_name", {
+                          {...register("emp_name", {
                             required: true,
                           })}
                         />
-                        {errors.first_name && (
-                          <span className="text-danger">
-                            This field is required
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <label htmlFor="">นามสกุล :</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                           placeholder="กรุณาเพิ่มข้อมูล"
-                          {...register("last_name", {
-                            required: true,
-                          })}
-                        />
-                        {errors.last_name && (
+                        {errors.emp_name && (
                           <span className="text-danger">
                             This field is required
                           </span>
@@ -204,13 +164,13 @@ const EmployeeEdit = () => {
                         <select
                           type="text"
                           className="form-control"
-                          {...register("division", {
+                          {...register("department", {
                             required: true,
                           })}
                         >
                         <option value={''}>กรุณาเลือกข้อมูล</option>
                         </select>
-                        {errors.division && (
+                        {errors.department && (
                           <span className="text-danger">
                             This field is required
                           </span>
@@ -223,13 +183,13 @@ const EmployeeEdit = () => {
                         <select
                           type="text"
                           className="form-control"
-                          {...register("department", {
+                          {...register("dept", {
                             required: true,
                           })}
                         >
                         <option value={''}>กรุณาเลือกข้อมูล</option>
                         </select>
-                        {errors.department && (
+                        {errors.dept && (
                           <span className="text-danger">
                             This field is required
                           </span>
