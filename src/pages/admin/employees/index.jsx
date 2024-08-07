@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { useAuthUser } from "react-auth-kit";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -30,12 +29,66 @@ const Employees = () => {
     const to = from + pageSize;
 
     await axios
-      .get("http://localhost/laravel_auth_jwt_api/public/api/employees")
+      .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/employees")
       .then((res) => {
         setEmployees(res.data.employees);
         setRecords(res.data.employees.slice(from, to));
         setLoading(false);
       });
+  };
+
+  // filter by employees id
+  
+
+  const [selectFile, setSelectFile] = useState("");
+
+  const changeHandler = (event) => {
+    setSelectFile(event.target.files[0]);
+  };
+
+  const handleSubmitImportFile = async () => {
+    if (!selectFile) {
+      Swal.fire({
+        icon: "info",
+        title: "Pease select file for upload",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("importFile", selectFile);
+
+      await axios
+        .post(
+          import.meta.env.VITE_API_KEY +
+            "/laravel_auth_jwt_api/public/api/employees-import",
+          formData
+        )
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Your file upload has been success",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          getData();
+          setLoading(false);
+        });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong !",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -70,8 +123,8 @@ const Employees = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="float-right mb-3">
-                          <div className="file btn btn-primary mr-1">
+                        <div className="float-right mb-2">
+                          <div className="file btn btn-primary mr-1" style={{position:"relative",overflow:"hidden"}}>
                             <i className="fas fa-folder-plus"></i> เลือกไฟล์
                             <input
                               style={{
@@ -83,12 +136,12 @@ const Employees = () => {
                               }}
                               type="file"
                               name="file"
-                              accept=".txt"
-                              //onChange={changeHandler}
+                              accept=".csv"
+                              onChange={changeHandler}
                             />
                           </div>
                           <button
-                            //onClick={handleSubmitImportFile}
+                            onClick={handleSubmitImportFile}
                             className="btn btn-success"
                           >
                             <i className="fas fa-file-upload"></i> อัพโหลด
@@ -99,29 +152,26 @@ const Employees = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <label htmlFor="">รหัสพนักงาน</label>
-                                <input type="text" className="form-control" />
+                                <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="กรุณากรอกข้อมูล" 
+                                onChange={(e)=>setSearch(e.target.value)}
+                                />
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <label htmlFor="">ชื่อพนักงาน</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <label htmlFor="">กลุ่มงาน</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
                               </div>
-                              <div className="col-md-2">
-                                <label htmlFor="">ตำแหน่ง</label>
-                                <input type="text" className="form-control" />
-                              </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <label htmlFor="">แผนก</label>
-                                <input type="text" className="form-control" />
-                              </div>
-                              <div className="col-md-2">
-                                <label htmlFor="">บริษัท</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
                               </div>
                             </div>
                           </div>
@@ -170,12 +220,12 @@ const Employees = () => {
                         },
                         {
                           accessor: "department",
-                          title: "แผนก",
+                          title: "หน่วยงาน",
                           textAlignment: "center",
                           render: ({ department }) => (
                             <>
-                              {department === "" ? (
-                                <span>ไม่ระบุข้อมูล</span>
+                              {department === null ? (
+                                <span className="text-danger">ไม่ระบุข้อมูล</span>
                               ) : (
                                 <span>{department}</span>
                               )}
@@ -183,8 +233,27 @@ const Employees = () => {
                           ),
                         },
                         {
-                          accessor: "company",
-                          title: "บริษัท",
+                          accessor: "agency",
+                          title: "ส่วนงาน",
+                          textAlignment: "center",
+                          render: ({ department }) => (
+                            <>
+                              {department === null ? (
+                                <span className="text-danger">ไม่ระบุข้อมูล</span>
+                              ) : (
+                                <span>{department}</span>
+                              )}
+                            </>
+                          ),
+                        },
+                        {
+                          accessor: "dept",
+                          title: "แผนก",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "work_exp",
+                          title: "อายุงาน",
                           textAlignment: "center",
                         },
                         {

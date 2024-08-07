@@ -57,7 +57,6 @@ const TimeScan = () => {
     }
 
     try {
-
       setLoading(true);
 
       const formData = new FormData();
@@ -123,26 +122,20 @@ const TimeScan = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="float-right">
-                          <div className="file btn btn-primary mr-1">
-                            <i className="fas fa-folder-plus"></i> เลือกไฟล์
-                            <input
-                              style={{
-                                position: "absolute",
-                                fontSize: 50,
-                                opacity: 0,
-                                right: 0,
-                                top: 0,
-                              }}
-                              type="file"
-                              name="file"
-                              accept=".txt"
-                              onChange={changeHandler}
-                            />
-                          </div>
+                        <div className="float-right mb-3">
+                        <div className="file btn btn-primary mr-1" style={{position:"relative",overflow:"hidden"}}>
+                        <i className="fas fa-folder-plus"></i> เลือกไฟล์
+                        <input
+                          style={{position:"absolute",fontSize:50,opacity:0,right:0,top:0}}
+                          type="file"
+                          name="file"
+                          accept=".txt"
+                          onChange={changeHandler}
+                        />
+                        </div>
                           <button
                             onClick={handleSubmitImportFile}
-                            className="btn btn-success mb-3 float-right"
+                            className="btn btn-success float-right"
                           >
                             <i className="fas fa-file-upload"></i> อัพโหลด
                           </button>
