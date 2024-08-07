@@ -33,7 +33,7 @@ const Approver = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data="+userDatail().dept
       )
       .then((res) => {
         //Change api name
@@ -437,7 +437,7 @@ const Approver = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่คำร้อง</label>
                                   <input
@@ -454,49 +454,20 @@ const Approver = () => {
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select
+                                  <input
+                                   placeholder="กรุณากรอกข้อมูล"
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
                                       nameFilter(event.target.value)
                                     }
-                                  >
-                                    <option value="">กรุณาเลือกข้อมูล</option>
-                                    {approver.map((item) => (
-                                      <option
-                                        key={item.id}
-                                        value={item.app_name_1}
-                                      >
-                                        {item.app_name_1}
-                                      </option>
-                                    ))}
-                                  </select>
+                                  />
                                 </div>
                               </div>
 
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor="">หน่วยงาน</label>
-                                  <select
-                                    className="form-control"
-                                    id="sel1"
-                                    onChange={(event) =>
-                                      departmentFilter(event.target.value)
-                                    }
-                                  >
-                                    <option value="">กรุณาเลือกข้อมูล</option>
-                                    {approver.map((item) => (
-                                      <option key={item.id} value={item.agency}>
-                                        {item.agency}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">สถานะ</label>
+                                  <label htmlFor="">สถานะการอนุมัติ</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
@@ -507,15 +478,15 @@ const Approver = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกข้อมูล
                                     </option>
-                                    <option value="รออนุมัติ">รออนุมัติ</option>
-                                    <option value="อนุมัติ">อนุมัติ</option>
-                                    <option value="ไม่อนุมัติ">
-                                      ไม่อนุมัติ
+                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
+                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="ไม่ผ่านการอนุมัติ">
+                                    ไม่ผ่านการอนุมัติ
                                     </option>
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   {/* <DatePicker/> */}
@@ -563,8 +534,8 @@ const Approver = () => {
                           textAlignment: "center",
                         },
                         {
-                          accessor: "department_name",
-                          title: "ผู้จัดการฝ่าย",
+                          accessor: "create_name",
+                          title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
                         {

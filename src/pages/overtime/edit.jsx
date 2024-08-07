@@ -28,6 +28,9 @@ const edit = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
 
+  const [scan1, setScan1]=useState([])
+  const [scan2, setScan2]=useState([])
+
   const getData = async () => {
     await axios
       .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest/" + id)
@@ -77,7 +80,24 @@ const edit = () => {
       });
   };
 
+  const filter_scan_first_time = async () => {
+    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-first-time?data=66056&time=2024-07-30")
+    .then((res)=>{
+      setScan1(res.data.scan)
+    }) 
+  }
+
+  
+  const filter_scan_last_time = async () => {
+    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-last-time?data=66056&time=2024-07-30")
+    .then((res)=>{
+      setScan2(res.data.scan)
+    }) 
+  }
+
   useEffect(() => {
+    filter_scan_first_time()
+    filter_scan_last_time()
     getData();
   }, []);
 
@@ -189,7 +209,7 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="รายงานผล"
+                                        placeholder="รายงาน"
                                         {...register(
                                           `test.${index}.objective`,
                                           { required: true }
@@ -201,13 +221,13 @@ const edit = () => {
                                         </span>
                                       )}
                                     </td>
-                                    <td>8.30-{overtimes.end_date}</td>
+                                    <td>{ dayjs(scan1.time).format('hh:mm') } - { dayjs(scan2.time).format('HH:mm') }</td>
                                     <td>
                                       <input
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="รายงานผล"
+                                        placeholder="รายงาน"
                                         {...register(`test.${index}.out_time`, {
                                           required: true,
                                         })}
@@ -226,7 +246,7 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="1"
-                                        placeholder="รายงานผล"
+                                        placeholder="รายงาน"
                                         {...register(`test.${index}.remark`, {
                                           required: true,
                                         })}

@@ -104,7 +104,7 @@ const view = () => {
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> :{" "}
-                                  {overtimes.department_name}
+                                  {overtimes.name_app_3}
                                 </td>
                                 <td>
                                   <b>ผู้ควบคุมงาน</b> : {overtimes.create_name}
@@ -169,7 +169,7 @@ const view = () => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className="text-success">
+                                    <td className="text-secondary">
                                       {member.objective === null ? (
                                        <i className="fas fa-pencil-alt"></i>
                                       ) : (
@@ -177,8 +177,8 @@ const view = () => {
                                       )}
                                     </td>
                                     {/* ลิ้งกับระบบแสกนนิ้วมือเพื่อดึงข้อมูลมาแสดง */}
-                                    <td>{ dayjs(scan1.time).format('hh:mm') } - { dayjs(scan2.time).format('HH:mm') }</td>
-                                    <td className="text-success">
+                                    <td>{ dayjs(scan1.time).format('HH:mm') } - { dayjs(scan2.time).format('HH:mm') }</td>
+                                    <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
@@ -189,7 +189,7 @@ const view = () => {
                                     <td>{member.out_time - overtimes.start_date} ชม.</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className="text-success">
+                                    <td className="text-secondary">
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (

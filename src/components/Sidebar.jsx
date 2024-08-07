@@ -57,6 +57,12 @@ export default function Sidebar() {
                   <p>จัดการพนักงาน</p>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to="/timescan" className="nav-link">
+                <i className="nav-icon fas fa-clock"></i>
+                  <p>Time Scan</p>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>

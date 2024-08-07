@@ -33,7 +33,7 @@ const Overtime = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data=PED"
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data="+userDatail().dept
       )
       .then((res) => {
         //Change api name
@@ -69,24 +69,6 @@ const Overtime = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
-          key
-      )
-      .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
-        setLoading(false);
-      });
-  };
-
-  //filter function by department
-  const departmentFilter = async (key) => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -271,7 +253,7 @@ const Overtime = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่คำร้อง</label>
                                   <input
@@ -284,53 +266,45 @@ const Overtime = () => {
                                   />
                                 </div>
                               </div>
-
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
-                                  <select
+                                  <input
                                     className="form-control"
                                     id="sel1"
+                                    placeholder="กรุณากรอกข้อมูล"
                                     onChange={(event) =>
                                       nameFilter(event.target.value)
                                     }
-                                  >
-                                    <option value="">กรุณาเลือกข้อมูล</option>
-                                    {approver.map((item) => (
-                                      <option
-                                        key={item.id}
-                                        value={item.app_name_1}
-                                      >
-                                        {item.app_name_1}
-                                      </option>
-                                    ))}
-                                  </select>
+                                  />
                                 </div>
                               </div>
 
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor="">หน่วยงาน</label>
+                                  <label htmlFor="">สถานะการอนุมัติ</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
-                                      departmentFilter(event.target.value)
+                                      statusFilter(event.target.value)
                                     }
                                   >
-                                    <option value="">กรุณาเลือกข้อมูล</option>
-                                    {approver.map((item) => (
-                                      <option key={item.id} value={item.agency}>
-                                        {item.agency}
-                                      </option>
-                                    ))}
+                                    <option defaultValue="">
+                                      กรุณาเลือกข้อมูล
+                                    </option>
+                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
+                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="ไม่ผ่านการอนุมัติ">
+                                    ไม่ผ่านการอนุมัติ
+                                    </option>
                                   </select>
                                 </div>
                               </div>
 
-                              <div className="col-md-2">
+                              {/* <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">สถานะ</label>
+                                  <label htmlFor="">สถานะการรายงาน</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
@@ -348,8 +322,8 @@ const Overtime = () => {
                                     </option>
                                   </select>
                                 </div>
-                              </div>
-                              <div className="col-md-2">
+                              </div> */}
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   <input
@@ -396,8 +370,8 @@ const Overtime = () => {
                           textAlignment: "center",
                         },
                         {
-                          accessor: "department_name",
-                          title: "ผู้จัดการฝ่าย",
+                          accessor: "create_name",
+                          title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
                         {
@@ -412,7 +386,7 @@ const Overtime = () => {
                         },
                         {
                           accessor: "status",
-                          title: "สถานะ",
+                          title: "สถานะการอนุมัติ",
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
@@ -434,7 +408,7 @@ const Overtime = () => {
                         },
                         {
                           accessor: "result",
-                          title: "สถานะรายงาน",
+                          title: "สถานะการรายงาน",
                           textAlignment: "center",
                           render: ({ result }) => (
                             <>

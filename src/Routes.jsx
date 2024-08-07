@@ -22,6 +22,7 @@ import Employees from './pages/admin/employees'
 import EmployeeCreate from './pages/admin/employees/create'
 import EmployeeView from "./pages/admin/employees/view";
 import EmployeeEdit from "./pages/admin/employees/edit";
+import TimeScan from "./pages/admin/timescan";
 
 
 const RoutesPage = () => {
@@ -53,6 +54,8 @@ const RoutesPage = () => {
           <Route path="/employees/create" element={<EmployeeCreate/>} />
           <Route path="/employees/view/:id" element={<EmployeeView/>} />
           <Route path="/employees/edit/:id" element={<EmployeeEdit/>} />
+          {/* Rout Time Scan */}
+          <Route path="/timescan" element={<TimeScan/>} />
         </Route>
       </Routes>
     </Router>

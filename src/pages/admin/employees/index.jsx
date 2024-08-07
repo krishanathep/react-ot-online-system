@@ -70,8 +70,30 @@ const Employees = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <Link to={'/employees/create'} className="btn btn-success mb-3 ml-1 float-right">เพิ่มพนักงาน</Link>
-                        <button className="btn btn-secondary mb-3 float-right">อัพโหลดไฟล์</button>
+                        <div className="float-right mb-3">
+                          <div className="file btn btn-primary mr-1">
+                            <i className="fas fa-folder-plus"></i> เลือกไฟล์
+                            <input
+                              style={{
+                                position: "absolute",
+                                fontSize: 50,
+                                opacity: 0,
+                                right: 0,
+                                top: 0,
+                              }}
+                              type="file"
+                              name="file"
+                              accept=".txt"
+                              //onChange={changeHandler}
+                            />
+                          </div>
+                          <button
+                            //onClick={handleSubmitImportFile}
+                            className="btn btn-success"
+                          >
+                            <i className="fas fa-file-upload"></i> อัพโหลด
+                          </button>
+                        </div>
                       </div>
                       <div className="col-md-12">
                         <div className="card shadow-none border">
@@ -150,10 +172,15 @@ const Employees = () => {
                           accessor: "department",
                           title: "แผนก",
                           textAlignment: "center",
-                          render: ({department}) => 
+                          render: ({ department }) => (
                             <>
-                              {department===""?(<span>ไม่ระบุข้อมูล</span>):(<span>{department}</span>)}
+                              {department === "" ? (
+                                <span>ไม่ระบุข้อมูล</span>
+                              ) : (
+                                <span>{department}</span>
+                              )}
                             </>
+                          ),
                         },
                         {
                           accessor: "company",
@@ -166,18 +193,6 @@ const Employees = () => {
                           textAlignment: "center",
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MM-YYYY"),
-                        },
-                        {
-                          accessor: "actions",
-                          textAlignment: "center",
-                          title: "ดำเนินการ",
-                          render: (blogs) => (
-                            <>
-                              <Link to={'/employees/view/'+blogs.id} className="btn btn-info">View</Link>{" "}
-                              <Link to={'/employees/edit/'+blogs.id} className="btn btn-primary">Edit</Link>{" "}
-                              <button className="btn btn-danger">Delete</button>
-                            </>
-                          ),
                         },
                       ]}
                       records={records}
