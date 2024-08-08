@@ -11,9 +11,6 @@ const view = () => {
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount]= useState(0)
 
-  const [scan1, setScan1]=useState([])
-  const [scan2, setScan2]=useState([])
-
   //stepper complete state
   const [complete_1, setComplete_1] = useState(false)
   const [complete_2, setComplete_2] = useState(false)
@@ -30,7 +27,7 @@ const view = () => {
         setMemebers(res.data.data.employees);
         setEmpcount(res.data.data.employees.length);
   
-        //stepper complete
+        //stepper complete function
         if(res.data.data.status==='รอการอนุมัติ 2'){
           setComplete_1(true)
         } if(res.data.data.status==='รอการอนุมัติ 3'){
@@ -43,24 +40,7 @@ const view = () => {
       });
   };
 
-  const filter_scan_first_time = async () => {
-    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-first-time?data=66056&time=2024-07-30")
-    .then((res)=>{
-      setScan1(res.data.scan)
-    }) 
-  }
-
-  
-  const filter_scan_last_time = async () => {
-    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-last-time?data=66056&time=2024-07-30")
-    .then((res)=>{
-      setScan2(res.data.scan)
-    }) 
-  }
-
   useEffect(() => {
-    filter_scan_first_time()
-    filter_scan_last_time()
     getData();
   }, []);
 
@@ -177,7 +157,7 @@ const view = () => {
                                       )}
                                     </td>
                                     {/* ลิ้งกับระบบแสกนนิ้วมือเพื่อดึงข้อมูลมาแสดง */}
-                                    <td>{ dayjs(scan1.time).format('HH:mm') } - { dayjs(scan2.time).format('HH:mm') }</td>
+                                    <td></td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>

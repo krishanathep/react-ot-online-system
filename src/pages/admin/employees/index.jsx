@@ -148,7 +148,7 @@ const Employees = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="col-md-12">
+                      {/* <div className="col-md-12">
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
@@ -176,7 +176,7 @@ const Employees = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <DataTable
                       style={{

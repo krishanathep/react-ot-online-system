@@ -27,6 +27,11 @@ const TimeScan = () => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
+    const ot = [
+      { id: 62399, name: "Kwang" },
+      { id: 66082, name: "Keng" },
+    ];
+
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
@@ -123,16 +128,25 @@ const TimeScan = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right mb-3">
-                        <div className="file btn btn-primary mr-1" style={{position:"relative",overflow:"hidden"}}>
-                        <i className="fas fa-folder-plus"></i> เลือกไฟล์
-                        <input
-                          style={{position:"absolute",fontSize:50,opacity:0,right:0,top:0}}
-                          type="file"
-                          name="file"
-                          accept=".txt"
-                          onChange={changeHandler}
-                        />
-                        </div>
+                          <div
+                            className="file btn btn-primary mr-1"
+                            style={{ position: "relative", overflow: "hidden" }}
+                          >
+                            <i className="fas fa-folder-plus"></i> เลือกไฟล์
+                            <input
+                              style={{
+                                position: "absolute",
+                                fontSize: 50,
+                                opacity: 0,
+                                right: 0,
+                                top: 0,
+                              }}
+                              type="file"
+                              name="file"
+                              accept=".txt"
+                              onChange={changeHandler}
+                            />
+                          </div>
                           <button
                             onClick={handleSubmitImportFile}
                             className="btn btn-success float-right"

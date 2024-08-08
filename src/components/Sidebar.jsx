@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink as Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import logo from '/assets/dist/img/AdminLTELogo.png'
 
 export default function Sidebar() {
   const userdetail = useAuthUser()
@@ -9,7 +10,7 @@ export default function Sidebar() {
       <aside className="main-sidebar nav-pills sidebar-dark-primary sidebar-no-expand elevation-1">
         <Link to="/" className="brand-link">
           <img
-            src="/assets/dist/img/AdminLTELogo.png"
+            src={logo}
             alt="AdminLTE Logo"
             className="brand-image img-circle elevation-1"
             style={{ opacity: ".8" }}

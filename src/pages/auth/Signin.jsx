@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Preloader from "../../components/Preloader";
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import logo from '/assets/imgs/logo.png'
 
 export default function Signin() {
   const [loading, setLoading] = useState(false)
@@ -65,7 +66,7 @@ export default function Signin() {
           <div className="login-logo">
             <a href="#">
               {/* <b>OT-</b>REQUEST */}
-              <img src="/assets/imgs/logo.png" width='40%' alt="" />
+              <img src={logo} width='40%' alt="" />
             </a>
           </div>
           <div  id="auth_bg" className="card">
