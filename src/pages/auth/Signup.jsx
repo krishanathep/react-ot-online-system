@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router-dom'
+import logo from '/assets/imgs/logo.png'
 import Swal from "sweetalert2";
 import axios from 'axios'
 
@@ -11,6 +12,7 @@ export default function Signup() {
   const REACT_APP_API = import.meta.env.VITE_API_KEY+'/laravel_auth_jwt_api/public/api/auth/register'
 
   const onSubmit = async data => {
+    //alert(JSON.stringify(data))
     try {
       await axios.post(REACT_APP_API, data)
       .then((res)=>{
@@ -32,7 +34,8 @@ export default function Signup() {
     <div className="register-box">
       <div className="register-logo">
         <a href="#">
-          <b>Admin</b>LTE
+          {/* <b>Admin</b>LTE */}
+          <img src={logo} width='40%' alt="" />
         </a>
       </div>
       <div className="card">
@@ -57,6 +60,46 @@ export default function Signup() {
               </div>
             </div>
             {errors.email && <p className="text-danger">This field is required</p>}
+
+            <div className="input-group mb-3">
+            <select className="form-control" type="text" {...register("role", { required: true })} placeholder="Rules">
+            <option value="">Please Select</option>
+              <option value="admin">System Admmin</option>
+              <option value="owner">System Owner</option>
+              <option value="user">System User</option>
+              <option value="approver_1">Approver 1</option>
+              <option value="approver_2">Approver 2</option>
+              <option value="approver_3">Approver 3</option>
+              <option value="approver_4">Approver 4</option>
+            </select>
+              <div className="input-group-append">
+                <div className="input-group-text">
+                  <span className="fas fa-cog" />
+                </div>
+              </div>
+            </div>
+            {errors.role && <p className="text-danger">This field is required</p>}
+
+            <div className="input-group mb-3">
+            <select className="form-control" type="text" {...register("dept", { required: true })} placeholder="Departments">
+              <option value="">Please Select</option>
+              <option value="RDD">RDD</option>
+              <option value="ADD">ADD</option>
+              <option value="PED">PED</option>
+              <option value="FED">FED</option>
+              <option value="QAD">QAD</option>
+              <option value="PLD">PLD</option>
+              <option value="PPD">PPD</option>
+              <option value="PRD">PRD</option>
+            </select>
+              <div className="input-group-append">
+                <div className="input-group-text">
+                  <span className="fas fa-id-card-alt" />
+                </div>
+              </div>
+            </div>
+            {errors.dept && <p className="text-danger">This field is required</p>}
+
             <div className="input-group mb-3">
             <input className="form-control" type="password" {...register("password", { required: true })} placeholder="Password" />
               <div className="input-group-append">
