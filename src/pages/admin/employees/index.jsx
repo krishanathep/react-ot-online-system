@@ -225,7 +225,7 @@ const Employees = () => {
                           render: ({ department }) => (
                             <>
                               {department === null ? (
-                                <span className="text-danger">ไม่ระบุข้อมูล</span>
+                                 <h5><blade className="badge bg-info"><span>ไม่ระบุข้อมูล</span></blade></h5>
                               ) : (
                                 <span>{department}</span>
                               )}
@@ -236,12 +236,12 @@ const Employees = () => {
                           accessor: "agency",
                           title: "ส่วนงาน",
                           textAlignment: "center",
-                          render: ({ department }) => (
+                          render: ({ agency }) => (
                             <>
-                              {department === null ? (
-                                <span className="text-danger">ไม่ระบุข้อมูล</span>
+                              {agency === null ? (
+                                 <h5><blade className="badge bg-info"><span>ไม่ระบุข้อมูล</span></blade></h5>
                               ) : (
-                                <span>{department}</span>
+                                <span>{agency}</span>
                               )}
                             </>
                           ),

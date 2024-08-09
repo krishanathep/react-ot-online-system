@@ -20,7 +20,7 @@ import OfficeCar from "./pages/officecar";
 import OfficeCarEdit from './pages/officecar/edit'
 import Employees from './pages/admin/employees'
 import TimeScan from "./pages/admin/timescan";
-
+import OvertimeAdmin from './pages/admin/overtime'
 
 const RoutesPage = () => {
   return (
@@ -47,11 +47,10 @@ const RoutesPage = () => {
           <Route path="/officecar" element={<OfficeCar/>} />
           <Route path="/officecar/edit/:id" element={<OfficeCarEdit/>} />
 
-          {/* Route Employees */}
-          <Route path="/employees" element={<Employees/>} />
-    
-          {/* Rout Time Scan */}
-          <Route path="/timescan" element={<TimeScan/>} />
+          {/* Route ADIMIN */}
+          <Route path="/admin/overtime" element={<OvertimeAdmin />} />
+          <Route path="/admin/employees" element={<Employees/>} />
+          <Route path="/admin/timescan" element={<TimeScan/>} />
         </Route>
       </Routes>
     </Router>

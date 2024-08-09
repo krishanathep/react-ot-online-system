@@ -53,15 +53,21 @@ export default function Sidebar() {
               </li>
               <li className="nav-header">ADMIN MENU</li>
               <li className="nav-item">
-                <Link to="/employees" className="nav-link">
-                <i className="nav-icon fas fa-users"></i>
-                  <p>จัดการพนักงาน</p>
+                <Link to="/admin/overtime" className="nav-link">
+                <i className="nav-icon fas fa-calendar-plus"></i>
+                  <p>Overtime</p>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/timescan" className="nav-link">
+                <Link to="/admin/employees" className="nav-link">
+                <i className="nav-icon fas fa-users"></i>
+                  <p>Employees</p>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/admin/timescan" className="nav-link">
                 <i className="nav-icon fas fa-clock"></i>
-                  <p>Time Scan</p>
+                  <p>Time-Scan</p>
                 </Link>
               </li>
             </ul>

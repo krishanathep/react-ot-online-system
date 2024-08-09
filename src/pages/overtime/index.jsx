@@ -227,7 +227,7 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
-                          <button
+                          {/* <button
                             onClick={textExport}
                             className="btn btn-secondary mb-3"
                             hidden={
@@ -235,10 +235,10 @@ const Overtime = () => {
                             }
                           >
                             <i className="fas fa-download"></i> ดึงข้อมูล
-                          </button>{" "}
+                          </button>{" "} */}
                           <Link
                             to={"/overtime/create"}
-                            className="btn btn-success mb-3"
+                            className="btn btn-success mb-2"
                             hidden={
                               userDatail().role === "approver" ? true : false
                             }
@@ -392,13 +392,13 @@ const Overtime = () => {
                             <>
                               <h5>
                                 {status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary">{status}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="info">{status}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 4" ? (
-                                  <Badge bg="primary">{status}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success">{status}</Badge>
+                                  <Badge bg="success"><span>{status}</span></Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
                                 )}
@@ -414,15 +414,15 @@ const Overtime = () => {
                             <>
                               <h5>
                                 {result === "รอการรายงาน" ? (
-                                  <Badge bg="secondary">{result}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
                                 ) : result === "รอการปิด (ส่วน)" ? (
-                                  <Badge bg="info">{result}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
-                                  <Badge bg="primary">{result}</Badge>
+                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
                                 ) : result === "ปิดการรายงาน" ? (
-                                  <Badge bg="success">{result}</Badge>
+                                  <Badge bg="success"><span>{result}</span></Badge>
                                 ) : (
-                                  <Badge bg="danger">{result}</Badge>
+                                  <Badge bg="danger"><span>{result}</span></Badge>
                                 )}
                               </h5>
                             </>
@@ -461,13 +461,13 @@ const Overtime = () => {
                                 to={"/overtime/view/" + blogs.id}
                                 className="btn btn-info"
                               >
-                                <i className="fas fa-eye"></i> รายละเอียด
+                              <i className="fas fa-bars"></i>
                               </Link>{" "}
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                                <i className="fas fa-pencil-alt"></i> รายงานผล
+                                <i className="far fa-edit"></i>
                               </Link>{" "}
                               {/* <button
                                 className="btn btn-danger"

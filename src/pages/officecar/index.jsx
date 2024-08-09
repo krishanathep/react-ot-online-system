@@ -210,7 +210,7 @@ const OfficeCar = () => {
                                 to={"/officecar/edit/" + blogs.id}
                                 className="btn btn-info"
                               >
-                                <i className="fas fa-edit"></i> จัดการ
+                              <i className="fas fa-bars"></i>
                               </Link>
                             </>
                           ),

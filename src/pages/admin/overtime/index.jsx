@@ -10,7 +10,7 @@ import axios from "axios";
 
 const PAGE_SIZES = [10, 20, 30];
 
-const Approver = () => {
+const OverTimeAdmin = () => {
   //user login
   const userDatail = useAuthUser();
 
@@ -433,6 +433,23 @@ const Approver = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
+                      <div className="col-12">
+                      <div className="row">
+                      <div className="col-md-12">
+                        <div className="float-right">
+                          <button
+                            onClick={textExport}
+                            className="btn btn-secondary mb-2"
+                            hidden={
+                              userDatail().role === "approver" ? true : false
+                            }
+                          >
+                            <i className="fas fa-download"></i> ดึงข้อมูล
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                      </div>
                       <div className="col-lg-12">
                         <div className="card shadow-none border">
                           <div className="card-body">
@@ -576,20 +593,20 @@ const Approver = () => {
                           textAlignment: "center",
                           render: ({ result }) => (
                             <>
-                              <h5>
-                                {result === "รอการรายงาน" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                                ) : result === "รอการปิด (ส่วน)" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                                ) : result === "รอการปิด (ผจก)" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                                ) : result === "ปิดการรายงาน" ? (
-                                  <Badge bg="success"><span>{result}</span></Badge>
-                                ) : (
-                                  <Badge bg="danger"><span>{result}</span></Badge>
-                                )}
-                              </h5>
-                            </>
+                            <h5>
+                              {result === "รอการรายงาน" ? (
+                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                              ) : result === "รอการปิด (ส่วน)" ? (
+                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                              ) : result === "รอการปิด (ผจก)" ? (
+                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                              ) : result === "ปิดการรายงาน" ? (
+                                <Badge bg="success"><span>{result}</span></Badge>
+                              ) : (
+                                <Badge bg="danger"><span>{result}</span></Badge>
+                              )}
+                            </h5>
+                          </>
                           ),
                         },
                         {
@@ -642,11 +659,11 @@ const Approver = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit3(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_2"
-                                    ? false
-                                    : true
-                                }
+                                // hidden={
+                                //   userDatail().role === "approver_2"
+                                //     ? false
+                                //     : true
+                                // }
                                 disabled={
                                   blogs.status === "รอการอนุมัติ 3"
                                     ? false
@@ -658,11 +675,11 @@ const Approver = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit4(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_3"
-                                    ? false
-                                    : true
-                                }
+                                // hidden={
+                                //   userDatail().role === "approver_3"
+                                //     ? false
+                                //     : true
+                                // }
                                 disabled={
                                   blogs.status === "รอการอนุมัติ 4"
                                     ? false
@@ -685,7 +702,8 @@ const Approver = () => {
                                     : true
                                 }
                               >
-                                <i className="fas fa-check-circle"></i>
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                5
                               </button>{" "}
                               <button
                                 className="btn btn-warning text-white"
@@ -701,7 +719,8 @@ const Approver = () => {
                                     : true
                                 }
                               >
-                                <i className="fas fa-check-circle"></i>
+                                <i className="fas fa-check-circle"></i> อนุมัติ
+                                6
                               </button>{" "}
                               <button
                                 className="btn btn-danger"
@@ -738,4 +757,4 @@ const Approver = () => {
   );
 };
 
-export default Approver;
+export default OverTimeAdmin;
