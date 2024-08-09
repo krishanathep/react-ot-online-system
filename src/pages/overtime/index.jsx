@@ -459,13 +459,13 @@ const Overtime = () => {
                             <>
                               <Link
                                 to={"/overtime/view/" + blogs.id}
-                                className="btn btn-info"
+                                className="btn btn-primary"
                               >
                               <i className="fas fa-bars"></i>
                               </Link>{" "}
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
-                                className="btn btn-primary"
+                                className="btn btn-info"
                               >
                                 <i className="far fa-edit"></i>
                               </Link>{" "}

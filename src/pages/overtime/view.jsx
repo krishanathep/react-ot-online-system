@@ -10,6 +10,7 @@ const view = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount]= useState(0)
+  const [scantime, setScantime]= useState([])
 
   //stepper complete state
   const [complete_1, setComplete_1] = useState(false)
@@ -23,8 +24,15 @@ const view = () => {
         timeout: 5000,
       })
       .then((res) => {
+        // overtime data
         setOvertimes(res.data.data);
+        // employee data
         setMemebers(res.data.data.employees);
+        // time scan data
+        setScantime(res.data.data.employees.map((e)=>({time_scan:e.time_scan})))
+        //console.log(res.data.data.employees.map((e)=>({time_scan:e.time_scan})))
+    
+        // count employee
         setEmpcount(res.data.data.employees.length);
   
         //stepper complete function
@@ -39,6 +47,8 @@ const view = () => {
         }
       });
   };
+  
+  console.log(scantime)
 
   useEffect(() => {
     getData();
@@ -156,8 +166,9 @@ const view = () => {
                                         member.objective
                                       )}
                                     </td>
-                                    {/* ลิ้งกับระบบแสกนนิ้วมือเพื่อดึงข้อมูลมาแสดง */}
-                                    <td></td>
+                                    <td>
+                                      {scantime.map((scan)=>{return(<li>{scan.time}</li>)})}
+                                    </td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>

@@ -66,7 +66,7 @@ export default function Sidebar() {
               </li>
               <li className="nav-item">
                 <Link to="/admin/timescan" className="nav-link">
-                <i className="nav-icon fas fa-clock"></i>
+                <i className="nav-icon fas fa-business-time"></i>
                   <p>Time-Scan</p>
                 </Link>
               </li>

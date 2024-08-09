@@ -208,7 +208,7 @@ const OfficeCar = () => {
                             <>
                               <Link
                                 to={"/officecar/edit/" + blogs.id}
-                                className="btn btn-info"
+                                className="btn btn-primary"
                               >
                               <i className="fas fa-bars"></i>
                               </Link>
