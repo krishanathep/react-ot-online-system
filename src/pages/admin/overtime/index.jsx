@@ -572,18 +572,18 @@ const OverTimeAdmin = () => {
                           render: ({ status }) => (
                             <>
                             <h5>
-                              {status === "รอการอนุมัติ 2" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "รอการอนุมัติ 3" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "รอการอนุมัติ 4" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "ผ่านการอนุมัติ" ? (
-                                <Badge bg="success"><span>{status}</span></Badge>
-                              ) : (
-                                <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
-                              )}
-                            </h5>
+                                {status === "รอการอนุมัติ 1" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 2" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 3" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "ผ่านการอนุมัติ" ? (
+                                  <Badge bg="success"><span>{status}</span></Badge>
+                                ) : (
+                                  <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
+                                )}
+                              </h5>
                           </>
                           ),
                         },
@@ -649,7 +649,7 @@ const OverTimeAdmin = () => {
                                 //     : true
                                 // }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 2"
+                                  blogs.status === "รอการอนุมัติ 1"
                                     ? false
                                     : true
                                 }
@@ -665,7 +665,7 @@ const OverTimeAdmin = () => {
                                 //     : true
                                 // }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 3"
+                                  blogs.status === "รอการอนุมัติ 2"
                                     ? false
                                     : true
                                 }
@@ -681,7 +681,7 @@ const OverTimeAdmin = () => {
                                 //     : true
                                 // }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 4"
+                                  blogs.status === "รอการอนุมัติ 3"
                                     ? false
                                     : true
                                 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -33,7 +33,9 @@ const Approver = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data="+userDatail().dept
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequests-dept?data=" +
+          userDatail().dept
       )
       .then((res) => {
         //Change api name
@@ -50,7 +52,8 @@ const Approver = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
           key
       )
       .then((res) => {
@@ -68,7 +71,8 @@ const Approver = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
           key
       )
       .then((res) => {
@@ -86,7 +90,8 @@ const Approver = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -104,7 +109,9 @@ const Approver = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+        `${
+          import.meta.env.VITE_API_KEY
+        }/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -123,7 +130,9 @@ const Approver = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+        `${
+          import.meta.env.VITE_API_KEY
+        }/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -161,7 +170,8 @@ const Approver = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
               blogs.id,
             data
           )
@@ -197,7 +207,8 @@ const Approver = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
               blogs.id,
             data
           )
@@ -232,7 +243,8 @@ const Approver = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
               blogs.id,
             data
           )
@@ -268,7 +280,8 @@ const Approver = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
               blogs.id,
             data
           )
@@ -310,7 +323,8 @@ const Approver = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
               blogs.id,
             data
           )
@@ -328,8 +342,15 @@ const Approver = () => {
   const handleRejectSubmit = async (blogs, data) => {
     await Swal.fire({
       title: "ยืนยันการไม่อนุมัติ OT",
-      text: "คุณไม่ต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      text: "กรุณากรอกเหตุผล หากท่านไม่ต้องการอนุมัติ ",
       icon: "error",
+      input: "text",
+      inputValidator: (value) => {
+        if (!value) {
+          return 'You need to write something!';
+        }
+      },
+      inputPlaceholder: "Enter your text here",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -339,15 +360,16 @@ const Approver = () => {
       if (result.isConfirmed) {
         Swal.fire({
           icon: "error",
-          title: "ระบบได้ทำการไม่อนุมัติ OT เรียบร้อยแล้ว",
+          title: "ระบบได้ทำการไม่อนุมัติ OT เรียบร้อยแล้ว ",
           showConfirmButton: false,
           timer: 2000,
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-reject/" +
+            import.meta.env.VITE_API_KEY +
+              "/laravel_auth_jwt_api/public/api/otrequest-reject/" +
               blogs.id,
-            data
+            data, {text:value}
           )
           .then((res) => {
             console.log(res);
@@ -370,7 +392,8 @@ const Approver = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-export",
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -398,7 +421,8 @@ const Approver = () => {
   const getApprover = async () => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approve-role?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/approve-role?data=" +
           userDatail().dept
       )
       .then((res) => {
@@ -455,7 +479,7 @@ const Approver = () => {
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <input
-                                   placeholder="กรุณากรอกข้อมูล"
+                                    placeholder="กรุณากรอกข้อมูล"
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
@@ -478,10 +502,14 @@ const Approver = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกข้อมูล
                                     </option>
-                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
-                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="รอการอนุมัติ">
+                                      รอการอนุมัติ
+                                    </option>
+                                    <option value="ผ่านการอนุมัติ">
+                                      ผ่านการอนุมัติ
+                                    </option>
                                     <option value="ไม่ผ่านการอนุมัติ">
-                                    ไม่ผ่านการอนุมัติ
+                                      ไม่ผ่านการอนุมัติ
                                     </option>
                                   </select>
                                 </div>
@@ -554,20 +582,20 @@ const Approver = () => {
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
-                            <h5>
-                              {status === "รอการอนุมัติ 2" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "รอการอนุมัติ 3" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "รอการอนุมัติ 4" ? (
-                                <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                              ) : status === "ผ่านการอนุมัติ" ? (
-                                <Badge bg="success"><span>{status}</span></Badge>
-                              ) : (
-                                <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
-                              )}
-                            </h5>
-                          </>
+                               <h5>
+                                {status === "รอการอนุมัติ 1" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 2" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 3" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "ผ่านการอนุมัติ" ? (
+                                  <Badge bg="success"><span>{status}</span></Badge>
+                                ) : (
+                                  <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
+                                )}
+                              </h5>
+                            </>
                           ),
                         },
                         {
@@ -578,15 +606,25 @@ const Approver = () => {
                             <>
                               <h5>
                                 {result === "รอการรายงาน" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "รอการปิด (ส่วน)" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "ปิดการรายงาน" ? (
-                                  <Badge bg="success"><span>{result}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{result}</span>
+                                  </Badge>
                                 ) : (
-                                  <Badge bg="danger"><span>{result}</span></Badge>
+                                  <Badge bg="danger">
+                                    <span>{result}</span>
+                                  </Badge>
                                 )}
                               </h5>
                             </>
@@ -621,7 +659,7 @@ const Approver = () => {
                                 to={"/approver/view/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                              <i className="fas fa-bars"></i>
+                                <i className="fas fa-bars"></i>
                               </Link>{" "}
                               <button
                                 className="btn btn-success"
@@ -632,7 +670,7 @@ const Approver = () => {
                                     : true
                                 }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 2"
+                                  blogs.status === "รอการอนุมัติ 1"
                                     ? false
                                     : true
                                 }
@@ -648,7 +686,7 @@ const Approver = () => {
                                     : true
                                 }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 3"
+                                  blogs.status === "รอการอนุมัติ 2"
                                     ? false
                                     : true
                                 }
@@ -664,7 +702,7 @@ const Approver = () => {
                                     : true
                                 }
                                 disabled={
-                                  blogs.status === "รอการอนุมัติ 4"
+                                  blogs.status === "รอการอนุมัติ 3"
                                     ? false
                                     : true
                                 }
@@ -675,7 +713,7 @@ const Approver = () => {
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit5(blogs)}
                                 hidden={
-                                  userDatail().role === "approver_2"
+                                  userDatail().role === "approver_1"
                                     ? false
                                     : true
                                 }
@@ -691,7 +729,7 @@ const Approver = () => {
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit6(blogs)}
                                 hidden={
-                                  userDatail().role === "approver_3"
+                                  userDatail().role === "approver_2"
                                     ? false
                                     : true
                                 }
@@ -706,11 +744,11 @@ const Approver = () => {
                               <button
                                 className="btn btn-danger"
                                 onClick={() => handleRejectSubmit(blogs)}
-                                // disabled={
-                                //   blogs.status === "รอการอนุมัติ 2"
-                                //     ? false
-                                //     : true
-                                // }
+                                disabled={
+                                  blogs.status !== "ผ่านการอนุมัติ"
+                                    ? false
+                                    : true
+                                }
                               >
                                 <i className="fas fa-times-circle"></i>{" "}
                               </button>

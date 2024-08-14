@@ -389,11 +389,11 @@ const Overtime = () => {
                           render: ({ status }) => (
                             <>
                               <h5>
-                                {status === "รอการอนุมัติ 2" ? (
+                                {status === "รอการอนุมัติ 1" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 2" ? (
                                   <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
-                                ) : status === "รอการอนุมัติ 4" ? (
                                   <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
                                   <Badge bg="success"><span>{status}</span></Badge>
@@ -433,22 +433,22 @@ const Overtime = () => {
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MM-YYYY"),
                         },
-                        {
-                          accessor: "bus_point_1",
-                          title: "จุดรถรับส่ง",
-                          textAlignment: "center",
-                          render: ({
-                            bus_point_1,
-                            bus_point_2,
-                            bus_point_3,
-                            bus_point_4,
-                          }) => (
-                            <span>
-                              {bus_point_1} : {bus_point_2} : {bus_point_3} :{" "}
-                              {bus_point_4}
-                            </span>
-                          ),
-                        },
+                        // {
+                        //   accessor: "bus_point_1",
+                        //   title: "จุดรถรับส่ง",
+                        //   textAlignment: "center",
+                        //   render: ({
+                        //     bus_point_1,
+                        //     bus_point_2,
+                        //     bus_point_3,
+                        //     bus_point_4,
+                        //   }) => (
+                        //     <span>
+                        //       {bus_point_1} : {bus_point_2} : {bus_point_3} :{" "}
+                        //       {bus_point_4}
+                        //     </span>
+                        //   ),
+                        // },
                         {
                           accessor: "actions",
                           textAlignment: "center",

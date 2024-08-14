@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import DatePicker from "react-datepicker";
+import { useForm, useFieldArray } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
@@ -163,7 +162,7 @@ const create = ({ prefix = "OT" }) => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approve-dept?data=" +
-          userDetail().dept
+          userDetail().agency
       )
       .then((res) => {
         reset({

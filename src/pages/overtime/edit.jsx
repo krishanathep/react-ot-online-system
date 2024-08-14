@@ -186,7 +186,7 @@ const edit = () => {
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
                                 <th>ทำได้จริง</th>
-                                <th>ข้อมูลแสกน</th>
+                                <th>ข้อมูลสแกนนิ้ว</th>
                                 <th>เลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
@@ -208,8 +208,8 @@ const edit = () => {
                                       <input
                                         className="form-control"
                                         type="text"
-                                        size="1"
-                                        placeholder="รายงาน"
+                                        size="2"
+                                        placeholder="เพิ่มข้อมูล"
                                         {...register(
                                           `test.${index}.objective`,
                                           { required: true }
@@ -226,8 +226,8 @@ const edit = () => {
                                       <input
                                         className="form-control"
                                         type="text"
-                                        size="1"
-                                        placeholder="รายงาน"
+                                        size="2"
+                                        placeholder="เพิ่มข้อมูล"
                                         {...register(`test.${index}.out_time`, {
                                           required: true,
                                         })}
@@ -245,8 +245,8 @@ const edit = () => {
                                       <input
                                         className="form-control"
                                         type="text"
-                                        size="1"
-                                        placeholder="รายงาน"
+                                        size="6"
+                                        placeholder="เพิ่มข้อมูล"
                                         {...register(`test.${index}.remark`, {
                                           required: true,
                                         })}

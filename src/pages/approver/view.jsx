@@ -25,11 +25,11 @@ const view = () => {
         setMemebers(res.data.data.employees);
         
          //stepper complete
-         if(res.data.data.status==='รอการอนุมัติ 2'){
+         if(res.data.data.status==='รอการอนุมัติ 1'){
           setComplete_1(true)
-        } if(res.data.data.status==='รอการอนุมัติ 3'){
+        } if(res.data.data.status==='รอการอนุมัติ 2'){
           setComplete_1(true),setComplete_2(true)
-        } if(res.data.data.status==='รอการอนุมัติ 4'){
+        } if(res.data.data.status==='รอการอนุมัติ 3'){
           setComplete_1(true),setComplete_2(true),setComplete_3(true)
         } if(res.data.data.status==='ผ่านการอนุมัติ'){
           setComplete_1(true),setComplete_2(true),setComplete_3(true),setComplete_4(true)
@@ -128,7 +128,7 @@ const view = () => {
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
                                 <th>ทำได้จริง</th>
-                                <th>ข้อมูลแสกน</th>
+                                <th>ข้อมูลสแกนนิ้ว</th>
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
@@ -146,25 +146,25 @@ const view = () => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className="text-success">
+                                    <td className="text-secondary">
                                       {member.objective === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         member.objective
                                       )}
                                     </td>
-                                    <td>8.30-17.30</td>
-                                    <td className="text-success">
+                                    <td></td>
+                                    <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         member.out_time
                                       )}
                                     </td>
-                                    <td>{overtimes.total_date}</td>
+                                    <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className="text-success">
+                                    <td className="text-secondary">
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
@@ -203,19 +203,19 @@ const view = () => {
                             <div className="stepper-wrapper" style={{fontFamily: "Prompt",}}>
                             <div className={`stepper-item ${(!complete_1)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
-                              <div className="step-name">ผู้จัดทำ</div>
+                              <div className="step-name">หัวหน้าหน่วย/ผู้จัดทำ</div>
                             </div>
                             <div className={`stepper-item ${(!complete_2)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
-                              <div className="step-name">ผู้ตรวจสอบ</div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 1</div>
                             </div>
                             <div className={`stepper-item ${(!complete_3)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
-                              <div className="step-name">ผู้อนุมัติคนที่ 1</div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 2</div>
                             </div>
                             <div className={`stepper-item ${(!complete_4)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
-                              <div className="step-name">ผู้อนุมัติคนที่ 2</div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 3</div>
                             </div>
                           </div>
                         </div>
