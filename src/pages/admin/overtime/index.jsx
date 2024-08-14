@@ -33,12 +33,12 @@ const OverTimeAdmin = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-dept?data="+userDatail().dept
+        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests"
       )
       .then((res) => {
         //Change api name
-        setOvertimes(res.data.otrequests);
-        setRecords(res.data.otrequests.slice(from, to));
+        setOvertimes(res.data.data);
+        setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
   };
@@ -555,11 +555,11 @@ const OverTimeAdmin = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
-                        {
-                          accessor: "dept",
-                          title: "แผนก",
-                          textAlignment: "center",
-                        },
+                        // {
+                        //   accessor: "dept",
+                        //   title: "แผนก",
+                        //   textAlignment: "center",
+                        // },
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
@@ -643,11 +643,11 @@ const OverTimeAdmin = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit2(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_1"
-                                    ? false
-                                    : true
-                                }
+                                // hidden={
+                                //   userDatail().role === "approver_1"
+                                //     ? false
+                                //     : true
+                                // }
                                 disabled={
                                   blogs.status === "รอการอนุมัติ 2"
                                     ? false
@@ -691,36 +691,34 @@ const OverTimeAdmin = () => {
                               <button
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit5(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_2"
-                                    ? false
-                                    : true
-                                }
+                                // hidden={
+                                //   userDatail().role === "approver_2"
+                                //     ? false
+                                //     : true
+                                // }
                                 disabled={
                                   blogs.result === "รอการปิด (ส่วน)"
                                     ? false
                                     : true
                                 }
                               >
-                                <i className="fas fa-check-circle"></i> อนุมัติ
-                                5
+                                <i className="fas fa-check-circle"></i>
                               </button>{" "}
                               <button
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit6(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_3"
-                                    ? false
-                                    : true
-                                }
+                                // hidden={
+                                //   userDatail().role === "approver_3"
+                                //     ? false
+                                //     : true
+                                // }
                                 disabled={
                                   blogs.result === "รอการปิด (ผจก)"
                                     ? false
                                     : true
                                 }
                               >
-                                <i className="fas fa-check-circle"></i> อนุมัติ
-                                6
+                                <i className="fas fa-check-circle"></i>
                               </button>{" "}
                               <button
                                 className="btn btn-danger"

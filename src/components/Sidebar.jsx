@@ -42,13 +42,13 @@ export default function Sidebar() {
               <li className="nav-item">
                 <Link to="/approver" className="nav-link">
                 <i className="nav-icon fas fa-check-circle"></i>
-                  <p>การอนุมัติ OT</p>
+                  <p>การอนุมัติ</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/officecar" className="nav-link">
                 <i className="nav-icon fas fa-truck"></i>
-                  <p>ข้อมูลรถรับส่ง</p>
+                  <p>รถรับส่ง</p>
                 </Link>
               </li>
               <li className="nav-header">ADMIN MENU</li>

@@ -24,17 +24,9 @@ export default function Navbar() {
       <ul className="navbar-nav ml-auto">
         <li className="nav-item dropdown"> 
           <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-           <i className="fas fa-user-circle fa-lg"></i>{' '}Hi : {userDatail().name}{' '} By : {userDatail().role}
+           <i className="fas fa-user-circle fa-lg"></i>{' '}Hi : {userDatail().name}{' '} By : {userDatail().role} : {userDatail().dept}
           </a>
           <div className="dropdown-menu dropdown-menu-md dropdown-menu-right">
-            {/* <a href="#" className="dropdown-item">
-            <i className="fas fa-user mr-2"></i>Profile
-            </a>
-            <hr className="dropdown-divider"/>
-            <a href="#" className="dropdown-item">
-            <i className="fas fa-cog mr-2"></i>Settings
-            </a>
-            <hr className="dropdown-divider"/> */}
             <a href="#" className="dropdown-item" onClick={handleSignOut}>
               <i className="fas fa-sign-out-alt mr-2"></i> Sign out
             </a>

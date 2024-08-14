@@ -50,8 +50,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
-          key
+        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-code?dept=${userDatail().dept}&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -68,8 +67,7 @@ const Overtime = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
-          key
+        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-name?dept=${userDatail().dept}&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);

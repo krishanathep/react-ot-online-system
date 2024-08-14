@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
+import { IconTimeDuration15 } from "@tabler/icons-react";
 
 const view = () => {
 
@@ -29,9 +30,14 @@ const view = () => {
         // employee data
         setMemebers(res.data.data.employees);
         // time scan data
-        setScantime(res.data.data.employees.map((e)=>({time_scan:e.time_scan})))
-        //console.log(res.data.data.employees.map((e)=>({time_scan:e.time_scan})))
-    
+          // const time1 = res.data.data.employees.map((e)=>({time_scan : e.time_scan, emp_name: e.emp_name}))
+          // const time2 = time1.map((i)=>(i.time_scan.map((e)=>({pin:e.pin,time:e.time}))))
+          const time1 = res.data.data.employees.map((i)=>({time_scan:i.time_scan, emp_name: i.emp_name}))
+         
+          setScantime(time1)
+
+          //console.log(time2)
+
         // count employee
         setEmpcount(res.data.data.employees.length);
   
@@ -48,7 +54,7 @@ const view = () => {
       });
   };
   
-  console.log(scantime)
+ console.log(scantime)
 
   useEffect(() => {
     getData();
@@ -167,7 +173,7 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>
-                                      {scantime.map((scan)=>{return(<li>{scan.time}</li>)})}
+                                      {/* {scantime.map((i)=>(i.time_scan.map((i)=>{return(<li>{i.time}</li>)})))} */}
                                     </td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
