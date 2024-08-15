@@ -27,13 +27,16 @@ const edit = () => {
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
-
-  const [scan1, setScan1]=useState([])
-  const [scan2, setScan2]=useState([])
+  const [scantime, setScanTime] = useState([]);
 
   const getData = async () => {
+
     await axios
-      .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest/" + id)
+      .get(
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequest/" +
+          id
+      )
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
@@ -43,8 +46,11 @@ const edit = () => {
             objective: employee.objective,
             out_time: employee.out_time,
             remark: employee.remark,
+            time_scan: employee.time_scan.filter((item)=>item.index===438892 || item.index===440623).map((i)=>i.time),
           })),
         });
+
+
         //stepper complete
         if (res.data.data.result === "รอการปิด (ส่วน)") {
           setComplete_1(true);
@@ -58,10 +64,22 @@ const edit = () => {
       });
   };
 
+  const getTime = async () => {
+    await axios
+      .get(
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/time-scan"
+      )
+      .then((res) => {
+        setScanTime(res.data.scan);
+      });
+  };
+
   const handleUpdateSubmit = async (data) => {
     await axios
       .put(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-update-report/" +
+        import.meta.env.VITE_API_KEY +
+          "/laravel_auth_jwt_api/public/api/otrequest-update-report/" +
           id,
         data
       )
@@ -73,32 +91,15 @@ const edit = () => {
           timer: 2000,
         });
         navigate("/overtime");
-        //console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const filter_scan_first_time = async () => {
-    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-first-time?data=66056&time=2024-07-30")
-    .then((res)=>{
-      setScan1(res.data.scan)
-    }) 
-  }
-
-  
-  const filter_scan_last_time = async () => {
-    await axios.get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/scan-last-time?data=66056&time=2024-07-30")
-    .then((res)=>{
-      setScan2(res.data.scan)
-    }) 
-  }
-
   useEffect(() => {
-    filter_scan_first_time()
-    filter_scan_last_time()
     getData();
+    getTime();
   }, []);
 
   return (
@@ -221,7 +222,19 @@ const edit = () => {
                                         </span>
                                       )}
                                     </td>
-                                    <td>{ dayjs(scan1.time).format('hh:mm') } - { dayjs(scan2.time).format('HH:mm') }</td>
+                                    <td>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size={"1"}
+                                        {...register(
+                                          `test.${index}.time_scan`,
+                                          {
+                                            required: true,
+                                          }
+                                        )}
+                                      />
+                                    </td>
                                     <td>
                                       <input
                                         className="form-control"
@@ -251,7 +264,7 @@ const edit = () => {
                                           required: true,
                                         })}
                                       />
-                                       {errors.test && (
+                                      {errors.test && (
                                         <span className="text-danger">
                                           This field is required
                                         </span>

@@ -182,8 +182,7 @@ const view = () => {
                                         member.out_time
                                       )}
                                     </td>
-                                    {/* คำนวนเวลาเริ่มต้น และ เวลาเลิกงานจริง */}
-                                    {/* <td>{member.out_time - overtimes.start_date} ชม.</td> */}
+                                    {/* คำนวนเวลาเริ่มต้น ลบ เวลาเลิกงานจริง */}
                                     <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}

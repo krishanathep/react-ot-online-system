@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import { useForm, useFieldArray } from "react-hook-form";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DualListBox from "react-dual-listbox";
 import "react-dual-listbox/lib/react-dual-listbox.css";
@@ -629,7 +630,7 @@ const create = ({ prefix = "OT" }) => {
                               <th>ประเภทค่าแรง</th>
                               <th>ชนิดงานที่ทำ</th>
                               <th>เป้าหมาย</th>
-                              <th>จุดลงรถรับส่ง</th>
+                              <th>จุดรถรับส่ง</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -729,7 +730,7 @@ const create = ({ prefix = "OT" }) => {
                                     <option value={"จุดที่ 4"}>
                                       จุดที่ 4 สายวงเวียนใหญ่
                                     </option>
-                                    <option value={"ไม่ระส่ง"}>
+                                    <option value={"ไม่ใช้บริการรถรับส่ง"}>
                                       ไม่ใช้บริการรถรับส่ง
                                     </option>
                                   </select>
