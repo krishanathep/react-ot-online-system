@@ -11,7 +11,6 @@ export default function Signin() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const signIn = useSignIn()
-  const userdetail = useAuthUser()
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const REACT_APP_API = import.meta.env.VITE_API_KEY+'/api/auth/login'
@@ -71,7 +70,7 @@ export default function Signin() {
           </div>
           <div  id="auth_bg" className="card">
             <div className="card-body login-card-body">
-              <p className="login-box-msg">Sign in to create your OT request : {userdetail().role}</p>
+              <p className="login-box-msg">Sign in to create your OT request</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="input-group mb-3">
                 <input className="form-control"   type="email" {...register("email", { required: true })} placeholder="Email" />
