@@ -25,7 +25,7 @@ import OverTimeViewAdmin from './pages/admin/overtime/view'
 
 const RoutesPage = () => {
   return (
-    <Router basename="/overtime">
+    <Router>
       <Routes>
         <Route element={<WithOutnavbar />}>
           <Route exact  path="/auth/signin" element={<Signin />} />
