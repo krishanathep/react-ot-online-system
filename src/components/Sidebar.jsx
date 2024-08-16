@@ -1,10 +1,31 @@
-import React from "react";
-import { NavLink as Link } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { NavLink as Link,useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
-import logo from '/assets/dist/img/AdminLTELogo.png'
+import logo from "/assets/dist/img/AdminLTELogo.png";
 
 export default function Sidebar() {
-  const userdetail = useAuthUser()
+
+  const userdetail = useAuthUser();
+  const navigate = useNavigate()
+
+  const [ruleUser, setRuleUser] = useState(false);
+  const [ruleApprover, setRuleApprover] = useState(false);
+  const [ruleAdmin, setRuleAdmin] = useState(false);
+
+  const getRule = async () => {
+    if(userdetail().role==='user'){
+      setRuleUser(true)
+    } if (userdetail().role==='approver_1' || userdetail().role==='approver_2' || userdetail().role==='approver_3'){
+      setRuleApprover(true),navigate('/approver')
+    } if (userdetail().role==='admin'){
+      setRuleAdmin(true),navigate('/admin/overtime')
+    }
+  }
+
+  useEffect(()=>{
+    getRule()
+  })
+
   return (
     <>
       <aside className="main-sidebar nav-pills sidebar-dark-primary sidebar-no-expand elevation-1">
@@ -25,51 +46,64 @@ export default function Sidebar() {
               role="menu"
               data-accordion="false"
             >
-              <li className="nav-header">MAIN MENU</li>
-              <li className="nav-item">
-                <Link to="/" className="nav-link">
-                  <i className="nav-icon fas fa-home"></i>
-                  <p>หน้าหลัก</p>
-                </Link>
-              </li>
-                <li className="nav-item">
-                <Link to="/overtime" className="nav-link">
-                  <i className="nav-icon fas fa-calendar-plus"></i>
-                  <p>ขออนุมัติ OT</p>
-                </Link>
-              </li>
-              <li className="nav-header">OTHER MENU</li>
-              <li className="nav-item">
-                <Link to="/approver" className="nav-link">
-                <i className="nav-icon fas fa-check-circle"></i>
-                  <p>การอนุมัติ</p>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/officecar" className="nav-link">
-                <i className="nav-icon fas fa-truck"></i>
-                  <p>รถรับส่ง</p>
-                </Link>
-              </li>
-              <li className="nav-header">ADMIN MENU</li>
-              <li className="nav-item">
-                <Link to="/admin/overtime" className="nav-link">
-                <i className="nav-icon fas fa-calendar-plus"></i>
-                  <p>Overtime</p>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/admin/employees" className="nav-link">
-                <i className="nav-icon fas fa-users"></i>
-                  <p>Employees</p>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/admin/timescan" className="nav-link">
-                <i className="nav-icon fas fa-business-time"></i>
-                  <p>Time-Scan</p>
-                </Link>
-              </li>
+              {ruleUser ? (
+                <>
+                  <li className="nav-header">MAIN MENU</li>
+                  <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                      <i className="nav-icon fas fa-home"></i>
+                      <p>หน้าหลัก</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/overtime" className="nav-link">
+                      <i className="nav-icon fas fa-calendar-plus"></i>
+                      <p>ขออนุมัติ OT</p>
+                    </Link>
+                  </li>
+                </>
+              ) : null}
+
+              {ruleApprover ? (
+                <>
+                  <li className="nav-header">OTHER MENU</li>
+                  <li className="nav-item">
+                    <Link to="/approver" className="nav-link">
+                      <i className="nav-icon fas fa-check-circle"></i>
+                      <p>การอนุมัติ OT</p>
+                    </Link>
+                  </li>
+                </>
+              ) : null}
+              {ruleAdmin ? (
+                <>
+                  <li className="nav-header">ADMIN MENU</li>
+                  <li className="nav-item">
+                    <Link to="/admin/overtime" className="nav-link">
+                      <i className="nav-icon fas fa-calendar-plus"></i>
+                      <p>Overtime</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/admin/employees" className="nav-link">
+                      <i className="nav-icon fas fa-users"></i>
+                      <p>Employees</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/admin/timescan" className="nav-link">
+                      <i className="nav-icon fas fa-business-time"></i>
+                      <p>Time-Scan</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/officecar" className="nav-link">
+                      <i className="nav-icon fas fa-truck"></i>
+                      <p>รถรับส่ง</p>
+                    </Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </nav>
         </div>

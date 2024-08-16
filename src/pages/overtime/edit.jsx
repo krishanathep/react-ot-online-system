@@ -30,7 +30,6 @@ const edit = () => {
   const [scantime, setScanTime] = useState([]);
 
   const getData = async () => {
-
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
@@ -46,7 +45,7 @@ const edit = () => {
             objective: employee.objective,
             out_time: employee.out_time,
             remark: employee.remark,
-            time_scan: employee.time_scan.filter((item)=>item.index===438892 || item.index===440623).map((i)=>i.time),
+            scan: employee.time_scan.filter((item)=>item.time==='2024-08-16 08:00:06' || item.time==='2024-08-16 07:50:24').map((i)=>i.time),
           })),
         });
 
@@ -76,6 +75,7 @@ const edit = () => {
   };
 
   const handleUpdateSubmit = async (data) => {
+    //alert(JSON.stringify(data))
     await axios
       .put(
         import.meta.env.VITE_API_KEY +
@@ -228,7 +228,7 @@ const edit = () => {
                                         type="text"
                                         size={"1"}
                                         {...register(
-                                          `test.${index}.time_scan`,
+                                          `test.${index}.scan`,
                                           {
                                             required: true,
                                           }
