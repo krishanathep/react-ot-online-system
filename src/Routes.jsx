@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { RequireAuth } from "react-auth-kit";
 
 import WithNavbar from "./layouts/WithNavbar";
@@ -25,7 +25,7 @@ import OverTimeViewAdmin from './pages/admin/overtime/view'
 
 const RoutesPage = () => {
   return (
-    <Router>
+    <Router basename="/overtime">
       <Routes>
         <Route element={<WithOutnavbar />}>
           <Route exact  path="/auth/signin" element={<Signin />} />
