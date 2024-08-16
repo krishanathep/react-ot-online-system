@@ -33,7 +33,7 @@ const OverTimeAdmin = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests"
+        import.meta.env.VITE_API_KEY+"/api/otrequests"
       )
       .then((res) => {
         //Change api name
@@ -50,7 +50,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
+        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-code?data=" +
           key
       )
       .then((res) => {
@@ -68,7 +68,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
+        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-name?data=" +
           key
       )
       .then((res) => {
@@ -86,7 +86,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
+        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -104,7 +104,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-status?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -123,7 +123,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-date?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -161,7 +161,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-approve2/" +
               blogs.id,
             data
           )
@@ -197,7 +197,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-approve3/" +
               blogs.id,
             data
           )
@@ -232,7 +232,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-approve4/" +
               blogs.id,
             data
           )
@@ -268,7 +268,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-approve5/" +
               blogs.id,
             data
           )
@@ -310,7 +310,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-approve6/" +
               blogs.id,
             data
           )
@@ -345,7 +345,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-reject/" +
+            import.meta.env.VITE_API_KEY+"/api/otrequest-reject/" +
               blogs.id,
             data
           )
@@ -370,7 +370,7 @@ const OverTimeAdmin = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-export",
+        import.meta.env.VITE_API_KEY+"/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -398,7 +398,7 @@ const OverTimeAdmin = () => {
   const getApprover = async () => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/approve-role?data=" +
+        import.meta.env.VITE_API_KEY+"/api/approve-role?data=" +
           userDatail().dept
       )
       .then((res) => {
@@ -635,7 +635,7 @@ const OverTimeAdmin = () => {
                           render: (blogs) => (
                             <>
                               <Link
-                                to={"/approver/view/" + blogs.id}
+                                to={"/admin/overtime/view/" + blogs.id}
                                 className="btn btn-primary"
                               >
                               <i className="fas fa-bars"></i>

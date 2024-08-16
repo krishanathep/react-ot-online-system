@@ -27,15 +27,10 @@ const TimeScan = () => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    const ot = [
-      { id: 62399, name: "Kwang" },
-      { id: 66082, name: "Keng" },
-    ];
-
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/time-scan"
+          "/api/time-scan"
       )
       .then((res) => {
         setTimeScan(res.data.scan);
@@ -71,7 +66,7 @@ const TimeScan = () => {
       await axios
         .post(
           import.meta.env.VITE_API_KEY +
-            "/laravel_auth_jwt_api/public/api/time-scan-import",
+            "/api/time-scan-import",
           formData
         )
         .then((res) => {

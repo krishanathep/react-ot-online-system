@@ -27,7 +27,7 @@ const edit = () => {
 
   const getData = async () => {
     await axios
-      .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest/" + id)
+      .get(import.meta.env.VITE_API_KEY+"/api/otrequest/" + id)
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);

@@ -3,20 +3,17 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 
-const view = () => {
-
+const viewAdmin = () => {
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
-  const [empcount, setEmpcount]= useState(0)
-  const [scantime, setScantime]= useState([])
 
   //stepper complete state
-  const [complete_1, setComplete_1] = useState(false)
-  const [complete_2, setComplete_2] = useState(false)
-  const [complete_3, setComplete_3] = useState(false)
-  const [complete_4, setComplete_4] = useState(false)
+  const [complete_1, setComplete_1] = useState(false);
+  const [complete_2, setComplete_2] = useState(false);
+  const [complete_3, setComplete_3] = useState(false);
+  const [complete_4, setComplete_4] = useState(false);
 
   const getData = async () => {
     await axios
@@ -24,24 +21,11 @@ const view = () => {
         timeout: 5000,
       })
       .then((res) => {
-        // overtime data
         setOvertimes(res.data.data);
-        // employee data
         setMemebers(res.data.data.employees);
-        // time scan data
-          // const time1 = res.data.data.employees.map((e)=>({time_scan : e.time_scan, emp_name: e.emp_name}))
-          // const time2 = time1.map((i)=>(i.time_scan.map((e)=>({pin:e.pin,time:e.time}))))
-          const time1 = res.data.data.employees.map((i)=>({time_scan:i.time_scan, emp_name: i.emp_name}))
-         
-          setScantime(time1)
-
-          //console.log(time2)
-
-        // count employee
-        setEmpcount(res.data.data.employees.length);
-  
-        //stepper complete function
-        if(res.data.data.status==='รอการอนุมัติ 1'){
+        
+         //stepper complete
+         if(res.data.data.status==='รอการอนุมัติ 1'){
           setComplete_1(true)
         } if(res.data.data.status==='รอการอนุมัติ 2'){
           setComplete_1(true),setComplete_2(true)
@@ -52,8 +36,6 @@ const view = () => {
         }
       });
   };
-  
- console.log(scantime)
 
   useEffect(() => {
     getData();
@@ -99,7 +81,7 @@ const view = () => {
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> :{" "}
-                                  {overtimes.name_app_3}
+                                  {overtimes.department_name}
                                 </td>
                                 <td>
                                   <b>ผู้ควบคุมงาน</b> : {overtimes.create_name}
@@ -129,7 +111,7 @@ const view = () => {
                                   <b>เวลาทั้งหมด</b> : {overtimes.total_date}
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : {empcount} คน
+                                  <b>จำนวนพนักงาน</b> : 1 คน
                                 </td>
                               </tr>
                             </thead>
@@ -166,14 +148,12 @@ const view = () => {
                                     <td>{member.target}</td>
                                     <td className="text-secondary">
                                       {member.objective === null ? (
-                                       <i className="fas fa-pencil-alt"></i>
+                                        <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         member.objective
                                       )}
                                     </td>
-                                    <td>
-                                      {/* {scantime.map((i)=>(i.time_scan.map((i)=>{return(<li>{i.time}</li>)})))} */}
-                                    </td>
+                                    <td></td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
@@ -181,7 +161,6 @@ const view = () => {
                                         member.out_time
                                       )}
                                     </td>
-                                    {/* คำนวนเวลาเริ่มต้น ลบ เวลาเลิกงานจริง */}
                                     <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
@@ -206,7 +185,7 @@ const view = () => {
                                   <b>หัวหน้าหน่วย/ผู้จัดทำ</b> : {overtimes.name_app_1}
                                 </td>
                                 <td>
-                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
+                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
@@ -219,8 +198,8 @@ const view = () => {
                             </thead>
                           </table>
                         </div>
-                        {/* Stepper Function */}
-                        <div className="col-md-12">
+                           {/* Stepper Function */}
+                           <div className="col-md-12">
                             <div className="stepper-wrapper" style={{fontFamily: "Prompt",}}>
                             <div className={`stepper-item ${(!complete_1)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
@@ -242,7 +221,7 @@ const view = () => {
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <Link to={"/overtime"} className="btn btn-danger">
+                            <Link to={"/admin/overtime"} className="btn btn-danger">
                               ย้อนกลับ
                             </Link>{" "}
                           </div>
@@ -260,4 +239,4 @@ const view = () => {
   );
 };
 
-export default view;
+export default viewAdmin;

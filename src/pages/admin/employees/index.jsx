@@ -29,7 +29,7 @@ const Employees = () => {
     const to = from + pageSize;
 
     await axios
-      .get(import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/employees")
+      .get(import.meta.env.VITE_API_KEY+"/api/employees")
       .then((res) => {
         setEmployees(res.data.employees);
         setRecords(res.data.employees.slice(from, to));
@@ -67,7 +67,7 @@ const Employees = () => {
       await axios
         .post(
           import.meta.env.VITE_API_KEY +
-            "/laravel_auth_jwt_api/public/api/employees-import",
+            "/api/employees-import",
           formData
         )
         .then((res) => {

@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import { useForm } from "react-hook-form"
-import { useSignIn } from 'react-auth-kit'
+import { useSignIn,useAuthUser } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
 import Preloader from "../../components/Preloader";
 import Swal from 'sweetalert2'
@@ -11,10 +11,10 @@ export default function Signin() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const signIn = useSignIn()
+  const userdetail = useAuthUser()
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const REACT_APP_API = import.meta.env.VITE_API_KEY+'/laravel_auth_jwt_api/public/api/auth/login'
-  
+  const REACT_APP_API = import.meta.env.VITE_API_KEY+'/api/auth/login'
 
   const onSubmit = async data => {
     try {
@@ -71,7 +71,7 @@ export default function Signin() {
           </div>
           <div  id="auth_bg" className="card">
             <div className="card-body login-card-body">
-              <p className="login-box-msg">Sign in to create your OT request</p>
+              <p className="login-box-msg">Sign in to create your OT request : {userdetail().role}</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="input-group mb-3">
                 <input className="form-control"   type="email" {...register("email", { required: true })} placeholder="Email" />

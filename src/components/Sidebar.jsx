@@ -15,16 +15,20 @@ export default function Sidebar() {
   const getRule = async () => {
     if(userdetail().role==='user'){
       setRuleUser(true)
+      return
     } if (userdetail().role==='approver_1' || userdetail().role==='approver_2' || userdetail().role==='approver_3'){
-      setRuleApprover(true),navigate('/approver')
+      setRuleApprover(true)
+      return
     } if (userdetail().role==='admin'){
-      setRuleAdmin(true),navigate('/admin/overtime')
+      setRuleAdmin(true)
+      return
     }
   }
 
+
   useEffect(()=>{
     getRule()
-  })
+  },[])
 
   return (
     <>
@@ -48,7 +52,6 @@ export default function Sidebar() {
             >
               {ruleUser ? (
                 <>
-                  <li className="nav-header">MAIN MENU</li>
                   <li className="nav-item">
                     <Link to="/" className="nav-link">
                       <i className="nav-icon fas fa-home"></i>
@@ -66,10 +69,15 @@ export default function Sidebar() {
 
               {ruleApprover ? (
                 <>
-                  <li className="nav-header">OTHER MENU</li>
+                  <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                      <i className="nav-icon fas fa-home"></i>
+                      <p>หน้าหลัก</p>
+                    </Link>
+                  </li>
                   <li className="nav-item">
                     <Link to="/approver" className="nav-link">
-                      <i className="nav-icon fas fa-check-circle"></i>
+                    <i className="nav-icon fas fa-user-check"></i>
                       <p>การอนุมัติ OT</p>
                     </Link>
                   </li>
@@ -77,7 +85,12 @@ export default function Sidebar() {
               ) : null}
               {ruleAdmin ? (
                 <>
-                  <li className="nav-header">ADMIN MENU</li>
+                <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                      <i className="nav-icon fas fa-home"></i>
+                      <p>หน้าหลัก</p>
+                    </Link>
+                  </li>
                   <li className="nav-item">
                     <Link to="/admin/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>

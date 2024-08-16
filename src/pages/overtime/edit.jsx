@@ -33,7 +33,7 @@ const edit = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequest/" +
+          "/api/otrequest/" +
           id
       )
       .then((res) => {
@@ -67,7 +67,7 @@ const edit = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/time-scan"
+          "/api/time-scan"
       )
       .then((res) => {
         setScanTime(res.data.scan);
@@ -79,7 +79,7 @@ const edit = () => {
     await axios
       .put(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequest-update-report/" +
+          "/api/otrequest-update-report/" +
           id,
         data
       )
@@ -336,7 +336,7 @@ const edit = () => {
                               className="btn btn-primary"
                               onClick={handleSubmit(handleUpdateSubmit)}
                               disabled={
-                                overtimes.status === "ผ่านการอนุมัติ"
+                                overtimes.status === "ผ่านการอนุมัติ" && overtimes.result === "รอการรายงาน"   
                                   ? false
                                   : true
                               }

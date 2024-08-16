@@ -34,7 +34,7 @@ const Approver = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequests-dept?data=" +
+          "/api/otrequests-dept?data=" +
           userDatail().dept
       )
       .then((res) => {
@@ -53,7 +53,7 @@ const Approver = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequests-filter-code?data=" +
+          "/api/otrequests-filter-code?data=" +
           key
       )
       .then((res) => {
@@ -72,7 +72,7 @@ const Approver = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequests-filter-name?data=" +
+          "/api/otrequests-filter-name?data=" +
           key
       )
       .then((res) => {
@@ -91,7 +91,7 @@ const Approver = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequests-filter-department?data=" +
+          "/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -111,7 +111,7 @@ const Approver = () => {
       .get(
         `${
           import.meta.env.VITE_API_KEY
-        }/laravel_auth_jwt_api/public/api/otrequests-filter-status?dept=${
+        }/api/otrequests-filter-status?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -132,7 +132,7 @@ const Approver = () => {
       .get(
         `${
           import.meta.env.VITE_API_KEY
-        }/laravel_auth_jwt_api/public/api/otrequests-filter-date?dept=${
+        }/api/otrequests-filter-date?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -171,7 +171,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-approve2/" +
+              "/api/otrequest-approve2/" +
               blogs.id,
             data
           )
@@ -208,7 +208,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-approve3/" +
+              "/api/otrequest-approve3/" +
               blogs.id,
             data
           )
@@ -244,7 +244,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-approve4/" +
+              "/api/otrequest-approve4/" +
               blogs.id,
             data
           )
@@ -281,7 +281,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-approve5/" +
+              "/api/otrequest-approve5/" +
               blogs.id,
             data
           )
@@ -324,7 +324,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-approve6/" +
+              "/api/otrequest-approve6/" +
               blogs.id,
             data
           )
@@ -367,7 +367,7 @@ const Approver = () => {
         axios
           .put(
             import.meta.env.VITE_API_KEY +
-              "/laravel_auth_jwt_api/public/api/otrequest-reject/" +
+              "/api/otrequest-reject/" +
               blogs.id,
             data, {text:value}
           )
@@ -393,7 +393,7 @@ const Approver = () => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/otrequest-export",
+          "/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -422,7 +422,7 @@ const Approver = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/laravel_auth_jwt_api/public/api/approve-role?data=" +
+          "/api/approve-role?data=" +
           userDatail().dept
       )
       .then((res) => {
