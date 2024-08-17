@@ -182,7 +182,9 @@ const OfficeCar = () => {
                           accessor: "end_date",
                           title: "เวลาสิ้นสุด",
                           textAlignment: "center",
-                          render: ({ end_date }) => (end_date)+" น."
+                          render: ({end_date}) => (
+                          end_date
+                          )+" น."
                         },
                         {
                           accessor: "bus_point_1",

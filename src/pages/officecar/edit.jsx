@@ -19,6 +19,7 @@ const edit = () => {
   const [empcount, setEmpcount] = useState(0);
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
+  const [price, setPrice] = useState(30)
 
   const[station_1, setStation_1] = useState(0)
   const[station_2, setStation_2] = useState(0)
@@ -37,13 +38,14 @@ const edit = () => {
         setStation_3(res.data.data.employees.filter(item=>item.bus_stations==="จุดที่ 3").length)
         setStation_4(res.data.data.employees.filter(item=>item.bus_stations==="จุดที่ 4").length)
       });
+      
   };
 
   const handleUpdateSubmit = async (data) => {
     //alert(JSON.stringify(data))
     await axios
     .put(
-      import.meta.env.VITE_API_KEY+"/laravel_auth_jwt_api/public/api/otrequest-update-point/" +
+      import.meta.env.VITE_API_KEY+"/api/otrequest-update-point/" +
         id,
       data
     )
@@ -176,7 +178,16 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                     {(overtimes.bus_point_1==="0"||overtimes.bus_point_2==="0"||overtimes.bus_point_3==="0"||overtimes.bus_point_4==="0")?('30'):('0')}
+                                      <input 
+                                      type="text" 
+                                      className="form-control" 
+                                      value="99999"
+                                      size={'1'} 
+                                      {...register(
+                                        `test.${index}.bus_price`,
+                                        { required: false }
+                                      )}
+                                      />
                                     </td>
                                   </tr>
                                 );

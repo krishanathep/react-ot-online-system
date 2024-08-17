@@ -81,7 +81,7 @@ const viewAdmin = () => {
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> :{" "}
-                                  {overtimes.department_name}
+                                  {overtimes.name_app_3}
                                 </td>
                                 <td>
                                   <b>ผู้ควบคุมงาน</b> : {overtimes.create_name}
@@ -185,7 +185,7 @@ const viewAdmin = () => {
                                   <b>หัวหน้าหน่วย/ผู้จัดทำ</b> : {overtimes.name_app_1}
                                 </td>
                                 <td>
-                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_1}
+                                  <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}

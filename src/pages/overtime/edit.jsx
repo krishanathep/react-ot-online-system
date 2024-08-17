@@ -27,6 +27,7 @@ const edit = () => {
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
+  const [empcount, setEmpcount] = useState(0)
   const [scantime, setScanTime] = useState([]);
 
   const getData = async () => {
@@ -37,6 +38,8 @@ const edit = () => {
           id
       )
       .then((res) => {
+        // count employee
+        setEmpcount(res.data.data.employees.length);
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
         reset({
@@ -45,7 +48,8 @@ const edit = () => {
             objective: employee.objective,
             out_time: employee.out_time,
             remark: employee.remark,
-            scan: employee.time_scan.filter((item)=>item.time==='2024-08-16 08:00:06' || item.time==='2024-08-16 07:50:24').map((i)=>i.time),
+            //scan: employee.time_scan.filter((item)=>item.time==='2024-08-16 08:00:06' || item.time==='2024-08-16 07:50:24').map((i)=>i.time),
+            scan: "07.30 - 19.50",
           })),
         });
 
@@ -170,7 +174,7 @@ const edit = () => {
                                   <b>เวลาทั้งหมด</b> : {overtimes.total_date}
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : 1 คน
+                                  <b>จำนวนพนักงาน</b> : {empcount} คน
                                 </td>
                               </tr>
                             </thead>
@@ -189,7 +193,7 @@ const edit = () => {
                                 <th>ทำได้จริง</th>
                                 <th>ข้อมูลสแกนนิ้ว</th>
                                 <th>เลิกงาน</th>
-                                <th>รวมเวลา</th>
+                                {/* <th>รวมเวลา</th> */}
                                 <th>รถรับส่ง</th>
                                 {/* <th>ค่ารถ</th> */}
                                 <th>หมายเหตุ</th>
@@ -251,7 +255,7 @@ const edit = () => {
                                         </span>
                                       )}
                                     </td>
-                                    <td>{overtimes.total_date}</td>
+                                    {/* <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td> */}
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
                                     <td>

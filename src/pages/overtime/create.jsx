@@ -263,7 +263,7 @@ const create = ({ prefix = "OT" }) => {
                                     id="sel1"
                                     //readOnly
                                     //value={}
-                                    {...register("department_name", {
+                                    {...register("name_app_3", {
                                       required: true,
                                     })}
                                   />

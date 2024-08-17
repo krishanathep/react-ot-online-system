@@ -173,6 +173,7 @@ const view = () => {
                                     </td>
                                     <td>
                                       {/* {scantime.map((i)=>(i.time_scan.map((i)=>{return(<li>{i.time}</li>)})))} */}
+                                      {member.scan}
                                     </td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
