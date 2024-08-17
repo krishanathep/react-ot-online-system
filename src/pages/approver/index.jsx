@@ -586,9 +586,9 @@ const Approver = () => {
                                 {status === "รอการอนุมัติ 1" ? (
                                   <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
                                   <Badge bg="success"><span>{status}</span></Badge>
                                 ) : (
@@ -610,11 +610,11 @@ const Approver = () => {
                                     <span className="text-white">{result}</span>
                                   </Badge>
                                 ) : result === "รอการปิด (ส่วน)" ? (
-                                  <Badge bg="warning">
+                                  <Badge bg="secondary">
                                     <span className="text-white">{result}</span>
                                   </Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
-                                  <Badge bg="warning">
+                                  <Badge bg="primary">
                                     <span className="text-white">{result}</span>
                                   </Badge>
                                 ) : result === "ปิดการรายงาน" ? (
