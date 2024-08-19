@@ -27,32 +27,33 @@ const edit = () => {
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
-  const [empcount, setEmpcount] = useState(0)
+  const [empcount, setEmpcount] = useState(0);
   const [scantime, setScanTime] = useState([]);
 
   const getData = async () => {
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequest/" +
-          id
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest/" + id)
       .then((res) => {
         // count employee
         setEmpcount(res.data.data.employees.length);
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
+        //setScanTime(res.data.data.employee.time_scan)
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
             objective: employee.objective,
             out_time: employee.out_time,
             remark: employee.remark,
-            //scan: employee.time_scan.filter((item)=>item.time==='2024-08-16 08:00:06' || item.time==='2024-08-16 07:50:24').map((i)=>i.time),
-            scan: "07.30 - 19.50",
+            time_scan: "hello world",
+            //time_scan: employee.time_scan
+              // .filter(
+              //   (item) =>
+              //     item.time === res.data.data.ot_time
+              // )
+              // .map((i) => i.pin),
           })),
         });
-
 
         //stepper complete
         if (res.data.data.result === "รอการปิด (ส่วน)") {
@@ -71,20 +72,17 @@ const edit = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/api/time-scan"
+          "/api/ttime-scan-first-time?data=62399&time=2024-07-30"
       )
       .then((res) => {
-        setScanTime(res.data.scan);
+        //
       });
   };
-
   const handleUpdateSubmit = async (data) => {
     //alert(JSON.stringify(data))
     await axios
       .put(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequest-update-report/" +
-          id,
+        import.meta.env.VITE_API_KEY + "/api/otrequest-update-report/" + id,
         data
       )
       .then((res) => {
@@ -103,7 +101,7 @@ const edit = () => {
 
   useEffect(() => {
     getData();
-    getTime();
+    //getTime();
   }, []);
 
   return (
@@ -231,12 +229,9 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size={"1"}
-                                        {...register(
-                                          `test.${index}.scan`,
-                                          {
-                                            required: true,
-                                          }
-                                        )}
+                                        {...register(`test.${index}.time_scan`, {
+                                          required: true,
+                                        })}
                                       />
                                     </td>
                                     <td>
@@ -340,7 +335,8 @@ const edit = () => {
                               className="btn btn-primary"
                               onClick={handleSubmit(handleUpdateSubmit)}
                               disabled={
-                                overtimes.status === "ผ่านการอนุมัติ" && overtimes.result === "รอการปิด (ส่วน)"   
+                                overtimes.status === "ผ่านการอนุมัติ" &&
+                                overtimes.result === "รอการปิด (ส่วน)"
                                   ? false
                                   : true
                               }
