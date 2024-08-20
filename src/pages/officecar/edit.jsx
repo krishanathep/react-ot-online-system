@@ -11,7 +11,11 @@ const edit = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({});
+  } = useForm({
+    defaultValues: {
+      test: [{}],
+    },
+  });
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,7 +23,6 @@ const edit = () => {
   const [empcount, setEmpcount] = useState(0);
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
-  const [price, setPrice] = useState(30)
 
   const[station_1, setStation_1] = useState(0)
   const[station_2, setStation_2] = useState(0)
@@ -33,6 +36,7 @@ const edit = () => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
         setEmpcount(res.data.data.employees.length);
+
         setStation_1(res.data.data.employees.filter(item=>item.bus_stations==="จุดที่ 1").length)
         setStation_2(res.data.data.employees.filter(item=>item.bus_stations==="จุดที่ 2").length)
         setStation_3(res.data.data.employees.filter(item=>item.bus_stations==="จุดที่ 3").length)
@@ -57,7 +61,6 @@ const edit = () => {
         timer: 2000,
       });
       navigate("/officecar");
-      //console.log(res.data);
     })
     .catch((error) => {
       console.log(error);
@@ -131,14 +134,14 @@ const edit = () => {
                             <thead>
                               <tr align={"center"}>
                                 <th>#</th>
-                                <th>รหัส</th>
+                                <th>รหัสพนักงาน</th>
                                 <th>ชื่อพนักงาน</th>
                                 <th>หน่วยงาน</th>
                                 <th>รถรับส่ง จุดที่ 1</th>
                                 <th>รถรับส่ง จุดที่ 2</th>
                                 <th>รถรับส่ง จุดที่ 3</th>
                                 <th>รถรับส่ง จุดที่ 4</th>
-                                <th>ค่ารถ</th>
+                                <th>ค่าเดินทาง</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -178,23 +181,20 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                      <input 
-                                      type="text" 
-                                      className="form-control" 
-                                      value="99999"
-                                      size={'1'} 
-                                      {...register(
-                                        `test.${index}.bus_price`,
-                                        { required: false }
-                                      )}
-                                      />
+                                     {
+                                     (member.bus_stations==="จุดที่ 1" && overtimes.bus_point_1!=='0')?('0'):
+                                     (member.bus_stations==="จุดที่ 2" && overtimes.bus_point_2!=='0')?('0'):
+                                     (member.bus_stations==="จุดที่ 3" && overtimes.bus_point_3!=='0')?('0'):
+                                     (member.bus_stations==="จุดที่ 4" && overtimes.bus_point_4!=='0')?('0'):
+                                     ('30')
+                                     }
                                     </td>
                                   </tr>
                                 );
                               })}
                               <tr align="center">
                                 <td colSpan={"4"}>
-                                  รวมพนักงานที่ใช้บริการรถรับส่ง
+                                  {/* รวมพนักงานที่ใช้บริการรถรับส่ง */}
                                 </td>
                                 <td>
                                   <div className="form-check">
@@ -260,13 +260,13 @@ const edit = () => {
                             </tbody>
                           </table>
                           <div className="col-md-12">
-                            <span className="text-muted">
-                              จุดลงรถรับ-ส่ง 1. สายศาลายา 2. สายนครชัยศรี 3.
+                            <span>
+                              <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
                               สายหนองแขม 4. สายวงเวียนใหญ่
                             </span>
                           </div>
                         </div>
-                        <div className="col-md-12 mt-3">
+                        <div className="col-md-12 mt-2">
                           <div className="float-right">
                             <button onClick={handleSubmit(handleUpdateSubmit)} className="btn btn-primary">
                               <i className="fas fa-save"></i> ยืนยัน

@@ -273,7 +273,7 @@ const edit = () => {
                                         type="text"
                                         size="6"
                                         {...register(`test.${index}.ot_create_date`, {
-                                          required: true,
+                                          required: false,
                                         })}
                                       />
                                       <input
@@ -281,7 +281,7 @@ const edit = () => {
                                         type="text"
                                         size="6"
                                         {...register(`test.${index}.ot_in_time`, {
-                                          required: true,
+                                          required: false,
                                         })}
                                       />
                                       <input
@@ -289,7 +289,7 @@ const edit = () => {
                                         type="text"
                                         size="6"
                                         {...register(`test.${index}.ot_out_time`, {
-                                          required: true,
+                                          required: false,
                                         })}
                                       />
                                       </div>
