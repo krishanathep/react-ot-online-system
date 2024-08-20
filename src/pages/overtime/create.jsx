@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DualListBox from "react-dual-listbox";
@@ -44,6 +44,8 @@ const create = ({ prefix = "OT" }) => {
   const [timeList_2, setTimeList_2] = useState([]);
 
   const [employeesByrole, setEmployeesbyrole] = useState([]);
+
+  const [ottime,setOttime]=useState('')
 
   const getEmployeesByrole = async () => {
     try {
@@ -312,15 +314,17 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่เริ่มต้น</label>
-                                  {/* <Controller
+                                  <label htmlFor="">วันที่เริ่มต้น</label><br/>
+                                  <Controller
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
+                                        // lock for select current date
+                                        minDate={dayjs().toDate()}
                                         required
                                         className="form-control"
-                                        placeholderText="กรุณาเลือกข้อมูล"
+                                        placeholderText="กรุณาเลือกวันที่"
                                         onChange={(date) =>
                                           field.onChange(
                                             dayjs(date).format("YYYY-MM-DD")
@@ -330,19 +334,20 @@ const create = ({ prefix = "OT" }) => {
                                         selected={field.value}
                                       />
                                     )}
-                                  /> */}
-                                  <input
+                                  />
+                                  {/* <input
                                     type="date"
                                     className="form-control"
                                     onChange={(event) =>
-                                      dayjs(event.target.value).format(
+                                      {dayjs(event.target.value).format(
                                         "YYYY-MM-DD"
-                                      )
+                                      ),
+                                      setOttime(event.target.value)}
                                     }
                                     {...register("ot_date", {
                                       required: true,
                                     })}
-                                  />
+                                  /> */}
                                   {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
@@ -638,7 +643,7 @@ const create = ({ prefix = "OT" }) => {
                               <tr key={field.id}>
                                 <td>{index + 1}</td>
                                 <td>
-                                  <input
+                                <input
                                     className="form-control"
                                     type="text"
                                     value={

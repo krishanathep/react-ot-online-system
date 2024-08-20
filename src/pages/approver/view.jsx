@@ -153,7 +153,35 @@ const view = () => {
                                         member.objective
                                       )}
                                     </td>
-                                    <td></td>
+                                    <td>
+                                    {member.time_scan
+                                        .filter((s) =>
+                                          s.time
+                                            .toLowerCase()
+                                            .includes(overtimes.ot_date)
+                                        )
+                                        .map((t, index) => {
+                                          return (
+                                            <span key={index}>
+                                              {index === 0 ? dayjs(t.time).format('HH.mm') : null}
+                                            </span>
+                                          );
+                                        })}{" "}
+                                      -{" "}
+                                      {member.time_scan
+                                        .filter((s) =>
+                                          s.time
+                                            .toLowerCase()
+                                            .includes(overtimes.ot_date)
+                                        )
+                                        .map((t, index) => {
+                                          return (
+                                            <span key={index}>
+                                              {index === 1 ? dayjs(t.time).format('HH.mm') : null}
+                                            </span>
+                                          );
+                                        })}
+                                    </td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>

@@ -28,7 +28,6 @@ const edit = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount] = useState(0);
-  const [scantime, setScanTime] = useState([]);
 
   const getData = async () => {
     await axios
@@ -38,20 +37,15 @@ const edit = () => {
         setEmpcount(res.data.data.employees.length);
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
-        //setScanTime(res.data.data.employee.time_scan)
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
             objective: employee.objective,
             out_time: employee.out_time,
             remark: employee.remark,
-            time_scan: "hello world",
-            //time_scan: employee.time_scan
-              // .filter(
-              //   (item) =>
-              //     item.time === res.data.data.ot_time
-              // )
-              // .map((i) => i.pin),
+            ot_create_date: res.data.data.ot_date,
+            ot_in_time:res.data.data.start_date,
+            ot_out_time:res.data.data.end_date,
           })),
         });
 
@@ -68,16 +62,7 @@ const edit = () => {
       });
   };
 
-  const getTime = async () => {
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/ttime-scan-first-time?data=62399&time=2024-07-30"
-      )
-      .then((res) => {
-        //
-      });
-  };
+ 
   const handleUpdateSubmit = async (data) => {
     //alert(JSON.stringify(data))
     await axios
@@ -101,7 +86,6 @@ const edit = () => {
 
   useEffect(() => {
     getData();
-    //getTime();
   }, []);
 
   return (
@@ -225,14 +209,33 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        size={"1"}
-                                        {...register(`test.${index}.time_scan`, {
-                                          required: true,
+                                    {member.time_scan
+                                        .filter((s) =>
+                                          s.time
+                                            .toLowerCase()
+                                            .includes(overtimes.ot_date)
+                                        )
+                                        .map((t, index) => {
+                                          return (
+                                            <span key={index}>
+                                              {index === 0 ? dayjs(t.time).format('HH.mm') : null}
+                                            </span>
+                                          );
+                                        })}{" "}
+                                      -{" "}
+                                      {member.time_scan
+                                        .filter((s) =>
+                                          s.time
+                                            .toLowerCase()
+                                            .includes(overtimes.ot_date)
+                                        )
+                                        .map((t, index) => {
+                                          return (
+                                            <span key={index}>
+                                              {index === 1 ? dayjs(t.time).format('HH.mm') : null}
+                                            </span>
+                                          );
                                         })}
-                                      />
                                     </td>
                                     <td>
                                       <input
@@ -263,6 +266,33 @@ const edit = () => {
                                           required: true,
                                         })}
                                       />
+                                      {/* input hidden */}
+                                      <div hidden>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size="6"
+                                        {...register(`test.${index}.ot_create_date`, {
+                                          required: true,
+                                        })}
+                                      />
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size="6"
+                                        {...register(`test.${index}.ot_in_time`, {
+                                          required: true,
+                                        })}
+                                      />
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size="6"
+                                        {...register(`test.${index}.ot_out_time`, {
+                                          required: true,
+                                        })}
+                                      />
+                                      </div>
                                       {errors.test && (
                                         <span className="text-danger">
                                           This field is required

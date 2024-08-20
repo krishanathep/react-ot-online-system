@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { useAuthUser } from "react-auth-kit";
+import {Link} from 'react-router-dom'
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -142,10 +143,11 @@ const Employees = () => {
                           </div>
                           <button
                             onClick={handleSubmitImportFile}
-                            className="btn btn-success"
+                            className="btn btn-secondary mr-1" 
                           >
                             <i className="fas fa-file-upload"></i> อัพโหลด
                           </button>
+                          <Link to={'/admin/employees/create'} className="btn btn-success"><i className="fas fa-plus"></i> Create</Link>
                         </div>
                       </div>
                       {/* <div className="col-md-12">

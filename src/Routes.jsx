@@ -19,6 +19,7 @@ import AppView from './pages/approver/view'
 import OfficeCar from "./pages/officecar";
 import OfficeCarEdit from './pages/officecar/edit'
 import Employees from './pages/admin/employees'
+import EmployeeCreate from "./pages/admin/employees/create";
 import TimeScan from "./pages/admin/timescan";
 import OvertimeAdmin from './pages/admin/overtime'
 import OverTimeViewAdmin from './pages/admin/overtime/view'
@@ -52,6 +53,7 @@ const RoutesPage = () => {
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />
           <Route path="/admin/overtime/view/:id" element={<OverTimeViewAdmin />} />
           <Route path="/admin/employees" element={<Employees/>} />
+          <Route path="/admin/employees/create" element={<EmployeeCreate/>} />
           <Route path="/admin/timescan" element={<TimeScan/>} />
         </Route>
       </Routes>
