@@ -102,3 +102,8 @@ table, th, td {
 }
 
 
+/* fix react datepicker calendar showing behind table head */
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+

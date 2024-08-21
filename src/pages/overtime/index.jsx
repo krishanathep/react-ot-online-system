@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
 import axios from "axios";
@@ -16,7 +17,7 @@ const Overtime = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
-  const [approver, setApprover] = useState([]);
+  const [startDate, setStartDate] = useState('');
 
   useEffect(() => {
     setPage(1);
@@ -33,7 +34,9 @@ const Overtime = () => {
     // get ot requrst data from dept by user login
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-dept?data="+userDatail().dept
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequests-dept?data=" +
+          userDatail().dept
       )
       .then((res) => {
         //Change api name
@@ -50,7 +53,9 @@ const Overtime = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-code?dept=${userDatail().dept}&data=${key}`
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-code?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -67,7 +72,9 @@ const Overtime = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-name?dept=${userDatail().dept}&data=${key}`
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-name?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -98,6 +105,7 @@ const Overtime = () => {
 
   //filter function by date
   const dateFilter = async (key) => {
+
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
@@ -117,84 +125,7 @@ const Overtime = () => {
 
   useEffect(() => {
     getData();
-    getApprover();
   }, [page, pageSize]);
-
-  const hanldeDelete = (blogs) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: "Your blog has been deleted",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        axios
-          .delete(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-delete/" +
-              blogs.id
-          )
-          .then((res) => {
-            console.log(res);
-            getData();
-          });
-      }
-    });
-  };
-
-  const today = new Date();
-  const month = today.getMonth() + 1;
-  const year = today.getFullYear();
-  const date = today.getDate();
-  const currentDate = "_" + month + "_" + date + "_" + year;
-
-  // Text export function
-  const textExport = async () => {
-    try {
-      const response = await axios.get(
-        import.meta.env.VITE_API_KEY+"/api/otrequest-export",
-        { responseType: "blob" }
-      );
-      // Create a blob from the response data
-      const blob = new Blob([response.data], { type: "text/plain" });
-
-      // Create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob);
-
-      // Create a link element and trigger the download
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "ot_request_export" + currentDate + ".txt");
-      document.body.appendChild(link);
-      link.click();
-
-      // Clean up
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Export failed:", error);
-      //alert('Failed to export data. Please try again.');
-    }
-  };
-
-  const getApprover = async () => {
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY+"/api/approve-role?data=" +
-          userDatail().dept
-      )
-      .then((res) => {
-        setApprover(res.data.approver);
-      });
-  };
 
   return (
     <>
@@ -225,15 +156,6 @@ const Overtime = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="float-right">
-                          {/* <button
-                            onClick={textExport}
-                            className="btn btn-secondary mb-3"
-                            hidden={
-                              userDatail().role === "approver" ? true : false
-                            }
-                          >
-                            <i className="fas fa-download"></i> ดึงข้อมูล
-                          </button>{" "} */}
                           <Link
                             to={"/overtime/create"}
                             className="btn btn-success mb-2"
@@ -291,15 +213,18 @@ const Overtime = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกข้อมูล
                                     </option>
-                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
-                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="รอการอนุมัติ">
+                                      รอการอนุมัติ
+                                    </option>
+                                    <option value="ผ่านการอนุมัติ">
+                                      ผ่านการอนุมัติ
+                                    </option>
                                     <option value="ไม่ผ่านการอนุมัติ">
-                                    ไม่ผ่านการอนุมัติ
+                                      ไม่ผ่านการอนุมัติ
                                     </option>
                                   </select>
                                 </div>
                               </div>
-
                               {/* <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการรายงาน</label>
@@ -324,16 +249,19 @@ const Overtime = () => {
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  <input
-                                    type="date"
+                                  <br />
+                                  <DatePicker
+                                    showIcon
+                                    //icon="fa fa-calendar"
                                     className="form-control"
-                                    onChange={(event) =>
-                                      dateFilter(
-                                        dayjs(event.target.value).format(
-                                          "YYYY-MM-DD"
-                                        )
-                                      )
-                                    }
+                                    //isClearable
+                                    placeholderText="กรุณาเลือกวันที่"
+                                    selected={startDate}
+                                    onChange={(date)=>{
+                                      setStartDate(date)
+                                      dateFilter(dayjs(date).format("YYYY-MM-DD"))
+                                    }}
+                                    dateFormat="dd-MM-yyyy"
                                   />
                                 </div>
                               </div>
@@ -390,13 +318,21 @@ const Overtime = () => {
                             <>
                               <h5>
                                 {status === "รอการอนุมัติ 1" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success"><span>{status}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{status}</span>
+                                  </Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
                                 )}
@@ -412,15 +348,25 @@ const Overtime = () => {
                             <>
                               <h5>
                                 {result === "รอการรายงาน" ? (
-                                  <Badge bg="warning"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "รอการปิด (ส่วน)" ? (
-                                  <Badge bg="secondary"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "รอการปิด (ผจก)" ? (
-                                  <Badge bg="primary"><span className="text-white">{result}</span></Badge>
+                                  <Badge bg="primary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
                                 ) : result === "ปิดการรายงาน" ? (
-                                  <Badge bg="success"><span>{result}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{result}</span>
+                                  </Badge>
                                 ) : (
-                                  <Badge bg="danger"><span>{result}</span></Badge>
+                                  <Badge bg="danger">
+                                    <span>{result}</span>
+                                  </Badge>
                                 )}
                               </h5>
                             </>
@@ -459,7 +405,7 @@ const Overtime = () => {
                                 to={"/overtime/view/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                              <i className="fas fa-bars"></i>
+                                <i className="fas fa-bars"></i>
                               </Link>{" "}
                               <Link
                                 to={"/overtime/edit/" + blogs.id}
@@ -467,12 +413,6 @@ const Overtime = () => {
                               >
                                 <i className="far fa-edit"></i>
                               </Link>{" "}
-                              {/* <button
-                                className="btn btn-danger"
-                                onClick={() => hanldeDelete(blogs)}
-                              >
-                                ลบ
-                              </button> */}
                             </>
                           ),
                         },

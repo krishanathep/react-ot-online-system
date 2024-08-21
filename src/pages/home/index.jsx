@@ -1,55 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuthUser } from "react-auth-kit";
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   Legend,
-//   ResponsiveContainer,
-// } from "recharts";
 import axios from "axios";
 
 export default function Home() {
-  // const data = [
-  //   {
-  //     name: "PRD",
-  //     Target: 157,
-  //     Actual: 155,
-  //   },
-  //   {
-  //     name: "PLD",
-  //     Target: 62,
-  //     Actual: 60,
-  //   }, {
-  //     name: "QAD",
-  //     Target: 50,
-  //     Actual: 48,
-  //   },{
-  //     name: "PED",
-  //     Target: 12,
-  //     Actual: 12,
-  //   }, {
-  //     name: "RDD",
-  //     Target: 27,
-  //     Actual: 20,
-  //   }, {
-  //     name: "PPD",
-  //     Target: 116,
-  //     Actual: 128,
-  //   }, {
-  //     name: "FED",
-  //     Target: 22,
-  //     Actual: 22,
-  //   }, {
-  //     name: "AED",
-  //     Target: 10,
-  //     Actual: 8,
-  //   },
-  // ];
-
+  
   //user login
   const userDatail = useAuthUser();
 
@@ -68,9 +22,9 @@ export default function Home() {
         .then((res) => {
           const counter1 = res.data.data.filter(
             (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
               ot.status === "รอการอนุมัติ 2" ||
-              ot.status === "รอการอนุมัติ 3" ||
-              ot.status === "รอการอนุมัติ 4"
+              ot.status === "รอการอนุมัติ 3"
           );
           const counter3 = res.data.data.filter(
             (ot) => ot.status === "ผ่านการอนุมัติ"
@@ -94,9 +48,9 @@ export default function Home() {
         .then((res) => {
           const counter1 = res.data.otrequests.filter(
             (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
               ot.status === "รอการอนุมัติ 2" ||
-              ot.status === "รอการอนุมัติ 3" ||
-              ot.status === "รอการอนุมัติ 4"
+              ot.status === "รอการอนุมัติ 3"
           );
           const counter3 = res.data.otrequests.filter(
             (ot) => ot.status === "ผ่านการอนุมัติ"
@@ -182,34 +136,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* <div className="col-lg-6 mt-3">
-                <div className="card card-outline card-primary">
-                  <div className="card-body">
-                    <h5>Overtimes</h5>
-                    <ResponsiveContainer width={"100%"} height={300}>
-                    <BarChart
-                      width={600}
-                      height={300}
-                      data={data}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 10,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="Target" fill="#8884d8" />
-                      <Bar dataKey="Actual" fill="#82ca9d" />
-                    </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div> */}
           </div>
         </div>
       </div>

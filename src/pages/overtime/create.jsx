@@ -43,6 +43,8 @@ const create = ({ prefix = "OT" }) => {
   const [timeList, setTimeList] = useState([]);
   const [timeList_2, setTimeList_2] = useState([]);
 
+  const [startDate, setStartDate] = useState('');
+
   const [employeesByrole, setEmployeesbyrole] = useState([]);
 
   const [ottime,setOttime]=useState('')
@@ -314,40 +316,27 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่เริ่มต้น</label><br/>
+                                  <label htmlFor="">วันที่จัดทำ</label><br/>
                                   <Controller
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
-                                        // lock for select current date
+                                        showIcon
                                         minDate={dayjs().toDate()}
                                         required
                                         className="form-control"
                                         placeholderText="กรุณาเลือกวันที่"
                                         onChange={(date) =>
                                           field.onChange(
-                                            dayjs(date).format("YYYY-MM-DD")
+                                            setStartDate(dayjs(date).format("YYYY-MM-DD"))
                                           )
                                         }
                                         dateFormat="dd-MM-yyyy"
-                                        selected={field.value}
+                                        selected={startDate}
                                       />
                                     )}
                                   />
-                                  {/* <input
-                                    type="date"
-                                    className="form-control"
-                                    onChange={(event) =>
-                                      {dayjs(event.target.value).format(
-                                        "YYYY-MM-DD"
-                                      ),
-                                      setOttime(event.target.value)}
-                                    }
-                                    {...register("ot_date", {
-                                      required: true,
-                                    })}
-                                  /> */}
                                   {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
