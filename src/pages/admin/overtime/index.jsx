@@ -575,9 +575,9 @@ const OverTimeAdmin = () => {
                                 {status === "รอการอนุมัติ 1" ? (
                                   <Badge bg="warning"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
                                   <Badge bg="success"><span>{status}</span></Badge>
                                 ) : (
@@ -594,18 +594,28 @@ const OverTimeAdmin = () => {
                           render: ({ result }) => (
                             <>
                             <h5>
-                              {result === "รอการรายงาน" ? (
-                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                              ) : result === "รอการปิด (ส่วน)" ? (
-                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                              ) : result === "รอการปิด (ผจก)" ? (
-                                <Badge bg="warning"><span className="text-white">{result}</span></Badge>
-                              ) : result === "ปิดการรายงาน" ? (
-                                <Badge bg="success"><span>{result}</span></Badge>
-                              ) : (
-                                <Badge bg="danger"><span>{result}</span></Badge>
-                              )}
-                            </h5>
+                                {result === "รอการรายงาน" ? (
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ส่วน)" ? (
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ผจก)" ? (
+                                  <Badge bg="primary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "ปิดการรายงาน" ? (
+                                  <Badge bg="success">
+                                    <span>{result}</span>
+                                  </Badge>
+                                ) : (
+                                  <Badge bg="danger">
+                                    <span>{result}</span>
+                                  </Badge>
+                                )}
+                              </h5>
                           </>
                           ),
                         },

@@ -43,17 +43,18 @@ const create = ({ prefix = "OT" }) => {
   const [timeList, setTimeList] = useState([]);
   const [timeList_2, setTimeList_2] = useState([]);
 
-  const [startDate, setStartDate] = useState('');
+  const [startDate, setStartDate] = useState("");
 
   const [employeesByrole, setEmployeesbyrole] = useState([]);
 
-  const [ottime,setOttime]=useState('')
+  const [ottime, setOttime] = useState("");
 
   const getEmployeesByrole = async () => {
     try {
       await axios
         .get(
-          import.meta.env.VITE_API_KEY+"/api/employees-role?data=" +
+          import.meta.env.VITE_API_KEY +
+            "/api/employees-role?data=" +
             userDetail().dept
         )
         .then((res) => {
@@ -84,7 +85,7 @@ const create = ({ prefix = "OT" }) => {
     try {
       setLoading(true);
       await axios
-        .get(import.meta.env.VITE_API_KEY+"/api/employees")
+        .get(import.meta.env.VITE_API_KEY + "/api/employees")
         .then((res) => {
           setEmployees(res.data.employees);
         });
@@ -99,8 +100,7 @@ const create = ({ prefix = "OT" }) => {
   const listFilter = async (key) => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-list?data=" +
-          key
+        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-list?data=" + key
       )
       .then((res) => {
         setTimeList(res.data.time);
@@ -108,7 +108,8 @@ const create = ({ prefix = "OT" }) => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-list_2?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequests-filter-list_2?data=" +
           key
       )
       .then((res) => {
@@ -120,7 +121,8 @@ const create = ({ prefix = "OT" }) => {
   const finishFilter = async (key) => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-finish?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequests-filter-finish?data=" +
           key
       )
       .then((res) => {
@@ -131,10 +133,7 @@ const create = ({ prefix = "OT" }) => {
   const handleCreateSubmit = async (data) => {
     try {
       await axios
-        .post(
-          import.meta.env.VITE_API_KEY+"/api/otrequest-create",
-          data
-        )
+        .post(import.meta.env.VITE_API_KEY + "/api/otrequest-create", data)
         .then((res) => {
           console.log(res.data);
           Swal.fire({
@@ -154,7 +153,8 @@ const create = ({ prefix = "OT" }) => {
   const getApprover = async () => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/approver-role?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/approver-role?data=" +
           userDetail().dept
       )
       .then((res) => {
@@ -166,7 +166,8 @@ const create = ({ prefix = "OT" }) => {
   const deptFilter = async () => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/approve-dept?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/approve-dept?data=" +
           userDetail().agency
       )
       .then((res) => {
@@ -193,7 +194,7 @@ const create = ({ prefix = "OT" }) => {
     deptFilter();
     getEmployeesByrole();
     const generateId = () => {
-      const dept_cut = userDetail().dept.slice(0, -1)
+      const dept_cut = userDetail().dept.slice(0, -1);
       const date = new Date();
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
       const year = date.getFullYear().toString().slice(-2);
@@ -316,11 +317,28 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label><br/>
+                                  <label htmlFor="">วันที่จัดทำ</label>
+                                  <br />
                                   <Controller
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
+                                      // <DatePicker
+                                      //   showIcon
+                                      //   minDate={dayjs().toDate()}
+                                      //   required
+                                      //   className="form-control"
+                                      //   placeholderText="กรุณาเลือกวันที่"
+                                      //   onChange={(date) =>
+                                      //     field.onChange(
+                                      //       setStartDate(
+                                      //         dayjs(date).format("YYYY-MM-DD")
+                                      //       )
+                                      //     )
+                                      //   }
+                                      //   dateFormat="dd-MM-yyyy"
+                                      //   selected={startDate}
+                                      // />
                                       <DatePicker
                                         showIcon
                                         minDate={dayjs().toDate()}
@@ -329,11 +347,11 @@ const create = ({ prefix = "OT" }) => {
                                         placeholderText="กรุณาเลือกวันที่"
                                         onChange={(date) =>
                                           field.onChange(
-                                            setStartDate(dayjs(date).format("YYYY-MM-DD"))
+                                            dayjs(date).format("YYYY-MM-DD")
                                           )
                                         }
                                         dateFormat="dd-MM-yyyy"
-                                        selected={startDate}
+                                        selected={field.value}
                                       />
                                     )}
                                   />
@@ -632,7 +650,7 @@ const create = ({ prefix = "OT" }) => {
                               <tr key={field.id}>
                                 <td>{index + 1}</td>
                                 <td>
-                                <input
+                                  <input
                                     className="form-control"
                                     type="text"
                                     value={
@@ -697,7 +715,7 @@ const create = ({ prefix = "OT" }) => {
                                       required: true,
                                     })}
                                   />
-                                   {errors.test && (
+                                  {errors.test && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>

@@ -88,13 +88,13 @@ export default function Sidebar() {
                 <li className="nav-item">
                     <Link to="/" className="nav-link">
                       <i className="nav-icon fas fa-home"></i>
-                      <p>หน้าหลัก</p>
+                      <p>Dashboard</p>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to="/admin/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>
-                      <p>Overtime</p>
+                      <p>Overtimes</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -112,7 +112,7 @@ export default function Sidebar() {
                   <li className="nav-item">
                     <Link to="/officecar" className="nav-link">
                       <i className="nav-icon fas fa-truck"></i>
-                      <p>รถรับส่ง</p>
+                      <p>Office-Car</p>
                     </Link>
                   </li>
                 </>

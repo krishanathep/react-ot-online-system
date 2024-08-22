@@ -16,7 +16,6 @@ const OfficeCar = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
-  const [empcount, setEmpCount] = useState([]);
 
   useEffect(() => {
     setPage(1);
@@ -30,26 +29,33 @@ const OfficeCar = () => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
-    // get ot requrst data from dept by user login
     await axios
-      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+      .get(
+        import.meta.env.VITE_API_KEY+"/api/otrequests"
+      )
       .then((res) => {
-        //Change api name
-        setOvertimes(res.data.data);
+        setOvertimes(res.data.data.filter(i=>i));
         setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
   };
 
   //filter function by date
-  const dateFilter = async () => {
+  const dateFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
     await axios
       .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests"
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-date?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
       });
   };
 
@@ -64,14 +70,14 @@ const OfficeCar = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">รถรับส่งพนักงาน OT</h1>
+                <h1 className="m-0">การขออนุมัติ OT ทั้งหมด</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item active">รถรับส่งพนักงาน</li>
+                  <li className="breadcrumb-item active">การขออนุมัติ</li>
                 </ol>
               </div>
             </div>
@@ -80,73 +86,189 @@ const OfficeCar = () => {
         <div className="content">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-12">
+              <div className="col-lg-12">
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-12">
-                        <div className="row">
-                          <div className="col-md-3">
-                            <div className="form-group">
-                              <label htmlFor="">วันที่จัดทำ OT</label>
-                              <input
-                                type="date"
-                                className="form-control"
-                                onChange={(event) =>
-                                  dateFilter(
-                                    dayjs(event.target.value).format(
-                                      "YYYY-MM-DD"
-                                    )
-                                  )
-                                }
-                              />
+                      <div className="col-lg-12">
+                        <div className="card shadow-none border">
+                          <div className="card-body">
+                            <div className="row">
+                              <div className="col-md-3">
+                                <div className="form-group">
+                                  <label htmlFor="">วันที่จัดทำ</label>
+                                  {/* <DatePicker/> */}
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    onChange={(event) =>
+                                      dateFilter(
+                                        dayjs(event.target.value).format(
+                                          "YYYY-MM-DD"
+                                        )
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr align={"center"}>
-                              <th>#</th>
-                              <th>รหัสพนักงาน</th>
-                              <th>ชื่อพนักงาน</th>
-                              <th>หน่วยงาน</th>
-                              <th>รถรับส่ง จุดที่ 1</th>
-                              <th>รถรับส่ง จุดที่ 2</th>
-                              <th>รถรับส่ง จุดที่ 3</th>
-                              <th>รถรับส่ง จุดที่ 4</th>
-                              <th>ค่าเดินทาง</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-             
-                          </tbody>
-                        </table>
-                        {/* <table className="table table-bordered">
-                          <thead>
-                            <tr align={"center"}>
-                              <th>#</th>
-                              <th>รหัสพนักงาน</th>
-                              <th>ชื่อพนักงาน</th>
-                              <th>หน่วยงาน</th>
-                              <th>รถรับส่ง จุดที่ 1</th>
-                              <th>รถรับส่ง จุดที่ 2</th>
-                              <th>รถรับส่ง จุดที่ 3</th>
-                              <th>รถรับส่ง จุดที่ 4</th>s
-                              <th>ค่าเดินทาง</th>
-                            </tr>
-                          </thead>
-                          <tbody></tbody>
-                        </table> */}
-                        <span>
-                          <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
-                          สายหนองแขม 4. สายวงเวียนใหญ่
-                        </span>
-                        <div className="float-right">
-                          <button className="btn btn-primary">SUBMIT</button>{" "}
-                          <Link className="btn btn-danger">CANCEL</Link>
-                        </div>
                       </div>
                     </div>
+                    <DataTable
+                      style={{
+                        fontFamily: "Prompt",
+                      }}
+                      withBorder
+                      highlightOnHover
+                      fontSize={"md"}
+                      verticalSpacing="md"
+                      paginationSize="md"
+                      withColumnBorders
+                      fetching={loading}
+                      idAccessor="id"
+                      columns={[
+                        {
+                          accessor: "index",
+                          title: "#",
+                          textAlignment: "center",
+                          width: 80,
+                          render: (record) => records.indexOf(record) + 1,
+                        },
+                        {
+                          accessor: "ot_member_id",
+                          title: "เลขที่คำร้อง",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "create_name",
+                          title: "ผู้ควบคุมงาน",
+                          textAlignment: "center",
+                        },
+                        // {
+                        //   accessor: "dept",
+                        //   title: "แผนก",
+                        //   textAlignment: "center",
+                        // },
+                        {
+                          accessor: "department",
+                          title: "หน่วยงาน",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "status",
+                          title: "สถานะการอนุมัติ",
+                          textAlignment: "center",
+                          render: ({ status }) => (
+                            <>
+                            <h5>
+                                {status === "รอการอนุมัติ 1" ? (
+                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 2" ? (
+                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
+                                ) : status === "รอการอนุมัติ 3" ? (
+                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
+                                ) : status === "ผ่านการอนุมัติ" ? (
+                                  <Badge bg="success"><span>{status}</span></Badge>
+                                ) : (
+                                  <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
+                                )}
+                              </h5>
+                          </>
+                          ),
+                        },
+                        {
+                          accessor: "result",
+                          title: "สถานะรายงาน",
+                          textAlignment: "center",
+                          render: ({ result }) => (
+                            <>
+                            <h5>
+                                {result === "รอการรายงาน" ? (
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ส่วน)" ? (
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ผจก)" ? (
+                                  <Badge bg="primary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "ปิดการรายงาน" ? (
+                                  <Badge bg="success">
+                                    <span>{result}</span>
+                                  </Badge>
+                                ) : (
+                                  <Badge bg="danger">
+                                    <span>{result}</span>
+                                  </Badge>
+                                )}
+                              </h5>
+                          </>
+                          ),
+                        },
+                        {
+                          accessor: "created_at",
+                          title: "วันที่จัดทำ",
+                          textAlignment: "center",
+                          render: ({ created_at }) =>
+                            dayjs(created_at).format("DD-MM-YYYY"),
+                        },
+                        {
+                          accessor: "bus_point_1",
+                          title: "รถรับส่งพนักงาน",
+                          textAlignment: "center",
+                          render: ({ bus_point_1, bus_point_2, bus_point_3, bus_point_4,}) =>(
+                            <span>{ bus_point_1 } : {bus_point_2} : {bus_point_3} : {bus_point_4}</span>
+                          ),
+                        },
+                        // {
+                        //   accessor: "start_date",
+                        //   title: "เวลาเริ่มต้น",
+                        //   textAlignment: "center",
+                        //   render: ({ start_date }) => start_date + " น.",
+                        // },
+                        // {
+                        //   accessor: "end_date",
+                        //   title: "เวลาสิ้นสุด",
+                        //   textAlignment: "center",
+                        //   render: ({ end_date }) => end_date + " น.",
+                        // },
+                        {
+                          accessor: "actions",
+                          textAlignment: "center",
+                          title: "ดำเนินการ",
+                          render: (blogs) => (
+                            <>
+                              <Link
+                                to={"/officecar/edit/" + blogs.id}
+                                className="btn btn-primary"
+                              >
+                              <i className="fas fa-bars"></i>
+                              </Link>{" "}
+
+                              <Link
+                                to={"/officecar/edit/" + blogs.id}
+                                className="btn btn-info"
+                              >
+                              <i className="fas fa-edit"></i>
+                              </Link>{" "}
+                            </>
+                          ),
+                        },
+                      ]}
+                      records={records}
+                      minHeight={200}
+                      totalRecords={overtimes.length}
+                      recordsPerPage={pageSize}
+                      page={page}
+                      onPageChange={(p) => setPage(p)}
+                      recordsPerPageOptions={PAGE_SIZES}
+                      onRecordsPerPageChange={setPageSize}
+                    />
                   </div>
                 </div>
               </div>
