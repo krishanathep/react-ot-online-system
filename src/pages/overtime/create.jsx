@@ -323,24 +323,7 @@ const create = ({ prefix = "OT" }) => {
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
-                                      // <DatePicker
-                                      //   showIcon
-                                      //   minDate={dayjs().toDate()}
-                                      //   required
-                                      //   className="form-control"
-                                      //   placeholderText="กรุณาเลือกวันที่"
-                                      //   onChange={(date) =>
-                                      //     field.onChange(
-                                      //       setStartDate(
-                                      //         dayjs(date).format("YYYY-MM-DD")
-                                      //       )
-                                      //     )
-                                      //   }
-                                      //   dateFormat="dd-MM-yyyy"
-                                      //   selected={startDate}
-                                      // />
                                       <DatePicker
-                                        showIcon
                                         minDate={dayjs().toDate()}
                                         required
                                         className="form-control"
@@ -742,8 +725,8 @@ const create = ({ prefix = "OT" }) => {
                                     <option value={"จุดที่ 4"}>
                                       จุดที่ 4 สายวงเวียนใหญ่
                                     </option>
-                                    <option value={"ไม่ใช้บริการรถรับส่ง"}>
-                                      ไม่ใช้บริการรถรับส่ง
+                                    <option value={"no"}>
+                                      ไม่ใช้บริการ
                                     </option>
                                   </select>
                                 </td>

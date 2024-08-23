@@ -30,11 +30,9 @@ const OfficeCar = () => {
     const to = from + pageSize;
 
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests"
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.data.filter(i=>i));
+        setOvertimes(res.data.data.filter((i) => i));
         setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
@@ -93,24 +91,23 @@ const OfficeCar = () => {
                       <div className="col-lg-12">
                         <div className="card shadow-none border">
                           <div className="card-body">
-                            <div className="row">
-                              <div className="col-md-3">
-                                <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label>
-                                  {/* <DatePicker/> */}
-                                  <input
-                                    type="date"
-                                    className="form-control"
-                                    onChange={(event) =>
-                                      dateFilter(
-                                        dayjs(event.target.value).format(
-                                          "YYYY-MM-DD"
-                                        )
+                            {/* <div className="float-right">
+                              <Link to={"/officecar/edit"} className="btn btn-success">จัดการรถรับส่ง</Link>
+                            </div> */}
+                            <div className="col-md-3">
+                              <div className="form-group">
+                                {/* <DatePicker/> */}
+                                <input
+                                  type="date"
+                                  className="form-control"
+                                  onChange={(event) =>
+                                    dateFilter(
+                                      dayjs(event.target.value).format(
+                                        "YYYY-MM-DD"
                                       )
-                                    }
-                                  />
-                                  <button>จััดการ</button>
-                                </div>
+                                    )
+                                  }
+                                />
                               </div>
                             </div>
                           </div>
@@ -163,20 +160,28 @@ const OfficeCar = () => {
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
-                            <h5>
+                              <h5>
                                 {status === "รอการอนุมัติ 1" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success"><span>{status}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{status}</span>
+                                  </Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
                                 )}
                               </h5>
-                          </>
+                            </>
                           ),
                         },
                         {
@@ -185,7 +190,7 @@ const OfficeCar = () => {
                           textAlignment: "center",
                           render: ({ result }) => (
                             <>
-                            <h5>
+                              <h5>
                                 {result === "รอการรายงาน" ? (
                                   <Badge bg="warning">
                                     <span className="text-white">{result}</span>
@@ -208,7 +213,7 @@ const OfficeCar = () => {
                                   </Badge>
                                 )}
                               </h5>
-                          </>
+                            </>
                           ),
                         },
                         {
@@ -219,11 +224,35 @@ const OfficeCar = () => {
                             dayjs(created_at).format("DD-MM-YYYY"),
                         },
                         {
-                          accessor: "bus_point_1",
-                          title: "รถรับส่งพนักงาน",
+                          accessor: "end_date",
+                          title: "เวลาสิ้นสุด",
                           textAlignment: "center",
-                          render: ({ bus_point_1, bus_point_2, bus_point_3, bus_point_4,}) =>(
-                            <span>{ bus_point_1 } : {bus_point_2} : {bus_point_3} : {bus_point_4}</span>
+                          render: ({ end_date }) => (
+                            <>
+                              {end_date === "20.00" ? (
+                                <h5><Badge bg="primary">{end_date}</Badge></h5>
+                              ) : end_date === "22.00" ? (
+                                <h5><Badge bg="primary">{end_date}</Badge></h5>
+                              ) : (
+                                end_date
+                              )}
+                            </>
+                          ),
+                        },
+                        {
+                          accessor: "bus_point_1",
+                          title: "จุดรถรับส่ง",
+                          textAlignment: "center",
+                          render: ({
+                            bus_point_1,
+                            bus_point_2,
+                            bus_point_3,
+                            bus_point_4,
+                          }) => (
+                            <span>
+                              {bus_point_1} : {bus_point_2} : {bus_point_3} :{" "}
+                              {bus_point_4}
+                            </span>
                           ),
                         },
                         // {
@@ -244,18 +273,17 @@ const OfficeCar = () => {
                           title: "ดำเนินการ",
                           render: (blogs) => (
                             <>
-                              <Link
+                              {/* <Link
                                 to={"/officecar/edit/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                              <i className="fas fa-bars"></i>
-                              </Link>{" "}
-
+                                <i className="fas fa-bars"></i>
+                              </Link>{" "} */}
                               <Link
                                 to={"/officecar/edit/" + blogs.id}
                                 className="btn btn-info"
                               >
-                              <i className="fas fa-edit"></i>
+                                <i className="fas fa-edit"></i>
                               </Link>{" "}
                             </>
                           ),
