@@ -87,7 +87,7 @@ export default function Sidebar() {
                 <>
                 <li className="nav-item">
                     <Link to="/" className="nav-link">
-                      <i className="nav-icon fas fa-home"></i>
+                    <i className="nav-icon fas fa-tachometer-alt"></i>
                       <p>Dashboard</p>
                     </Link>
                   </li>
