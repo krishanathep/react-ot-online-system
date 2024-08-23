@@ -36,7 +36,10 @@ const edit = () => {
         // count employee
         setEmpcount(res.data.data.employees.length);
         setOvertimes(res.data.data);
-        setMemebers(res.data.data.employees);
+
+        const bus = res.data.data.employees
+
+        setMemebers(bus.filter(b=>b.bus_stations!=='no'));
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
