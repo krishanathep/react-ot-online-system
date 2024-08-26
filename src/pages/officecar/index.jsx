@@ -3,6 +3,8 @@ import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -16,6 +18,7 @@ const OfficeCar = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
+  const [startDate, setStartDate] = useState("");
 
   useEffect(() => {
     setPage(1);
@@ -32,7 +35,7 @@ const OfficeCar = () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.data.filter((i) => i));
+        setOvertimes(res.data.data.filter((i) => i.ot_date === "2024-08-17"));
         setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
@@ -91,23 +94,30 @@ const OfficeCar = () => {
                       <div className="col-lg-12">
                         <div className="card shadow-none border">
                           <div className="card-body">
-                            {/* <div className="float-right">
-                              <Link to={"/officecar/edit"} className="btn btn-success">จัดการรถรับส่ง</Link>
-                            </div> */}
-                            <div className="col-md-3">
-                              <div className="form-group">
-                                {/* <DatePicker/> */}
-                                <input
-                                  type="date"
+                            <div className="row">
+                              <div className="col-md-3">
+                                <DatePicker
+                                  //showIcon
+                                  //icon="fa fa-calendar"
                                   className="form-control"
-                                  onChange={(event) =>
+                                  //isClearable
+                                  placeholderText="กรุณาเลือกวันที่"
+                                  selected={startDate}
+                                  onChange={(date) => {
+                                    setStartDate(date);
                                     dateFilter(
-                                      dayjs(event.target.value).format(
-                                        "YYYY-MM-DD"
-                                      )
-                                    )
-                                  }
-                                />
+                                      dayjs(date).format("YYYY-MM-DD")
+                                    );
+                                  }}
+                                  dateFormat="dd-MM-yyyy"
+                                />{" "} 
+                              </div>
+                              <div className="col-md-9">
+                              <div className="float-right">
+                              <Link to='/officecar/managecar' className="btn btn-success">
+                                  <i className="fas fa-edit"></i>Car manage
+                                </Link>
+                              </div>
                               </div>
                             </div>
                           </div>
@@ -217,11 +227,11 @@ const OfficeCar = () => {
                           ),
                         },
                         {
-                          accessor: "created_at",
-                          title: "วันที่จัดทำ",
+                          accessor: "ot_date",
+                          title: "วันที่ทำ OT",
                           textAlignment: "center",
-                          render: ({ created_at }) =>
-                            dayjs(created_at).format("DD-MM-YYYY"),
+                          render: ({ ot_date }) =>
+                            dayjs(ot_date).format("DD-MM-YYYY"),
                         },
                         {
                           accessor: "end_date",
@@ -230,9 +240,13 @@ const OfficeCar = () => {
                           render: ({ end_date }) => (
                             <>
                               {end_date === "20.00" ? (
-                                <h5><Badge bg="primary">{end_date}</Badge></h5>
+                                <h5>
+                                  <Badge bg="primary">{end_date}</Badge>
+                                </h5>
                               ) : end_date === "22.00" ? (
-                                <h5><Badge bg="primary">{end_date}</Badge></h5>
+                                <h5>
+                                  <Badge bg="primary">{end_date}</Badge>
+                                </h5>
                               ) : (
                                 end_date
                               )}

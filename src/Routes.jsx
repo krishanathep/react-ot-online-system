@@ -49,7 +49,7 @@ const RoutesPage = () => {
           <Route path="/approver/view/:id" element={<AppView />} />
           <Route path="/officecar" element={<OfficeCar/>} />
           <Route path="/officecar/edit/:id" element={<OfficeCarEdit/>} />
-          <Route path="/officecar/managecar/:id" element={<OfficeCarManage/>} />
+          <Route path="/officecar/managecar" element={<OfficeCarManage/>} />
 
           {/* Route ADIMIN */}
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />

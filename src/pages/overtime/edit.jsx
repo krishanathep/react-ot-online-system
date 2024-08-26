@@ -40,6 +40,7 @@ const edit = () => {
         const bus = res.data.data.employees
 
         setMemebers(bus.filter(b=>b.bus_stations!=='no'));
+        
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,

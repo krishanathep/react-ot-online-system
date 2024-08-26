@@ -37,11 +37,11 @@ export default function Signin() {
           }
         })
     } catch(error){
-      console.log(error.response.data)
+      console.log(error.response)
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: error.response.data,
+        title: 'Error',
+        text: error,
       })
       reset({
         email: "",
