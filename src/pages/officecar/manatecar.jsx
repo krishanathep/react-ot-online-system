@@ -19,7 +19,6 @@ const manageCar = () => {
     },
   });
 
-  const { id } = useParams();
 
   const [priceID, setPieceID] = useState("");
 
@@ -36,12 +35,14 @@ const manageCar = () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(
-          res.data.data.filter(
-            (i) =>
-              (i.ot_date === startDate && i.end_date === "20.00") ||
-              (i.ot_date === startDate && i.end_date === "22.00")
-          )
+        const ot =  res.data.data.filter(
+          (i) =>
+            (i.ot_date === startDate && i.end_date === "20.00") ||
+            (i.ot_date === startDate && i.end_date === "22.00")
+        )
+        setOvertimes(ot);
+        setPieceID(
+          ot.filter((o, index) => index === 0).map((ot, index) => ot.id)
         );
       });
   };
@@ -63,7 +64,7 @@ const manageCar = () => {
   };
 
   const handleUpdateSubmit = async (data) => {
-    //alert(JSON.stringify(data) + "id" + priceID);
+    alert(JSON.stringify(data) + "id" + priceID);
 
     await axios
       .put(
