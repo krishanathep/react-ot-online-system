@@ -20,33 +20,54 @@ const manageCar = () => {
   });
 
   const { id } = useParams();
+
+  const [priceID, setPieceID] = useState("");
+
   const navigate = useNavigate();
 
+  const [busPrice, setBusPrice] = useState(30);
+
   const [overtimes, setOvertimes] = useState([]);
-  const [startDate, setStartDate] = useState(new dayjs(Date()).format("YYYY-MM-DD"));
+  const [startDate, setStartDate] = useState(
+    new dayjs(Date()).format("YYYY-MM-DD")
+  );
 
   const getData = async () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.data.filter((i) => (i.ot_date === startDate) && (i.end_date==="20.00") ||  (i.ot_date === startDate) && (i.end_date==="22.00")));
+        setOvertimes(
+          res.data.data.filter(
+            (i) =>
+              (i.ot_date === startDate && i.end_date === "20.00") ||
+              (i.ot_date === startDate && i.end_date === "22.00")
+          )
+        );
       });
   };
 
-  const dateFilter = async () => {
+  const dateFilter = async (date) => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.data.filter((i) => (i.ot_date === startDate) && (i.end_date==="20.00") ||  (i.ot_date === startDate) && (i.end_date==="22.00")));
-        console.log(startDate)
+        const ot = res.data.data.filter(
+          (i) =>
+            (i.ot_date === date && i.end_date === "20.00") ||
+            (i.ot_date === date && i.end_date === "22.00")
+        );
+        setOvertimes(ot);
+        setPieceID(
+          ot.filter((o, index) => index === 0).map((ot, index) => ot.id)
+        );
       });
   };
 
   const handleUpdateSubmit = async (data) => {
-    //alert(JSON.stringify(data))
+    //alert(JSON.stringify(data) + "id" + priceID);
+
     await axios
       .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-update-point/" + id,
+        import.meta.env.VITE_API_KEY + "/api/otrequest-update-point/" + priceID,
         data
       )
       .then((res) => {
@@ -56,6 +77,7 @@ const manageCar = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        console.log(res);
         navigate("/officecar");
       })
       .catch((error) => {
@@ -106,9 +128,11 @@ const manageCar = () => {
                                   showIcon
                                   placeholderText=" กรุณาเลือกวันที่"
                                   selected={startDate}
-                                  onChange={(date)=>{
-                                    setStartDate(date)
-                                    dateFilter(dayjs(date).format("YYYY-MM-DD"))
+                                  onChange={(date) => {
+                                    setStartDate(date);
+                                    dateFilter(
+                                      dayjs(date).format("YYYY-MM-DD")
+                                    );
                                   }}
                                   dateFormat="dd-MM-yyyy"
                                 />
@@ -122,7 +146,10 @@ const manageCar = () => {
                       <div className="col-md-12">
                         {overtimes.map((ot) => {
                           return (
-                            <div className="card shadow-none border">
+                            <div
+                              className="card shadow-none border"
+                              key={ot.id}
+                            >
                               <div className="card-body">
                                 <table className="table table-borderless">
                                   <thead>
@@ -156,7 +183,7 @@ const manageCar = () => {
                                       .filter((e) => e.bus_stations !== "no")
                                       .map((em, index) => {
                                         return (
-                                          <tr align="center">
+                                          <tr align="center" key={em.id}>
                                             <td>{index + 1}</td>
                                             <td>{em.code}</td>
                                             <td>{em.emp_name}</td>
@@ -193,22 +220,27 @@ const manageCar = () => {
                                                 ""
                                               )}
                                             </td>
-                                            <td>{dayjs(ot.ot_date).format("DD-MM-YYYY")}</td>
                                             <td>
-                                              {ot.bus_stations === "จุดที่ 1" &&
-                                              overtimes.bus_point_1 !== "0"
+                                              {dayjs(ot.ot_date).format(
+                                                "DD-MM-YYYY"
+                                              )}
+                                            </td>
+                                            <td>
+                                              {em.bus_stations ===
+                                                "จุดที่ 1" &&
+                                              ot.bus_point_1 !== "0"
                                                 ? "0"
-                                                : ot.bus_stations ===
+                                                : em.bus_stations ===
                                                     "จุดที่ 2" &&
-                                                  overtimes.bus_point_2 !== "0"
+                                                  ot.bus_point_2 !== "0"
                                                 ? "0"
-                                                : ot.bus_stations ===
+                                                : em.bus_stations ===
                                                     "จุดที่ 3" &&
-                                                  overtimes.bus_point_3 !== "0"
+                                                  ot.bus_point_3 !== "0"
                                                 ? "0"
-                                                : ot.bus_stations ===
+                                                : em.bus_stations ===
                                                     "จุดที่ 4" &&
-                                                  overtimes.bus_point_4 !== "0"
+                                                  ot.bus_point_4 !== "0"
                                                 ? "0"
                                                 : "30"}
                                             </td>
@@ -216,9 +248,7 @@ const manageCar = () => {
                                         );
                                       })}
                                     <tr align="center">
-                                      <td colSpan={"4"}>
-                                        {/* รวมพนักงานที่ใช้บริการรถรับส่ง */}
-                                      </td>
+                                      <td colSpan={"4"}>รวม (พนักงาน)</td>
                                       <td>
                                         <div className="form-check">
                                           <input
@@ -324,11 +354,6 @@ const manageCar = () => {
                           <button
                             onClick={handleSubmit(handleUpdateSubmit)}
                             className="btn btn-primary"
-                            disabled={
-                              !overtimes.filter((ot) => ot.ot_date !== "")
-                                ? false
-                                : true
-                            }
                           >
                             <i className="fas fa-save"></i> ยืนยัน
                           </button>{" "}

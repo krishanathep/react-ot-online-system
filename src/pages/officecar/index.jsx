@@ -35,7 +35,7 @@ const OfficeCar = () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.data.filter((i) => i.ot_date === "2024-08-17"));
+        setOvertimes(res.data.data);
         setRecords(res.data.data.slice(from, to));
         setLoading(false);
       });
@@ -97,11 +97,11 @@ const OfficeCar = () => {
                             <div className="row">
                               <div className="col-md-3">
                                 <DatePicker
-                                  //showIcon
+                                  showIcon
                                   //icon="fa fa-calendar"
                                   className="form-control"
                                   //isClearable
-                                  placeholderText="กรุณาเลือกวันที่"
+                                  placeholderText="ค้นหาตามวันที่"
                                   selected={startDate}
                                   onChange={(date) => {
                                     setStartDate(date);
@@ -115,7 +115,7 @@ const OfficeCar = () => {
                               <div className="col-md-9">
                               <div className="float-right">
                               <Link to='/officecar/managecar' className="btn btn-success">
-                                  <i className="fas fa-edit"></i>Car manage
+                                  <i className="fas fa-edit"></i> จัดการรถรับส่ง
                                 </Link>
                               </div>
                               </div>
@@ -240,13 +240,13 @@ const OfficeCar = () => {
                           render: ({ end_date }) => (
                             <>
                               {end_date === "20.00" ? (
-                                <h5>
-                                  <Badge bg="primary">{end_date}</Badge>
-                                </h5>
+                                <>
+                                  <Badge bg="success">{end_date}</Badge>
+                                </>
                               ) : end_date === "22.00" ? (
-                                <h5>
-                                  <Badge bg="primary">{end_date}</Badge>
-                                </h5>
+                                <>
+                                  <Badge bg="success">{end_date}</Badge>
+                                </>
                               ) : (
                                 end_date
                               )}

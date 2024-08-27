@@ -13,6 +13,8 @@ import axios from "axios";
 const create = ({ prefix = "OT" }) => {
   const [id, setId] = useState("");
 
+  const [lock,SetLock]=useState(false)
+
   const {
     register,
     control,
@@ -132,6 +134,7 @@ const create = ({ prefix = "OT" }) => {
 
   const handleCreateSubmit = async (data) => {
     try {
+      SetLock(true)
       await axios
         .post(import.meta.env.VITE_API_KEY + "/api/otrequest-create", data)
         .then((res) => {
@@ -751,6 +754,7 @@ const create = ({ prefix = "OT" }) => {
                             <button
                               onClick={handleSubmit(handleCreateSubmit)}
                               className="btn btn-primary"
+                              disabled={lock}
                             >
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}
