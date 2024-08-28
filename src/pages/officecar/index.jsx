@@ -281,27 +281,27 @@ const OfficeCar = () => {
                         //   textAlignment: "center",
                         //   render: ({ end_date }) => end_date + " น.",
                         // },
-                        {
-                          accessor: "actions",
-                          textAlignment: "center",
-                          title: "ดำเนินการ",
-                          render: (blogs) => (
-                            <>
-                              {/* <Link
-                                to={"/officecar/edit/" + blogs.id}
-                                className="btn btn-primary"
-                              >
-                                <i className="fas fa-bars"></i>
-                              </Link>{" "} */}
-                              <Link
-                                to={"/officecar/edit/" + blogs.id}
-                                className="btn btn-info"
-                              >
-                                <i className="fas fa-edit"></i>
-                              </Link>{" "}
-                            </>
-                          ),
-                        },
+                        // {
+                        //   accessor: "actions",
+                        //   textAlignment: "center",
+                        //   title: "ดำเนินการ",
+                        //   render: (blogs) => (
+                        //     <>
+                        //       {/* <Link
+                        //         to={"/officecar/edit/" + blogs.id}
+                        //         className="btn btn-primary"
+                        //       >
+                        //         <i className="fas fa-bars"></i>
+                        //       </Link>{" "} */}
+                        //       <Link
+                        //         to={"/officecar/edit/" + blogs.id}
+                        //         className="btn btn-info"
+                        //       >
+                        //         <i className="fas fa-edit"></i>
+                        //       </Link>{" "}
+                        //     </>
+                        //   ),
+                        // },
                       ]}
                       records={records}
                       minHeight={200}

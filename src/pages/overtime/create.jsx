@@ -135,6 +135,7 @@ const create = ({ prefix = "OT" }) => {
   const handleCreateSubmit = async (data) => {
     try {
       SetLock(true)
+      navigate("/overtime");
       await axios
         .post(import.meta.env.VITE_API_KEY + "/api/otrequest-create", data)
         .then((res) => {
@@ -145,7 +146,7 @@ const create = ({ prefix = "OT" }) => {
             showConfirmButton: false,
             timer: 2000,
           });
-          navigate("/overtime");
+          //navigate("/overtime");
         });
     } catch (error) {
       console.log(error);

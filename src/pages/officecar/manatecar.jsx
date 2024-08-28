@@ -19,14 +19,18 @@ const manageCar = () => {
     },
   });
 
-
-  const [priceID, setPieceID] = useState("");
+  const [priceID_01, setPieceID_01] = useState("");
+  const [priceID_02, setPieceID_02] = useState("");
 
   const navigate = useNavigate();
 
   const [busPrice, setBusPrice] = useState(30);
 
-  const [overtimes, setOvertimes] = useState([]);
+  const [nullTable, setNullTable] = useState(false);
+
+  const [overtimes_01, setOvertimes_01] = useState([]);
+  const [overtimes_02, setOvertimes_02] = useState([]);
+
   const [startDate, setStartDate] = useState(
     new dayjs(Date()).format("YYYY-MM-DD")
   );
@@ -35,14 +39,20 @@ const manageCar = () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        const ot =  res.data.data.filter(
-          (i) =>
-            (i.ot_date === startDate && i.end_date === "20.00") ||
-            (i.ot_date === startDate && i.end_date === "22.00")
-        )
-        setOvertimes(ot);
-        setPieceID(
-          ot.filter((o, index) => index === 0).map((ot, index) => ot.id)
+        const ot_01 = res.data.data.filter(
+          (i) => i.ot_date === startDate && i.end_date === "20.00"
+        );
+        const ot_02 = res.data.data.filter(
+          (i) => i.ot_date === startDate && i.end_date === "22.00"
+        );
+        setOvertimes_01(ot_01);
+        setOvertimes_02(ot_02);
+
+        setPieceID_01(
+          ot_01.filter((o, index) => index === 0).map((ot, index) => ot.id)
+        );
+        setPieceID_02(
+          ot_02.filter((o, index) => index === 0).map((ot, index) => ot.id)
         );
       });
   };
@@ -51,24 +61,32 @@ const manageCar = () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        const ot = res.data.data.filter(
-          (i) =>
-            (i.ot_date === date && i.end_date === "20.00") ||
-            (i.ot_date === date && i.end_date === "22.00")
+        const ot_01 = res.data.data.filter(
+          (i) => i.ot_date === date && i.end_date === "20.00"
         );
-        setOvertimes(ot);
-        setPieceID(
-          ot.filter((o, index) => index === 0).map((ot, index) => ot.id)
+        const ot_02 = res.data.data.filter(
+          (i) => i.ot_date === date && i.end_date === "22.00"
+        );
+        setOvertimes_01(ot_01);
+        setOvertimes_02(ot_02);
+        
+        setPieceID_01(
+          ot_01.filter((o, index) => index === 0).map((ot, index) => ot.id)
+        );
+        setPieceID_02(
+          ot_02.filter((o, index) => index === 0).map((ot, index) => ot.id)
         );
       });
   };
 
-  const handleUpdateSubmit = async (data) => {
-    alert(JSON.stringify(data) + "id" + priceID);
+  const submitCarPrice_01 = async (data) => {
+    //alert(JSON.stringify(data) + "id" + priceID_01);
 
     await axios
       .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-update-point/" + priceID,
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequest-update-point/" +
+          priceID_01,
         data
       )
       .then((res) => {
@@ -79,7 +97,32 @@ const manageCar = () => {
           timer: 2000,
         });
         console.log(res);
-        navigate("/officecar");
+        //navigate("/officecar");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const submitCarPrice_02 = async (data) => {
+    //alert(JSON.stringify(data) + "id" + priceID_02);
+
+    await axios
+      .put(
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequest-update-point/" +
+          priceID_02,
+        data
+      )
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Your Office Car has been updated",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        console.log(res);
+        //navigate("/officecar");
       })
       .catch((error) => {
         console.log(error);
@@ -145,7 +188,7 @@ const manageCar = () => {
                     </div>
                     <div className="row">
                       <div className="col-md-12">
-                        {overtimes.map((ot) => {
+                        {overtimes_01.map((ot) => {
                           return (
                             <div
                               className="card shadow-none border"
@@ -164,6 +207,7 @@ const manageCar = () => {
                                 </table>
                               </div>
                               <div className="col-md-12">
+                              <form onSubmit={handleSubmit(submitCarPrice_01)}>
                                 <table className="table table-bordered">
                                   <thead>
                                     <tr align={"center"}>
@@ -227,8 +271,7 @@ const manageCar = () => {
                                               )}
                                             </td>
                                             <td>
-                                              {em.bus_stations ===
-                                                "จุดที่ 1" &&
+                                              {em.bus_stations === "จุดที่ 1" &&
                                               ot.bus_point_1 !== "0"
                                                 ? "0"
                                                 : em.bus_stations ===
@@ -338,9 +381,19 @@ const manageCar = () => {
                                           </label>
                                         </div>
                                       </td>
+                                      <td></td>
+                                      <td>
+                                        <button
+                                          type="submit"
+                                          className="btn btn-primary"
+                                        >
+                                          <i className="fas fa-save"></i>
+                                        </button>
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
+                                </form>
                                 <div className="col-md-12 mb-3">
                                   <span>
                                     <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2.
@@ -351,17 +404,264 @@ const manageCar = () => {
                             </div>
                           );
                         })}
-                        <div className="float-right">
-                          <button
-                            onClick={handleSubmit(handleUpdateSubmit)}
-                            className="btn btn-primary"
-                          >
-                            <i className="fas fa-save"></i> ยืนยัน
-                          </button>{" "}
-                          <Link to={"/officecar"} className="btn btn-danger">
-                            ย้อนกลับ
-                          </Link>{" "}
-                        </div>
+                        {nullTable ? (
+                          <table className="table table-bordered">
+                            <thead>
+                              <tr align={"center"}>
+                                <th>#</th>
+                                <th>รหัสพนักงาน</th>
+                                <th>ชื่อพนักงาน</th>
+                                <th>หน่วยงาน</th>
+                                <th>รถรับส่ง จุดที่ 1</th>
+                                <th>รถรับส่ง จุดที่ 2</th>
+                                <th>รถรับส่ง จุดที่ 3</th>
+                                <th>รถรับส่ง จุดที่ 4</th>
+                                <th>วันที่ทำ OT</th>
+                                <th>ค่าเดินทาง</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <td colSpan={"10"} align="center">
+                              ไม่มีข้อมูลการทำ OT
+                            </td>
+                          </table>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      <div className="col-md-12">
+                        {overtimes_02.map((ot) => {
+                          return (
+                            <div
+                              className="card shadow-none border mt-3"
+                              key={ot.id}
+                            >
+                              <div className="card-body">
+                                <table className="table table-borderless">
+                                  <thead>
+                                    <tr>
+                                      <td>
+                                        <b>เวลาที่ทำ OT : </b>
+                                        <span>{ot.end_date}</span> น.
+                                      </td>
+                                    </tr>
+                                  </thead>
+                                </table>
+                              </div>
+                              <div className="col-md-12">
+                                <form
+                                  onSubmit={handleSubmit(submitCarPrice_02)}
+                                >
+                                  <table className="table table-bordered">
+                                    <thead>
+                                      <tr align={"center"}>
+                                        <th>#</th>
+                                        <th>รหัสพนักงาน</th>
+                                        <th>ชื่อพนักงาน</th>
+                                        <th>หน่วยงาน</th>
+                                        <th>รถรับส่ง จุดที่ 1</th>
+                                        <th>รถรับส่ง จุดที่ 2</th>
+                                        <th>รถรับส่ง จุดที่ 3</th>
+                                        <th>รถรับส่ง จุดที่ 4</th>
+                                        <th>วันที่ทำ OT</th>
+                                        <th>ค่าเดินทาง</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {ot.employees
+                                        .filter((e) => e.bus_stations !== "no")
+                                        .map((em, index) => {
+                                          return (
+                                            <tr align="center" key={em.id}>
+                                              <td>{index + 1}</td>
+                                              <td>{em.code}</td>
+                                              <td>{em.emp_name}</td>
+                                              <td>{ot.department}</td>
+                                              <td>
+                                                {em.bus_stations ===
+                                                "จุดที่ 1" ? (
+                                                  <i className="fas fa-map-marker-alt text-danger"></i>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                              <td>
+                                                {em.bus_stations ===
+                                                "จุดที่ 2" ? (
+                                                  <i className="fas fa-map-marker-alt text-danger"></i>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                              <td>
+                                                {em.bus_stations ===
+                                                "จุดที่ 3" ? (
+                                                  <i className="fas fa-map-marker-alt text-danger"></i>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                              <td>
+                                                {em.bus_stations ===
+                                                "จุดที่ 4" ? (
+                                                  <i className="fas fa-map-marker-alt text-danger"></i>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                              <td>
+                                                {dayjs(ot.ot_date).format(
+                                                  "DD-MM-YYYY"
+                                                )}
+                                              </td>
+                                              <td>
+                                                {em.bus_stations ===
+                                                  "จุดที่ 1" &&
+                                                ot.bus_point_1 !== "0"
+                                                  ? "0"
+                                                  : em.bus_stations ===
+                                                      "จุดที่ 2" &&
+                                                    ot.bus_point_2 !== "0"
+                                                  ? "0"
+                                                  : em.bus_stations ===
+                                                      "จุดที่ 3" &&
+                                                    ot.bus_point_3 !== "0"
+                                                  ? "0"
+                                                  : em.bus_stations ===
+                                                      "จุดที่ 4" &&
+                                                    ot.bus_point_4 !== "0"
+                                                  ? "0"
+                                                  : "30"}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })}
+                                      <tr align="center">
+                                        <td colSpan={"4"}>รวม (พนักงาน)</td>
+                                        <td>
+                                          <div className="form-check">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              value="1"
+                                              {...register("bus_point_1", {
+                                                required: false,
+                                              })}
+                                            />
+                                            <label className="form-check-label">
+                                              จำนวน{" "}
+                                              {
+                                                ot.employees.filter(
+                                                  (e) =>
+                                                    e.bus_stations ===
+                                                    "จุดที่ 1"
+                                                ).length
+                                              }{" "}
+                                              คน
+                                            </label>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className="form-check">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              value="2"
+                                              {...register("bus_point_2", {
+                                                required: false,
+                                              })}
+                                            />
+                                            <label className="form-check-label">
+                                              จำนวน{" "}
+                                              {
+                                                ot.employees.filter(
+                                                  (e) =>
+                                                    e.bus_stations ===
+                                                    "จุดที่ 2"
+                                                ).length
+                                              }{" "}
+                                              คน
+                                            </label>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className="form-check">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              value="3"
+                                              {...register("bus_point_3", {
+                                                required: false,
+                                              })}
+                                            />
+                                            <label className="form-check-label">
+                                              จำนวน{" "}
+                                              {
+                                                ot.employees.filter(
+                                                  (e) =>
+                                                    e.bus_stations ===
+                                                    "จุดที่ 3"
+                                                ).length
+                                              }{" "}
+                                              คน
+                                            </label>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className="form-check">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              value="4"
+                                              {...register("bus_point_4", {
+                                                required: false,
+                                              })}
+                                            />
+                                            <label className="form-check-label">
+                                              จำนวน{" "}
+                                              {
+                                                ot.employees.filter(
+                                                  (e) =>
+                                                    e.bus_stations ===
+                                                    "จุดที่ 4"
+                                                ).length
+                                              }{" "}
+                                              คน
+                                            </label>
+                                          </div>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                          {" "}
+                                          <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                          >
+                                            <i className="fas fa-save"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </form>
+                                <div className="col-md-12 mb-3">
+                                  <span>
+                                    <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2.
+                                    สายนครชัยศรี 3. สายหนองแขม 4. สายวงเวียนใหญ่
+                                  </span>
+                                  <div className="float-right mb-3">
+                                    <Link
+                                      to={"/officecar"}
+                                      className="btn btn-danger"
+                                    >
+                                      ย้อนกลับ
+                                    </Link>{" "}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

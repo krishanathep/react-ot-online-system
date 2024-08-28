@@ -28,6 +28,7 @@ const edit = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount] = useState(0);
+  const [price, setPrice] = useState("xxxxxxx");
 
   const getData = async () => {
     await axios
@@ -35,21 +36,35 @@ const edit = () => {
       .then((res) => {
         // count employee
         setEmpcount(res.data.data.employees.length);
-        setOvertimes(res.data.data);
+        const ot = res.data.data;
+        setOvertimes(ot);
 
-        const bus = res.data.data.employees
+        const bus = res.data.data.employees;
 
-        setMemebers(bus.filter(b=>b.bus_stations!=='no'));
-        
+        setMemebers(bus.filter((b) => b.bus_stations !== "no"));
+
+        if (ot.bus_stations === "จุดที่ 1" && bus.bus_point_1 !== 0) {
+          setPrice(0);
+        } else if (ot.bus_stations === "จุดที่ 2" && bus.bus_point_2 !== 0) {
+          setPrice(0);
+        } else if (ot.bus_stations === "จุดที่ 3" && bus.bus_point_3 !== 0) {
+          setPrice(0);
+        } else if (ot.bus_stations === "จุดที่ 4" && bus.bus_point_4 !== 0) {
+          setPrice(0);
+        } else {
+          setPrice(30);
+        }
+
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
             objective: employee.objective,
             out_time: employee.out_time,
+            //bus_price: employee.bus_price,
             remark: employee.remark,
             ot_create_date: res.data.data.ot_date,
-            ot_in_time:res.data.data.start_date,
-            ot_out_time:res.data.data.end_date,
+            ot_in_time: res.data.data.start_date,
+            ot_out_time: res.data.data.end_date,
           })),
         });
 
@@ -66,7 +81,6 @@ const edit = () => {
       });
   };
 
- 
   const handleUpdateSubmit = async (data) => {
     //alert(JSON.stringify(data))
     await axios
@@ -178,10 +192,10 @@ const edit = () => {
                                 <th>เป้าหมาย</th>
                                 <th>ทำได้จริง</th>
                                 <th>ข้อมูลสแกนนิ้ว</th>
-                                <th>เลิกงาน</th>
+                                <th>เลิกงานจริง</th>
                                 {/* <th>รวมเวลา</th> */}
                                 <th>รถรับส่ง</th>
-                                {/* <th>ค่ารถ</th> */}
+                                <th>ค่าเดินทาง</th>
                                 <th>หมายเหตุ</th>
                               </tr>
                             </thead>
@@ -213,7 +227,7 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.time_scan
+                                      {member.time_scan
                                         .filter((s) =>
                                           s.time
                                             .toLowerCase()
@@ -222,7 +236,9 @@ const edit = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? dayjs(t.time).format('HH.mm') : null}
+                                              {index === 0
+                                                ? dayjs(t.time).format("HH.mm")
+                                                : null}
                                             </span>
                                           );
                                         })}{" "}
@@ -236,7 +252,9 @@ const edit = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 1 ? dayjs(t.time).format('HH.mm') : null}
+                                              {index === 1
+                                                ? dayjs(t.time).format("HH.mm")
+                                                : null}
                                             </span>
                                           );
                                         })}
@@ -259,7 +277,37 @@ const edit = () => {
                                     </td>
                                     {/* <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td> */}
                                     <td>{member.bus_stations}</td>
-                                    {/* <td>{member.bus_price}</td> */}
+                                    <td>
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        value={
+                                          member.bus_stations === "จุดที่ 1" &&
+                                          overtimes.bus_point_1 !== "0"
+                                            ? "0"
+                                            : member.bus_stations ===
+                                                "จุดที่ 2" &&
+                                              overtimes.bus_point_2 !== "0"
+                                            ? "0"
+                                            : member.bus_stations ===
+                                                "จุดที่ 3" &&
+                                              overtimes.bus_point_3 !== "0"
+                                            ? "0"
+                                            : member.bus_stations ===
+                                                "จุดที่ 4" &&
+                                              overtimes.bus_point_4 !== "0"
+                                            ? "0"
+                                            : "30"
+                                        }
+                                        size="1"
+                                        {...register(
+                                          `test.${index}.bus_price`,
+                                          {
+                                            required: false,
+                                          }
+                                        )}
+                                      />
+                                    </td>
                                     <td>
                                       <input
                                         className="form-control"
@@ -272,30 +320,39 @@ const edit = () => {
                                       />
                                       {/* input hidden */}
                                       <div hidden>
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        size="6"
-                                        {...register(`test.${index}.ot_create_date`, {
-                                          required: false,
-                                        })}
-                                      />
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        size="6"
-                                        {...register(`test.${index}.ot_in_time`, {
-                                          required: false,
-                                        })}
-                                      />
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        size="6"
-                                        {...register(`test.${index}.ot_out_time`, {
-                                          required: false,
-                                        })}
-                                      />
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_create_date`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_in_time`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_out_time`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
                                       </div>
                                       {errors.test && (
                                         <span className="text-danger">
