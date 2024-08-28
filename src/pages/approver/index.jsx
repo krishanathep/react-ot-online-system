@@ -168,6 +168,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -178,6 +179,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);
@@ -205,6 +207,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -215,6 +218,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);
@@ -241,6 +245,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -251,6 +256,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -13,7 +13,7 @@ import axios from "axios";
 const create = ({ prefix = "OT" }) => {
   const [id, setId] = useState("");
 
-  const [lock,SetLock]=useState(false)
+  const [lock, SetLock] = useState(false);
 
   const {
     register,
@@ -32,14 +32,15 @@ const create = ({ prefix = "OT" }) => {
     // },
   });
 
-  const [nullTable, setNullTable] = useState(true);
+  const [nullTable, setNullTable] = useState(false);
 
   const [approver, setApprover] = useState([]);
   const userDetail = useAuthUser();
   const navigate = useNavigate();
 
   const [employees, setEmployees] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+  const [loading, setLoading2] = useState(false)
 
   const [time, setTime] = useState("");
   const [timeList, setTimeList] = useState([]);
@@ -134,8 +135,8 @@ const create = ({ prefix = "OT" }) => {
 
   const handleCreateSubmit = async (data) => {
     try {
-      SetLock(true)
-      navigate("/overtime");
+      SetLock(true);
+      setLoading2(true)
       await axios
         .post(import.meta.env.VITE_API_KEY + "/api/otrequest-create", data)
         .then((res) => {
@@ -146,7 +147,7 @@ const create = ({ prefix = "OT" }) => {
             showConfirmButton: false,
             timer: 2000,
           });
-          //navigate("/overtime");
+          navigate("/overtime");
         });
     } catch (error) {
       console.log(error);
@@ -210,6 +211,16 @@ const create = ({ prefix = "OT" }) => {
 
     setId(generateId());
   }, [time, prefix]);
+
+  if (loading === true) {
+    return (
+      <>
+        <div className="loading-state">
+          <div className="loading"></div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -729,9 +740,7 @@ const create = ({ prefix = "OT" }) => {
                                     <option value={"จุดที่ 4"}>
                                       จุดที่ 4 สายวงเวียนใหญ่
                                     </option>
-                                    <option value={"no"}>
-                                      ไม่ใช้บริการ
-                                    </option>
+                                    <option value={"no"}>ไม่ใช้บริการ</option>
                                   </select>
                                 </td>
                               </tr>
