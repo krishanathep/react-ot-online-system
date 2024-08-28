@@ -32,9 +32,7 @@ const OverTimeAdmin = () => {
 
     // get ot requrst data from dept by user login
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests"
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
         //Change api name
         setOvertimes(res.data.data);
@@ -50,8 +48,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-code?data=" +
-          key
+        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-code?data=" + key
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -68,8 +65,7 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-name?data=" +
-          key
+        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-name?data=" + key
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -86,7 +82,8 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/otrequests-filter-department?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequests-filter-department?data=" +
           key
       )
       .then((res) => {
@@ -159,15 +156,18 @@ const OverTimeAdmin = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true);
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-approve2/" +
+            import.meta.env.VITE_API_KEY +
+              "/api/otrequest-approve2/" +
               blogs.id,
             data
           )
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -195,15 +195,18 @@ const OverTimeAdmin = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-approve3/" +
+            import.meta.env.VITE_API_KEY +
+              "/api/otrequest-approve3/" +
               blogs.id,
             data
           )
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);
@@ -230,15 +233,18 @@ const OverTimeAdmin = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-approve4/" +
+            import.meta.env.VITE_API_KEY +
+              "/api/otrequest-approve4/" +
               blogs.id,
             data
           )
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);
@@ -268,7 +274,8 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-approve5/" +
+            import.meta.env.VITE_API_KEY +
+              "/api/otrequest-approve5/" +
               blogs.id,
             data
           )
@@ -310,7 +317,8 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-approve6/" +
+            import.meta.env.VITE_API_KEY +
+              "/api/otrequest-approve6/" +
               blogs.id,
             data
           )
@@ -345,8 +353,7 @@ const OverTimeAdmin = () => {
         });
         axios
           .put(
-            import.meta.env.VITE_API_KEY+"/api/otrequest-reject/" +
-              blogs.id,
+            import.meta.env.VITE_API_KEY + "/api/otrequest-reject/" + blogs.id,
             data
           )
           .then((res) => {
@@ -370,7 +377,7 @@ const OverTimeAdmin = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY+"/api/otrequest-export",
+        import.meta.env.VITE_API_KEY + "/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -398,7 +405,8 @@ const OverTimeAdmin = () => {
   const getApprover = async () => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY+"/api/approve-role?data=" +
+        import.meta.env.VITE_API_KEY +
+          "/api/approve-role?data=" +
           userDatail().dept
       )
       .then((res) => {
@@ -434,21 +442,23 @@ const OverTimeAdmin = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-12">
-                      <div className="row">
-                      <div className="col-md-12">
-                        <div className="float-right">
-                          <button
-                            onClick={textExport}
-                            className="btn btn-secondary mb-2"
-                            hidden={
-                              userDatail().role === "approver" ? true : false
-                            }
-                          >
-                            <i className="fas fa-download"></i> ดึงข้อมูล
-                          </button>
+                        <div className="row">
+                          <div className="col-md-12">
+                            <div className="float-right">
+                              <button
+                                onClick={textExport}
+                                className="btn btn-secondary mb-2"
+                                hidden={
+                                  userDatail().role === "approver"
+                                    ? true
+                                    : false
+                                }
+                              >
+                                <i className="fas fa-download"></i> ดึงข้อมูล
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
                       </div>
                       <div className="col-lg-12">
                         <div className="card shadow-none border">
@@ -472,7 +482,7 @@ const OverTimeAdmin = () => {
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <input
-                                   placeholder="กรุณากรอกข้อมูล"
+                                    placeholder="กรุณากรอกข้อมูล"
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
@@ -495,10 +505,14 @@ const OverTimeAdmin = () => {
                                     <option defaultValue="">
                                       กรุณาเลือกข้อมูล
                                     </option>
-                                    <option value="รอการอนุมัติ">รอการอนุมัติ</option>
-                                    <option value="ผ่านการอนุมัติ">ผ่านการอนุมัติ</option>
+                                    <option value="รอการอนุมัติ">
+                                      รอการอนุมัติ
+                                    </option>
+                                    <option value="ผ่านการอนุมัติ">
+                                      ผ่านการอนุมัติ
+                                    </option>
                                     <option value="ไม่ผ่านการอนุมัติ">
-                                    ไม่ผ่านการอนุมัติ
+                                      ไม่ผ่านการอนุมัติ
                                     </option>
                                   </select>
                                 </div>
@@ -571,20 +585,28 @@ const OverTimeAdmin = () => {
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
-                            <h5>
+                              <h5>
                                 {status === "รอการอนุมัติ 1" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success"><span>{status}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{status}</span>
+                                  </Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
                                 )}
                               </h5>
-                          </>
+                            </>
                           ),
                         },
                         {
@@ -593,7 +615,7 @@ const OverTimeAdmin = () => {
                           textAlignment: "center",
                           render: ({ result }) => (
                             <>
-                            <h5>
+                              <h5>
                                 {result === "รอการรายงาน" ? (
                                   <Badge bg="warning">
                                     <span className="text-white">{result}</span>
@@ -616,7 +638,7 @@ const OverTimeAdmin = () => {
                                   </Badge>
                                 )}
                               </h5>
-                          </>
+                            </>
                           ),
                         },
                         {
@@ -648,7 +670,7 @@ const OverTimeAdmin = () => {
                                 to={"/admin/overtime/view/" + blogs.id}
                                 className="btn btn-primary"
                               >
-                              <i className="fas fa-bars"></i>
+                                <i className="fas fa-bars"></i>
                               </Link>{" "}
                               <button
                                 className="btn btn-success"
