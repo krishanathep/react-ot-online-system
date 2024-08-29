@@ -336,12 +336,12 @@ const create = ({ prefix = "OT" }) => {
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   <br />
                                   <Controller
+                                  rules={{ required: true }}
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
                                       <DatePicker
                                         minDate={dayjs().toDate()}
-                                        required
                                         className="form-control"
                                         placeholderText="กรุณาเลือกวันที่"
                                         onChange={(date) =>
