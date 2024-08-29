@@ -42,7 +42,7 @@ const create = ({ prefix = "OT" }) => {
   const [isLoading, setLoading] = useState(true);
   const [loading, setLoading2] = useState(false)
 
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(0);
   const [timeList, setTimeList] = useState([]);
   const [timeList_2, setTimeList_2] = useState([]);
 
@@ -130,7 +130,8 @@ const create = ({ prefix = "OT" }) => {
           key
       )
       .then((res) => {
-        setTime(res.data.time.ot_total);
+        //setTime(res.data.time.ot_total);
+       reset({total_date: res.data.time.ot_total})
       });
   };
 
@@ -434,34 +435,34 @@ const create = ({ prefix = "OT" }) => {
                                     </option>
                                     {/* OT ประเภท ทำงานเป็นกะ */}
                                     <option value="วันธรรมดา ก่อนเข้ากะ 1">
-                                      OT วันธรรมดา ประเภท 1 ก่อนเข้ากะ
+                                    OT วันธรรมดา ก่อนกะ 21.45
                                     </option>
                                     <option value="OT วันธรรมดา หลังกะ 1">
-                                      OT วันธรรมดา ประเภท 1 หลังกะ
+                                    OT วันธรรมดา หลังกะ 7.05
                                     </option>
                                     <option value="OT วันหยุดปกติ 1">
-                                      OT วันหยุด ประเภท 1 วันหยุดปกติ
+                                    OT วันหยุดปกติ 21.45-6.45
                                     </option>
                                     <option value="OT วันหยุด ก่อนเข้ากะ 1">
-                                      OT วันหยุด ประเภท 1 ก่อนเข้ากะ
+                                    OT วันหยุด ก่อนกะ 21.45
                                     </option>
                                     <option value="OT วันหยุด หลังกะ 1">
-                                      OT วันหยุด ประเภท 1 หลังกะ
+                                    OT วันหยุด หลังกะ 6.45
                                     </option>
                                     <option value="OT วันธรรมดา ก่อนเข้ากะ 2">
-                                      OT วันธรรมดา ประเภท 2 ก่อนเข้ากะ
+                                    OT วันธรรมดา ก่อนกะ 20.15
                                     </option>
                                     <option value="OT วันธรรมดา หลังกะ 2">
-                                      OT วันธรรมดา ประเภท 2 หลังกะ
+                                    OT วันธรรมดา หลังกะ 5.35
                                     </option>
                                     <option value="OT วันหยุดปกติ 2">
-                                      OT วันหยุด ประเภท 2 วันหยุดปกติ
+                                    OT วันหยุดปกติ 20.15-5.15
                                     </option>
                                     <option value="OT วันหยุด ก่อนเข้ากะ 2">
-                                      OT วันหยุด ประเภท 2 ก่อนเข้ากะ
+                                    OT วันหยุด ก่อนกะ 20.15
                                     </option>
                                     <option value="OT วันหยุด หลังกะ 2">
-                                      OT วันหยุด ประเภท 2 หลังกะ
+                                    OT วันหยุด หลังกะ 5.15
                                     </option>
                                   </select>
                                   {errors.ot_type && (
@@ -530,7 +531,7 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">จำนวนชั่วโมง</label>
+                                  <label htmlFor="">จำนวนชั่วโมง (ชม.)</label>
                                   <input
                                     //readOnly
                                     placeholder="0"
@@ -539,7 +540,6 @@ const create = ({ prefix = "OT" }) => {
                                       required: true,
                                     })}
                                     type="text"
-                                    value={time}
                                   />
                                   {errors.total_date && (
                                     <span className="text-danger">

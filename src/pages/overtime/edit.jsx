@@ -171,10 +171,10 @@ const edit = () => {
                                   <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
                                 </td>
                                 <td>
-                                  <b>เวลาทั้งหมด</b> : {overtimes.total_date}
+                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : {empcount} คน
+                                <b>พนักงาน</b> : {empcount} คน <b>รวมทั้งหมด</b> : {overtimes.total_date*empcount} ชม.
                                 </td>
                               </tr>
                             </thead>
