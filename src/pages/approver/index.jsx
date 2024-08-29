@@ -18,6 +18,8 @@ const Approver = () => {
   const [overtimes, setOvertimes] = useState([]);
   const [approver, setApprover] = useState([]);
 
+  const [selectedRecords, setSelectedRecords] = useState([]);
+
   useEffect(() => {
     setPage(1);
   }, [pageSize]);
@@ -226,6 +228,7 @@ const Approver = () => {
       }
     });
   };
+
   // Approver 4 update status
   const handleApproverSubmit4 = (blogs, data) => {
     Swal.fire({
@@ -345,18 +348,18 @@ const Approver = () => {
     });
   };
 
-  const handleRejectSubmit = async (blogs, data) => {
+  const handleRejectSubmit = async (blogs) => {
     await Swal.fire({
       title: "ยืนยันการไม่อนุมัติ OT",
       text: "กรุณากรอกเหตุผล หากท่านไม่ต้องการอนุมัติ ",
       icon: "error",
-      input: "text",
-      inputValidator: (value) => {
-        if (!value) {
-          return 'You need to write something!';
-        }
-      },
-      inputPlaceholder: "Enter your text here",
+      // input: "text",
+      // inputValidator: (value) => {
+      //   if (!value) {
+      //     return 'You need to write something!';
+      //   }
+      // },
+      //inputPlaceholder: "Enter your text here",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -370,16 +373,18 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        setLoading(true)
         axios
           .put(
             import.meta.env.VITE_API_KEY +
               "/api/otrequest-reject/" +
-              blogs.id,
-            data, {text:value}
+              blogs.id
+            // data, {text:value}
           )
           .then((res) => {
             console.log(res);
             getData();
+            setLoading(false)
           })
           .catch((error) => {
             console.log(error);
@@ -770,6 +775,8 @@ const Approver = () => {
                       onPageChange={(p) => setPage(p)}
                       recordsPerPageOptions={PAGE_SIZES}
                       onRecordsPerPageChange={setPageSize}
+                      selectedRecords={selectedRecords}
+                      onSelectedRecordsChange={setSelectedRecords}
                     />
                   </div>
                 </div>

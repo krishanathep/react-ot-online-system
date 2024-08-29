@@ -13,7 +13,7 @@ import axios from "axios";
 const create = ({ prefix = "OT" }) => {
   const [id, setId] = useState("");
 
-  const [lock, SetLock] = useState(false);
+  const [lock, SetLock] = useState(true);
 
   const {
     register,
@@ -32,7 +32,7 @@ const create = ({ prefix = "OT" }) => {
     // },
   });
 
-  const [nullTable, setNullTable] = useState(false);
+  const [nullTable, setNullTable] = useState(true);
 
   const [approver, setApprover] = useState([]);
   const userDetail = useAuthUser();
@@ -82,6 +82,7 @@ const create = ({ prefix = "OT" }) => {
       append({ option: item });
     });
     setNullTable(false);
+    SetLock(false)
   };
 
   const getEmployees = async () => {

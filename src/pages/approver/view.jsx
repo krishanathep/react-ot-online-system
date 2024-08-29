@@ -8,6 +8,7 @@ const view = () => {
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
+  const [empcount, setEmpcount] = useState(0);
 
   //stepper complete state
   const [complete_1, setComplete_1] = useState(false);
@@ -23,6 +24,7 @@ const view = () => {
       .then((res) => {
         setOvertimes(res.data.data);
         setMemebers(res.data.data.employees);
+        setEmpcount(res.data.data.employees.length);
         
          //stepper complete
          if(res.data.data.status==='รอการอนุมัติ 1'){
@@ -111,7 +113,7 @@ const view = () => {
                                   <b>เวลาทั้งหมด</b> : {overtimes.total_date}
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : 1 คน
+                                  <b>จำนวนพนักงาน</b> : {empcount} คน
                                 </td>
                               </tr>
                             </thead>
