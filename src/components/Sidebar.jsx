@@ -115,6 +115,12 @@ export default function Sidebar() {
                       <p>Office-Car</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/admin/approver" className="nav-link">
+                      <i className="nav-icon fas fa-user-check"></i>
+                      <p>Approver</p>
+                    </Link>
+                  </li>
                 </>
               ) : null}
             </ul>

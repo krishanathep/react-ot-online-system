@@ -28,7 +28,7 @@ const edit = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount] = useState(0);
-  const [price, setPrice] = useState("xxxxxxx");
+  //const [price, setPrice] = useState("xxxxxxx");
 
   const getData = async () => {
     await axios

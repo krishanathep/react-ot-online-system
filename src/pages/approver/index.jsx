@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -54,9 +54,7 @@ const Approver = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-code?data=" +
-          key
+        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-code?data=" + key
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -73,9 +71,7 @@ const Approver = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-name?data=" +
-          key
+        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-name?data=" + key
       )
       .then((res) => {
         setOvertimes(res.data.otrequest);
@@ -111,9 +107,7 @@ const Approver = () => {
 
     await axios
       .get(
-        `${
-          import.meta.env.VITE_API_KEY
-        }/api/otrequests-filter-status?dept=${
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-status?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -132,9 +126,7 @@ const Approver = () => {
 
     await axios
       .get(
-        `${
-          import.meta.env.VITE_API_KEY
-        }/api/otrequests-filter-date?dept=${
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-date?dept=${
           userDatail().dept
         }&data=${key}`
       )
@@ -149,7 +141,7 @@ const Approver = () => {
   useEffect(() => {
     getData();
     getApprover();
-  }, [page, pageSize]);
+  }, [page, pageSize, selectedRecords]);
 
   // Approver 2 update status
   const handleApproverSubmit2 = (blogs, data) => {
@@ -170,7 +162,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -181,7 +173,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -209,7 +201,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -220,7 +212,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -248,7 +240,7 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -259,7 +251,7 @@ const Approver = () => {
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -373,18 +365,16 @@ const Approver = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
-            import.meta.env.VITE_API_KEY +
-              "/api/otrequest-reject/" +
-              blogs.id
+            import.meta.env.VITE_API_KEY + "/api/otrequest-reject/" + blogs.id
             // data, {text:value}
           )
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -403,8 +393,7 @@ const Approver = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequest-export",
+        import.meta.env.VITE_API_KEY + "/api/otrequest-export",
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -439,6 +428,10 @@ const Approver = () => {
       .then((res) => {
         setApprover(res.data.approver);
       });
+  };
+
+  const handleApproveAll = async () => {
+    //alert(JSON.stringify());
   };
 
   return (
@@ -542,6 +535,14 @@ const Approver = () => {
                                   />
                                 </div>
                               </div>
+                              <div className="col-md-12">
+                                <button 
+                                onClick={handleApproveAll}
+                                className="btn btn-info">
+                                  <i className="fas fa-check-circle"></i>{" "}
+                                  Approve
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -593,15 +594,23 @@ const Approver = () => {
                           textAlignment: "center",
                           render: ({ status }) => (
                             <>
-                               <h5>
+                              <h5>
                                 {status === "รอการอนุมัติ 1" ? (
-                                  <Badge bg="warning"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="warning">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 2" ? (
-                                  <Badge bg="secondary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "รอการอนุมัติ 3" ? (
-                                  <Badge bg="primary"><span className="text-white">{status}</span></Badge>
+                                  <Badge bg="primary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
                                 ) : status === "ผ่านการอนุมัติ" ? (
-                                  <Badge bg="success"><span>{status}</span></Badge>
+                                  <Badge bg="success">
+                                    <span>{status}</span>
+                                  </Badge>
                                 ) : (
                                   <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
                                 )}
@@ -777,6 +786,7 @@ const Approver = () => {
                       onRecordsPerPageChange={setPageSize}
                       selectedRecords={selectedRecords}
                       onSelectedRecordsChange={setSelectedRecords}
+                      //isRecordSelectable={(records) => records.data.status = "รอการอนุมัติ 3"}
                     />
                   </div>
                 </div>

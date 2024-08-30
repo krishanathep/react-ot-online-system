@@ -285,7 +285,7 @@ const create = ({ prefix = "OT" }) => {
                                     id="sel1"
                                     //readOnly
                                     //value={}
-                                    {...register("name_app_3", {
+                                    {...register("department_name", {
                                       required: true,
                                     })}
                                   />
