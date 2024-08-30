@@ -141,6 +141,7 @@ const view = () => {
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
+                                <th>ค่าเดินทาง</th>
                                 <th>หมายเหตุ</th>
                               </tr>
                             </thead>
@@ -208,7 +209,7 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>
-                                    {/* <td>{member.bus_price}</td> */}
+                                    <td>{member.bus_price}</td>
                                     <td className="text-secondary">
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>

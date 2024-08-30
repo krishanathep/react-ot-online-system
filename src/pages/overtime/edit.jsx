@@ -28,7 +28,6 @@ const edit = () => {
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount] = useState(0);
-  //const [price, setPrice] = useState("xxxxxxx");
 
   const getData = async () => {
     await axios
@@ -42,18 +41,6 @@ const edit = () => {
         const bus = res.data.data.employees;
 
         setMemebers(bus.filter((b) => b.bus_stations !== "no"));
-
-        if (ot.bus_stations === "จุดที่ 1" && bus.bus_point_1 !== 0) {
-          setPrice(0);
-        } else if (ot.bus_stations === "จุดที่ 2" && bus.bus_point_2 !== 0) {
-          setPrice(0);
-        } else if (ot.bus_stations === "จุดที่ 3" && bus.bus_point_3 !== 0) {
-          setPrice(0);
-        } else if (ot.bus_stations === "จุดที่ 4" && bus.bus_point_4 !== 0) {
-          setPrice(0);
-        } else {
-          setPrice(30);
-        }
 
         reset({
           test: res.data.data.employees.map((employee) => ({
