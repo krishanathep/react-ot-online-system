@@ -396,7 +396,7 @@ const edit = () => {
                               <div className="step-counter text-white">
                                 <i className="fas fa-check"></i>
                               </div>
-                              <div className="step-name">รายงานผล</div>
+                              <div className="step-name">การรายงานผล</div>
                             </div>
                             <div
                               className={`stepper-item ${
