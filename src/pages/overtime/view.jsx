@@ -87,7 +87,7 @@ const view = () => {
                             <thead>
                               <tr>
                                 <td>
-                                  <b>เลขที่คำร้อง</b> : {overtimes.ot_member_id} total : {overtimes.total_date}
+                                  <b>เลขที่คำร้อง</b> : {overtimes.ot_member_id}
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
