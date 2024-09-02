@@ -430,8 +430,25 @@ const Approver = () => {
       });
   };
 
-  const handleApproveAll = async () => {
-    //alert(JSON.stringify());
+  // Approve all by selected
+  const handleApproveAll = async (data) => {
+
+    const selected = selectedRecords.map((r) => r.id);
+
+    console.log(selected);
+
+    await axios
+      .put(
+        import.meta.env.VITE_API_KEY + "/api/otrequest-approve-all/" +  selected,data
+      )
+      .then((res) => {
+        console.log(res);
+        getData();
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -535,14 +552,16 @@ const Approver = () => {
                                   />
                                 </div>
                               </div>
-                              {/* <div className="col-md-12">
-                                <button 
-                                onClick={handleApproveAll}
-                                className="btn btn-info">
+                              <div className="col-md-12">
+                                <button
+                                  onClick={handleApproveAll}
+                                  disabled={selectedRecords.length === 0}
+                                  className="btn btn-info"
+                                >
                                   <i className="fas fa-check-circle"></i>{" "}
                                   Approve
                                 </button>
-                              </div> */}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -786,7 +805,6 @@ const Approver = () => {
                       onRecordsPerPageChange={setPageSize}
                       selectedRecords={selectedRecords}
                       onSelectedRecordsChange={setSelectedRecords}
-                      //isRecordSelectable={(records) => records.data.status = "รอการอนุมัติ 3"}
                     />
                   </div>
                 </div>
