@@ -214,6 +214,7 @@ const create = ({ prefix = "OT" }) => {
     setId(generateId());
   }, [time, prefix]);
 
+  //loading with css
   if (loading === true) {
     return (
       <>
