@@ -93,9 +93,9 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/approver" className="nav-link">
-                    <i className="nav-icon fas fa-user-check"></i>
-                      <p>การอนุมัติ OT</p>
+                    <Link to="/overtime" className="nav-link">
+                      <i className="nav-icon fas fa-calendar-plus"></i>
+                      <p>ขออนุมัติ OT</p>
                     </Link>
                   </li>
                   <li className="nav-header">ADMIN MENU</li>
