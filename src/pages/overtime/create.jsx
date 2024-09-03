@@ -180,7 +180,7 @@ const create = ({ prefix = "OT" }) => {
       .then((res) => {
         reset({
           //create_name: res.data.approver.app_name_1,
-          department_name: res.data.approver.app_name_2,
+          department_name: res.data.approver.app_name_3,
           department: res.data.approver.agency,
           //name_app_1: res.data.approver.app_name_1,
           name_app_2: res.data.approver.app_name_2,
