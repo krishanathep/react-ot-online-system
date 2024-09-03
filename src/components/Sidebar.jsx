@@ -85,12 +85,20 @@ export default function Sidebar() {
               ) : null}
               {ruleAdmin ? (
                 <>
+                <li className="nav-header">MAIN MENU</li>
                 <li className="nav-item">
                     <Link to="/" className="nav-link">
                     <i className="nav-icon fas fa-tachometer-alt"></i>
                       <p>Dashboard</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/approver" className="nav-link">
+                    <i className="nav-icon fas fa-user-check"></i>
+                      <p>การอนุมัติ OT</p>
+                    </Link>
+                  </li>
+                  <li className="nav-header">ADMIN MENU</li>
                   <li className="nav-item">
                     <Link to="/admin/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>
