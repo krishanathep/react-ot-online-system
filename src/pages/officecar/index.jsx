@@ -91,36 +91,14 @@ const OfficeCar = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-lg-12">
-                        <div className="card shadow-none border">
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-md-3">
-                                <DatePicker
-                                  showIcon
-                                  //icon="fa fa-calendar"
-                                  className="form-control"
-                                  //isClearable
-                                  placeholderText="ค้นหาตามวันที่"
-                                  selected={startDate}
-                                  onChange={(date) => {
-                                    setStartDate(date);
-                                    dateFilter(
-                                      dayjs(date).format("YYYY-MM-DD")
-                                    );
-                                  }}
-                                  dateFormat="dd-MM-yyyy"
-                                />{" "} 
-                              </div>
-                              <div className="col-md-9">
-                              <div className="float-right">
-                              <Link to='/officecar/managecar' className="btn btn-success">
-                                  <i className="fas fa-edit"></i> จัดการรถรับส่ง
-                                </Link>
-                              </div>
-                              </div>
-                            </div>
-                          </div>
+                      <div className="col-md-12">
+                        <div className="float-right">
+                          <Link
+                            to="/officecar/edit"
+                            className="btn btn-success mb-3"
+                          >
+                            <i className="fas fa-edit"></i> จัดการข้อมูล
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -237,21 +215,7 @@ const OfficeCar = () => {
                           accessor: "end_date",
                           title: "เวลาสิ้นสุด",
                           textAlignment: "center",
-                          render: ({ end_date }) => (
-                            <>
-                              {end_date === "20.00" ? (
-                                <>
-                                  <Badge bg="success">{end_date}</Badge>
-                                </>
-                              ) : end_date === "22.00" ? (
-                                <>
-                                  <Badge bg="success">{end_date}</Badge>
-                                </>
-                              ) : (
-                                end_date
-                              )}
-                            </>
-                          ),
+                          render: ({ end_date }) => (end_date),
                         },
                         {
                           accessor: "bus_point_1",
@@ -269,39 +233,6 @@ const OfficeCar = () => {
                             </span>
                           ),
                         },
-                        // {
-                        //   accessor: "start_date",
-                        //   title: "เวลาเริ่มต้น",
-                        //   textAlignment: "center",
-                        //   render: ({ start_date }) => start_date + " น.",
-                        // },
-                        // {
-                        //   accessor: "end_date",
-                        //   title: "เวลาสิ้นสุด",
-                        //   textAlignment: "center",
-                        //   render: ({ end_date }) => end_date + " น.",
-                        // },
-                        // {
-                        //   accessor: "actions",
-                        //   textAlignment: "center",
-                        //   title: "ดำเนินการ",
-                        //   render: (blogs) => (
-                        //     <>
-                        //       {/* <Link
-                        //         to={"/officecar/edit/" + blogs.id}
-                        //         className="btn btn-primary"
-                        //       >
-                        //         <i className="fas fa-bars"></i>
-                        //       </Link>{" "} */}
-                        //       <Link
-                        //         to={"/officecar/edit/" + blogs.id}
-                        //         className="btn btn-info"
-                        //       >
-                        //         <i className="fas fa-edit"></i>
-                        //       </Link>{" "}
-                        //     </>
-                        //   ),
-                        // },
                       ]}
                       records={records}
                       minHeight={200}

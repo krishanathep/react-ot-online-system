@@ -23,7 +23,6 @@ import EmployeeCreate from "./pages/admin/employees/create";
 import TimeScan from "./pages/admin/timescan";
 import OvertimeAdmin from './pages/admin/overtime'
 import OverTimeViewAdmin from './pages/admin/overtime/view'
-import OfficeCarManage from './pages/officecar/manatecar'
 import ApproverMaster from "./pages/admin/approver";
 import ApproverMasterCreate from './pages/admin/approver/create'
 import ApproverMasterUpdate from './pages/admin/approver/update'
@@ -51,8 +50,7 @@ const RoutesPage = () => {
           <Route path="/approver" element={<Approver />} />
           <Route path="/approver/view/:id" element={<AppView />} />
           <Route path="/officecar" element={<OfficeCar/>} />
-          <Route path="/officecar/edit/:id" element={<OfficeCarEdit/>} />
-          <Route path="/officecar/managecar" element={<OfficeCarManage/>} />
+          <Route path="/officecar/edit" element={<OfficeCarEdit/>} />
 
           {/* Route ADIMIN */}
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />

@@ -114,13 +114,13 @@ export default function Sidebar() {
                   <li className="nav-item">
                     <Link to="/admin/timescan" className="nav-link">
                       <i className="nav-icon fas fa-business-time"></i>
-                      <p>Time-Scan</p>
+                      <p>Time-scan</p>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to="/officecar" className="nav-link">
                       <i className="nav-icon fas fa-truck"></i>
-                      <p>Office-Car</p>
+                      <p>Office-car</p>
                     </Link>
                   </li>
                   <li className="nav-item">
