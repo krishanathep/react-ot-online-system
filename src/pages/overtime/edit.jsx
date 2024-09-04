@@ -413,8 +413,7 @@ const edit = () => {
                               className="btn btn-primary"
                               onClick={handleSubmit(handleUpdateSubmit)}
                               disabled={
-                                overtimes.status === "ผ่านการอนุมัติ" &&
-                                overtimes.result === "รอการปิด (ส่วน)"
+                                overtimes.status === "ผ่านการอนุมัติ"
                                   ? false
                                   : true
                               }
