@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { useForm } from "react-hook-form"
 import { useSignIn,useAuthUser } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
-import Preloader from "../../components/Preloader";
+//import Preloader from "../../components/Preloader";
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import logo from '/assets/imgs/logo.png'
@@ -52,10 +52,21 @@ export default function Signin() {
     }
   }
 
-  if(loading === true) {
-    return(
-      <Preloader/>
-    )
+  // if(loading === true) {
+  //   return(
+  //     <Preloader/>
+  //   )
+  // }
+
+   //loading with css
+   if (loading === true) {
+    return (
+      <>
+        <div className="loading-state">
+          <div className="loading"></div>
+        </div>
+      </>
+    );
   }
 
   return (

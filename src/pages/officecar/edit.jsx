@@ -21,6 +21,8 @@ const manageCar = () => {
     },
   });
 
+  const [loading,setLoading]=useState(false)
+
   const userDetail = useAuthUser();
   dayjs.extend(relativeTime);
 
@@ -37,6 +39,7 @@ const manageCar = () => {
   );
 
   const getData = async () => {
+    setLoading(true)
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
@@ -56,9 +59,11 @@ const manageCar = () => {
           ot_02.filter((o, index) => index === 0).map((ot, index) => ot.id)
         );
       });
+      setLoading(false)
   };
 
   const dateFilter = async (date) => {
+    setLoading(true)
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
@@ -82,6 +87,7 @@ const manageCar = () => {
           ot_02.filter((o, index) => index === 0).map((ot, index) => ot.id)
         );
       });
+      setLoading(false)
   };
 
   const submitCarPrice_01 = async (data) => {
@@ -137,6 +143,16 @@ const manageCar = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  if (loading === true) {
+    return (
+      <>
+        <div className="loading-state">
+          <div className="loading"></div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
