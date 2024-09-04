@@ -3,9 +3,11 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuthUser } from "react-auth-kit";
 import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 const manageCar = () => {
   const {
@@ -18,6 +20,9 @@ const manageCar = () => {
       test: [{}],
     },
   });
+
+  const userDetail = useAuthUser();
+  dayjs.extend(relativeTime);
 
   const [priceID_01, setPieceID_01] = useState("");
   const [priceID_02, setPieceID_02] = useState("");
@@ -158,7 +163,7 @@ const manageCar = () => {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">
-                <div className="card card-outline card-primary">
+                <div className="card">
                   <div className="card-body">
                     <div className="col-md-12">
                       <b>วันที่ทำ OT : </b>
@@ -190,8 +195,20 @@ const manageCar = () => {
                               key={ot.id}
                             >
                               <div className="card-body">
-                                <b>หมายเลข OT : </b>
+                               <div className="row">
+                                <div className="col-md-4">
+                                <b>หมายเลข : </b>
                                 <span>{ot.ot_member_id}</span>{" "}
+                                </div>
+                                <div className="col-md-4">
+                                <b>แก้ไขล่าสุด : </b>
+                                <span>{dayjs(ot.updated_at).format("HH:mm:ss")}</span>{" "}น.
+                                </div>
+                                <div className="col-md-4">
+                                <b>แก้ไขโดย : </b>
+                                <span>{userDetail().name}</span>{" "}
+                                </div>
+                               </div>
                               </div>
                               <div className="col-md-12">
                                 <form
@@ -415,9 +432,21 @@ const manageCar = () => {
                           key={ot.id}
                         >
                           <div className="card-body">
-                            <b>หมายเลข OT : </b>
-                            <span>{ot.ot_member_id}</span>
-                          </div>
+                               <div className="row">
+                                <div className="col-md-4">
+                                <b>หมายเลข : </b>
+                                <span>{ot.ot_member_id}</span>{" "}
+                                </div>
+                                <div className="col-md-4">
+                                <b>แก้ไขล่าสุด : </b>
+                                <span>{dayjs(ot.updated_at).format("HH:mm:ss")}</span>{" "}น.
+                                </div>
+                                <div className="col-md-4">
+                                <b>แก้ไขโดย : </b>
+                                <span>{userDetail().name}</span>{" "}
+                                </div>
+                               </div>
+                              </div>
                           <div className="col-md-12">
                             <form onSubmit={handleSubmit(submitCarPrice_02)}>
                               <table className="table table-bordered">
