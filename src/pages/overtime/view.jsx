@@ -117,10 +117,18 @@ const view = () => {
                                   <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
                                 </td>
                                 <td>
-                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
+                                  <b>เวลารวม</b> : {overtimes.total_date}{" "}
+                                  {overtimes.total_date === "50"
+                                    ? "นาที"
+                                    : "ชม."}{" "}
                                 </td>
                                 <td>
-                                  <b>พนักงาน</b> : {empcount} คน <b>รวมทั้งหมด</b> : {overtimes.total_date*empcount} ชม.
+                                  <b>พนักงาน</b> : {empcount} คน{" "}
+                                  <b>รวมทั้งหมด</b> :{" "}
+                                  {overtimes.total_date * empcount === 50
+                                    ? overtimes.total_date * empcount + " นาที"
+                                    : overtimes.total_date * empcount +
+                                      " ชม."}{" "}
                                 </td>
                               </tr>
                             </thead>
@@ -172,7 +180,9 @@ const view = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? dayjs(t.time).format('HH.mm') : null}
+                                              {index === 0
+                                                ? dayjs(t.time).format("HH.mm")
+                                                : null}
                                             </span>
                                           );
                                         })}{" "}
@@ -186,7 +196,9 @@ const view = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 1 ? dayjs(t.time).format('HH.mm') : null}
+                                              {index === 1
+                                                ? dayjs(t.time).format("HH.mm")
+                                                : null}
                                             </span>
                                           );
                                         })}
@@ -200,14 +212,17 @@ const view = () => {
                                     </td>
                                     {/* คำนวนเวลาเริ่มต้น ลบ เวลาเลิกงานจริง */}
                                     <td className="text-secondary">
-                                      {
-
-                                      member.out_time === null ? (
+                                      {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
-                                        Math.round((member.out_time - overtimes.start_date)*100) / 100  + " ชม."
-                                      )
-                                      }
+                                        Math.round(
+                                          (member.out_time -
+                                            overtimes.start_date) *
+                                            100
+                                        ) /
+                                          100 +
+                                        " ชม."
+                                      )}
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     <td>{member.bus_price}</td>

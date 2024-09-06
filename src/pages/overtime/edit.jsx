@@ -161,7 +161,9 @@ const edit = () => {
                                   <b>เวลารวม</b> : {overtimes.total_date} ชม.
                                 </td>
                                 <td>
-                                <b>พนักงาน</b> : {empcount} คน <b>รวมทั้งหมด</b> : {overtimes.total_date*empcount} ชม.
+                                  <b>พนักงาน</b> : {empcount} คน{" "}
+                                  <b>รวมทั้งหมด</b> :{" "}
+                                  {overtimes.total_date * empcount} ชม.
                                 </td>
                               </tr>
                             </thead>
@@ -180,7 +182,7 @@ const edit = () => {
                                 <th>ทำได้จริง</th>
                                 <th>ข้อมูลสแกนนิ้ว</th>
                                 <th>เลิกงานจริง</th>
-                                {/* <th>รวมเวลา</th> */}
+                                <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
                                 <th>ค่าเดินทาง</th>
                                 <th>หมายเหตุ</th>
@@ -262,7 +264,19 @@ const edit = () => {
                                         </span>
                                       )}
                                     </td>
-                                    {/* <td className="text-secondary">{(member.out_time===null)?(<i className="fas fa-pencil-alt"></i>):(member.out_time - overtimes.start_date)+" ชม."}</td> */}
+                                    <td>
+                                      {member.out_time === null ? (
+                                        "0"
+                                      ) : (
+                                        Math.round(
+                                          (member.out_time -
+                                            overtimes.start_date) *
+                                            100
+                                        ) /
+                                          100 +
+                                        " ชม."
+                                      )}
+                                    </td>
                                     <td>{member.bus_stations}</td>
                                     <td>
                                       <input

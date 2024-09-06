@@ -106,6 +106,13 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/officecar" className="nav-link">
+                      <i className="nav-icon fas fa-truck"></i>
+                      <p>Office-car</p>
+                    </Link>
+                  </li>
+                  <li className="nav-header">OTHER MENU</li>
+                  <li className="nav-item">
                     <Link to="/admin/employees" className="nav-link">
                       <i className="nav-icon fas fa-users"></i>
                       <p>Employees</p>
@@ -115,12 +122,6 @@ export default function Sidebar() {
                     <Link to="/admin/timescan" className="nav-link">
                       <i className="nav-icon fas fa-business-time"></i>
                       <p>Time-scan</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/officecar" className="nav-link">
-                      <i className="nav-icon fas fa-truck"></i>
-                      <p>Office-car</p>
                     </Link>
                   </li>
                   <li className="nav-item">
