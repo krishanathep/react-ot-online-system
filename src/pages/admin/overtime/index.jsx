@@ -642,11 +642,11 @@ const OverTimeAdmin = () => {
                           ),
                         },
                         {
-                          accessor: "created_at",
-                          title: "วันที่จัดทำ",
+                          accessor: "ot_date",
+                          title: "วันที่ทำ OT",
                           textAlignment: "center",
-                          render: ({ created_at }) =>
-                            dayjs(created_at).format("DD-MM-YYYY"),
+                          render: ({ ot_date }) =>
+                            dayjs(ot_date).format("DD-MM-YYYY"),
                         },
                         // {
                         //   accessor: "start_date",
