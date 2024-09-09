@@ -195,7 +195,7 @@ const OverTimeAdmin = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -206,7 +206,7 @@ const OverTimeAdmin = () => {
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -233,7 +233,7 @@ const OverTimeAdmin = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        setLoading(true)
+        setLoading(true);
         axios
           .put(
             import.meta.env.VITE_API_KEY +
@@ -244,7 +244,7 @@ const OverTimeAdmin = () => {
           .then((res) => {
             console.log(res);
             getData();
-            setLoading(false)
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -648,18 +648,30 @@ const OverTimeAdmin = () => {
                           render: ({ ot_date }) =>
                             dayjs(ot_date).format("DD-MM-YYYY"),
                         },
-                        // {
-                        //   accessor: "start_date",
-                        //   title: "เวลาเริ่มต้น",
-                        //   textAlignment: "center",
-                        //   render: ({ start_date }) => start_date + " น.",
-                        // },
-                        // {
-                        //   accessor: "end_date",
-                        //   title: "เวลาสิ้นสุด",
-                        //   textAlignment: "center",
-                        //   render: ({ end_date }) => end_date + " น.",
-                        // },
+                        {
+                          accessor: "otrequests",
+                          title: "จุดรถรับส่ง",
+                          textAlignment: "center",
+                          render: (otrequests) => (
+                            <span>
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_1 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_2 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_3 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_4 : null
+                              )}
+                            </span>
+                          ),
+                        },
                         {
                           accessor: "actions",
                           textAlignment: "center",

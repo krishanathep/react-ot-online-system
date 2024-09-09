@@ -1,118 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
+import { DataTable } from "mantine-datatable";
+import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
+import { Link } from "react-router-dom";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
-import axios from "axios";
+
 import dayjs from "dayjs";
+import axios from "axios";
 
-const manageCar = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      test: [{}],
-    },
-  });
+const PAGE_SIZES = [10, 20, 30];
 
-  const [employees_1, setEmployees_1] = useState([]);
-  const [employees_2, setEmployees_2] = useState([]);
+const OfficeCar = () => {
+  //user login
+  const userDatail = useAuthUser();
 
-  const userdetail = useAuthUser();
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+  const [overtimes, setOvertimes] = useState([]);
+  const [startDate, setStartDate] = useState("");
 
-  const [startdate, setStartDate] = useState(
-    new dayjs(Date()).format("YYYY-MM-DD")
-  );
+  useEffect(() => {
+    setPage(1);
+  }, [pageSize]);
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [records, setRecords] = useState(overtimes.slice(0, pageSize));
 
   const getData = async () => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
     await axios
-      .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        const otrequest1 = res.data.employees.filter(
-          (e) =>
-            (e.ot_create_date === startdate && e.out_time === "20.00") ||
-            (e.ot_create_date === startdate && e.out_time === "19.50")
-        );
-        setEmployees_1(otrequest1);
-        const otrequest2 = res.data.employees.filter(
-          (e) =>
-            (e.ot_create_date === startdate && e.out_time === "22.00") ||
-            (e.ot_create_date === startdate && e.out_time === "21.50")
-        );
-        setEmployees_2(otrequest2);
-        reset({
-          test: res.data.employees
-            .filter(
-              (e) =>
-                (e.ot_create_date === startdate && e.out_time === "20.00") ||
-                (e.ot_create_date === startdate && e.out_time === "19.50")
-            )
-            .map((employee) => ({
-              id: employee.id,
-              //bus_price: employee.bus_price,
-            })),
-          test_2: res.data.employees
-            .filter(
-              (e) =>
-                (e.ot_create_date === startdate && e.out_time === "22.00") ||
-                (e.ot_create_date === startdate && e.out_time === "21.50")
-            )
-            .map((employee) => ({
-              id: employee.id,
-              //bus_price: employee.bus_price,
-              bus_point_1: employee.bus_point_1,
-              bus_point_2: employee.bus_point_2,
-              bus_point_3: employee.bus_point_3,
-              bus_point_4: employee.bus_point_4,
-            })),
-        });
+        setOvertimes(res.data.data);
+        setRecords(res.data.data.slice(from, to));
+        setLoading(false);
       });
   };
 
-  const handleUpdate_01 = async (data) => {
-    //alert(JSON.stringify(data))
-    await axios
-      .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update",
-        data
-      )
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Your Office Car has been updated",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        console.log(res);
-      });
-  };
+  //filter function by date
+  const dateFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
 
-  const handleUpdate_02 = async (data) => {
-    //alert(JSON.stringify(data))
     await axios
-      .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update2",
-        data
+      .get(
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-date?dept=${
+          userDatail().dept
+        }&data=${key}`
       )
       .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "Your Office Car has been updated",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        console.log(res);
+        setOvertimes(res.data.otrequest);
+        console.log(overtimes);
+        setRecords(res.data.otrequest.slice(from, to));
+        setLoading(false);
       });
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [page, pageSize]);
 
   return (
     <>
@@ -121,402 +71,187 @@ const manageCar = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">จัดการรถรับส่ง</h1>
+                <h1 className="m-0">การขออนุมัติ OT ทั้งหมด</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item">รถรับส่งพนักงาน</li>
+                  <li className="breadcrumb-item active">การขออนุมัติ</li>
                 </ol>
               </div>
             </div>
           </div>
         </div>
-        <div className="content-wraper">
+        <div className="content">
           <div className="container-fluid">
-            <div className="col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <div className="col-md-12">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="card card-outline card-primary">
+                  <div className="card-body">
                     <div className="row">
-                      <div className="col-md-4">
-                        <h5>เวลาที่เลิกทำ OT : 19.50 น. - 20.00 น.</h5>
+                      <div className="col-md-12">
+                        <div className="float-right">
+                          <Link
+                            to="/officecar/edit"
+                            className="btn btn-success mb-3"
+                          >
+                            <i className="fas fa-edit"></i> จัดการข้อมูล
+                          </Link>
+                        </div>
                       </div>
                     </div>
+                    <DataTable
+                      style={{
+                        fontFamily: "Prompt",
+                      }}
+                      withBorder
+                      highlightOnHover
+                      fontSize={"md"}
+                      verticalSpacing="md"
+                      paginationSize="md"
+                      withColumnBorders
+                      fetching={loading}
+                      idAccessor="id"
+                      columns={[
+                        {
+                          accessor: "index",
+                          title: "#",
+                          textAlignment: "center",
+                          width: 80,
+                          render: (record) => records.indexOf(record) + 1,
+                        },
+                        {
+                          accessor: "ot_member_id",
+                          title: "เลขที่คำร้อง",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "create_name",
+                          title: "ผู้ควบคุมงาน",
+                          textAlignment: "center",
+                        },
+                        // {
+                        //   accessor: "dept",
+                        //   title: "แผนก",
+                        //   textAlignment: "center",
+                        // },
+                        {
+                          accessor: "department",
+                          title: "หน่วยงาน",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "status",
+                          title: "สถานะการอนุมัติ",
+                          textAlignment: "center",
+                          render: ({ status }) => (
+                            <>
+                              <h5>
+                                {status === "รอการอนุมัติ 1" ? (
+                                  <Badge bg="warning">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
+                                ) : status === "รอการอนุมัติ 2" ? (
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
+                                ) : status === "รอการอนุมัติ 3" ? (
+                                  <Badge bg="primary">
+                                    <span className="text-white">{status}</span>
+                                  </Badge>
+                                ) : status === "ผ่านการอนุมัติ" ? (
+                                  <Badge bg="success">
+                                    <span>{status}</span>
+                                  </Badge>
+                                ) : (
+                                  <Badge bg="danger">ไม่ผ่านการอนุมัติ</Badge>
+                                )}
+                              </h5>
+                            </>
+                          ),
+                        },
+                        {
+                          accessor: "result",
+                          title: "สถานะรายงาน",
+                          textAlignment: "center",
+                          render: ({ result }) => (
+                            <>
+                              <h5>
+                                {result === "รอการรายงาน" ? (
+                                  <Badge bg="warning">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ส่วน)" ? (
+                                  <Badge bg="secondary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "รอการปิด (ผจก)" ? (
+                                  <Badge bg="primary">
+                                    <span className="text-white">{result}</span>
+                                  </Badge>
+                                ) : result === "ปิดการรายงาน" ? (
+                                  <Badge bg="success">
+                                    <span>{result}</span>
+                                  </Badge>
+                                ) : (
+                                  <Badge bg="danger">
+                                    <span>{result}</span>
+                                  </Badge>
+                                )}
+                              </h5>
+                            </>
+                          ),
+                        },
+                        {
+                          accessor: "ot_date",
+                          title: "วันที่ทำ OT",
+                          textAlignment: "center",
+                          render: ({ ot_date }) =>
+                            dayjs(ot_date).format("DD-MM-YYYY"),
+                        },
+                        {
+                          accessor: "end_date",
+                          title: "เวลาสิ้นสุด",
+                          textAlignment: "center",
+                          render: ({ end_date }) => (end_date),
+                        },
+                        {
+                          accessor: "otrequests",
+                          title: "จุดรถรับส่ง",
+                          textAlignment: "center",
+                          render: (otrequests) => (
+                            <span>
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_1 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_2 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_3 : null
+                              )}{" "}
+                              : {""}
+                              {otrequests.employees.map((e, index) =>
+                                index === 0 ? e.bus_point_4 : null
+                              )}
+                            </span>
+                          ),
+                        },
+                      ]}
+                      records={records}
+                      minHeight={200}
+                      totalRecords={overtimes.length}
+                      recordsPerPage={pageSize}
+                      page={page}
+                      onPageChange={(p) => setPage(p)}
+                      recordsPerPageOptions={PAGE_SIZES}
+                      onRecordsPerPageChange={setPageSize}
+                    />
                   </div>
-                  <form onSubmit={handleSubmit(handleUpdate_01)}>
-                    <table className="table table-bordered mt-2">
-                      <thead>
-                        <tr align="center">
-                          <th>#</th>
-                          <th>รหัสพนักงาน</th>
-                          <th>ชื่อพนักงาน</th>
-                          <th>จุดรถรับส่ง 1</th>
-                          <th>จุดรถรับส่ง 2</th>
-                          <th>จุดรถรับส่ง 3</th>
-                          <th>จุดรถรับส่ง 4</th>
-                          <th>วันที่ทำ OT</th>
-                          <th>เวลาเลิก OT</th>
-                          <th>ค่าเดินทาง</th>
-                          <th>แก้ไขล่าสุด</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {employees_1.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
-                            <td>{e.code}</td>
-                            <td>{e.emp_name}</td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 1" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 2" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 3" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 4" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
-                            </td>
-                            <td>{e.out_time} </td>
-                            <td width={100} align="center">
-                              <input
-                                size={1}
-                                className="form-control"
-                                type="text"
-                                value={
-                                  e.bus_stations === "จุดที่ 1" &&
-                                  e.bus_point_1 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 2" &&
-                                      e.bus_point_2 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 3" &&
-                                      e.bus_point_3 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 4" &&
-                                      e.bus_point_4 !== "0"
-                                    ? "0"
-                                    : "30"
-                                }
-                                {...register(`test.${index}.bus_price`, {
-                                  required: false,
-                                })}
-                              />
-                            </td>
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
-                          </tr>
-                        ))}
-                        <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_1", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_1.filter(
-                                    (e) => e.bus_stations === "จุดที่ 1"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_2", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_1.filter(
-                                    (e) => e.bus_stations === "จุดที่ 2"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_3", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_1.filter(
-                                    (e) => e.bus_stations === "จุดที่ 3"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_4", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_1.filter(
-                                    (e) => e.bus_stations === "จุดที่ 4"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <button
-                      type="submit"
-                      className="btn btn-primary mt-2 float-right"
-                    >
-                      <i className="fas fa-save"> บันทึก</i>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-12">
-              <div className="card">
-                <div className="card-body">
-                  <div className="col-md-12">
-                    <div className="row">
-                      <div className="col-md-4">
-                        <h5>เวลาที่เลิกทำ OT : 21.50 น. - 22.00 น.</h5>
-                      </div>
-                    </div>
-                  </div>
-                  <form onSubmit={handleSubmit(handleUpdate_02)}>
-                    <table className="table table-bordered mt-2">
-                      <thead>
-                        <tr align="center">
-                          <th>#</th>
-                          <th>รหัสพนักงาน</th>
-                          <th>ชื่อพนักงาน</th>
-                          <th>จุดรถรับส่ง 1</th>
-                          <th>จุดรถรับส่ง 2</th>
-                          <th>จุดรถรับส่ง 3</th>
-                          <th>จุดรถรับส่ง 4</th>
-                          <th>วันที่ทำ OT</th>
-                          <th>เวลาเลิก OT</th>
-                          <th>ค่าเดินทาง</th>
-                          <th>แก้ไขล่าสุด</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {employees_2.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
-                            <td>{e.code}</td>
-                            <td>{e.emp_name}</td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 1" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 2" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 3" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {e.bus_stations === "จุดที่ 4" ? (
-                                <i className="fas fa-map-marker-alt text-danger"></i>
-                              ) : (
-                                "-"
-                              )}
-                            </td>
-                            <td>
-                              {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
-                            </td>
-                            <td>{e.out_time} </td>
-                            <td width={100} align="center">
-                              <input
-                                size={1}
-                                className="form-control"
-                                type="text"
-                                value={
-                                  e.bus_stations === "จุดที่ 1" &&
-                                  e.bus_point_1 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 2" &&
-                                      e.bus_point_2 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 3" &&
-                                      e.bus_point_3 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 4" &&
-                                      e.bus_point_4 !== "0"
-                                    ? "0"
-                                    : "30"
-                                }
-                                {...register(`test_2.${index}.bus_price`, {
-                                  required: false,
-                                })}
-                              />
-                            </td>
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
-                          </tr>
-                        ))}
-                        <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_1", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_2.filter(
-                                    (e) => e.bus_stations === "จุดที่ 1"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_2", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_2.filter(
-                                    (e) => e.bus_stations === "จุดที่ 2"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_3", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_2.filter(
-                                    (e) => e.bus_stations === "จุดที่ 3"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value="1"
-                                {...register("bus_point_4", {
-                                  required: false,
-                                })}
-                              />
-                              <label className="form-check-label">
-                                จำนวน{" "}
-                                {
-                                  employees_2.filter(
-                                    (e) => e.bus_stations === "จุดที่ 4"
-                                  ).length
-                                }{" "}
-                                คน
-                              </label>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <button
-                      type="submit"
-                      className="btn btn-primary mt-2 float-right"
-                    >
-                      <i className="fas fa-save"> บันทึก</i>
-                    </button>
-                  </form>
                 </div>
               </div>
             </div>
@@ -527,4 +262,4 @@ const manageCar = () => {
   );
 };
 
-export default manageCar;
+export default OfficeCar;

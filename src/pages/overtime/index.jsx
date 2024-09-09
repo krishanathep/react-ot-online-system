@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 import dayjs from "dayjs";
 import axios from "axios";
+import { set } from "react-hook-form";
 
 const PAGE_SIZES = [10, 20, 30];
 
@@ -18,6 +19,11 @@ const Overtime = () => {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
   const [startDate, setStartDate] = useState('');
+
+  const [bus_point_1, setBus_Point_1] = useState(0)
+  const [bus_point_2, setBus_Point_2] = useState(0)
+  const [bus_point_3, setBus_Point_3] = useState(0)
+  const [bus_point_4, setBus_Point_4] = useState(0)
 
   useEffect(() => {
     setPage(1);
@@ -380,18 +386,12 @@ const Overtime = () => {
                             dayjs(ot_date).format("DD-MM-YYYY"),
                         },
                         // {
-                        //   accessor: "bus_point_1",
+                        //   accessor: "#",
                         //   title: "จุดรถรับส่ง",
                         //   textAlignment: "center",
-                        //   render: ({
-                        //     bus_point_1,
-                        //     bus_point_2,
-                        //     bus_point_3,
-                        //     bus_point_4,
-                        //   }) => (
+                        //   render: ({}) => (
                         //     <span>
-                        //       {bus_point_1} : {bus_point_2} : {bus_point_3} :{" "}
-                        //       {bus_point_4}
+                        //      {bus_point_1} : {bus_point_2} : {bus_point_3} : {bus_point_4}
                         //     </span>
                         //   ),
                         // },
