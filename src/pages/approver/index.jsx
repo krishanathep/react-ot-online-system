@@ -552,7 +552,7 @@ const Approver = () => {
                                   />
                                 </div>
                               </div>
-                              <div className="col-md-12">
+                              {/* <div className="col-md-12">
                                 <button
                                   onClick={handleApproveAll}
                                   disabled={selectedRecords.length === 0}
@@ -561,7 +561,7 @@ const Approver = () => {
                                   <i className="fas fa-check-circle"></i>{" "}
                                   Approve
                                 </button>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>

@@ -456,6 +456,8 @@ const OverTimeAdmin = () => {
                               >
                                 <i className="fas fa-download"></i> ดึงข้อมูล
                               </button>
+                              <Link to={'/admin/overtime/busprice'} className="btn btn-info mb-2 ml-1">
+                              <i className="fas fa-truck"></i>  จัดการค่ารถ</Link>
                             </div>
                           </div>
                         </div>

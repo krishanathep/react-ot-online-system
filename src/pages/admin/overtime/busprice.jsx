@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
 
-const manageCar = () => {
+const busPrice = () => {
   const {
     register,
     handleSubmit,
@@ -30,6 +30,7 @@ const manageCar = () => {
   const [startdate, setStartDate] = useState(
     new dayjs(Date()).format("YYYY-MM-DD")
   );
+
 
   const getData = async () => {
     //setLoading(true);
@@ -58,10 +59,6 @@ const manageCar = () => {
             .map((employee) => ({
               id: employee.id,
               check_price: employee.check_price,
-              bus_point_1: employee.bus_point_1,
-              bus_point_2: employee.bus_point_2,
-              bus_point_3: employee.bus_point_3,
-              bus_point_4: employee.bus_point_4,
               //bus_price: employee.bus_price,
             })),
           test_2: res.data.employees
@@ -72,11 +69,11 @@ const manageCar = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              check_price: employee.check_price,
               bus_point_1: employee.bus_point_1,
               bus_point_2: employee.bus_point_2,
               bus_point_3: employee.bus_point_3,
               bus_point_4: employee.bus_point_4,
+              check_price: employee.check_price,
             })),
         });
         //setLoading(false);
@@ -181,6 +178,16 @@ const manageCar = () => {
     );
   }
 
+  const [busprice, setBusPrice] = useState(employees_1);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+ const handleCheckboxChange = (id) => {
+  // setSelectedIds(prev => 
+  //   prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+  // );
+  // alert(id)
+ } 
+
   return (
     <>
       <div className="content-wrapper">
@@ -253,6 +260,7 @@ const manageCar = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
+                          <th>เลือก</th>
                           <th>แก้ไขล่าสุด</th>
                           <th>จัดทำโดย</th>
                         </tr>
@@ -299,27 +307,23 @@ const manageCar = () => {
                               <input
                                 size={1}
                                 className="form-control"
+                                value={(e.check_price)?('30'):('0')}
                                 type="text"
-                                value={
-                                  e.bus_stations === "จุดที่ 1" &&
-                                  e.bus_point_1 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 2" &&
-                                      e.bus_point_2 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 3" &&
-                                      e.bus_point_3 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 4" &&
-                                      e.bus_point_4 !== "0"
-                                    ? "0"
-                                    : "30"
-                                }
                                 {...register(`test.${index}.bus_price`, {
                                   required: false,
                                 })}
                               />
                             </td>
+
+                            <td>
+                              <input 
+                              type="checkbox" 
+                              {...register(`test.${index}.check_price`, {
+                                required: false,
+                              })}
+                              />
+                            </td>
+
                             <td>{dayjs(e.updated_at).format("HH.mm")}</td>
                             <td>
                               <input
@@ -339,14 +343,14 @@ const manageCar = () => {
                           <td colSpan={3}>รวมพนักงานทั้งหมด</td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
-                                value={1}
+                                value="1"
                                 {...register("bus_point_1", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -360,14 +364,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
-                                value={2}
+                                value="2"
                                 {...register("bus_point_2", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -381,14 +385,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
-                                value={3}
+                                value="3"
                                 {...register("bus_point_3", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -402,14 +406,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
-                                value={4}
+                                value="4"
                                 {...register("bus_point_4", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -424,12 +428,12 @@ const manageCar = () => {
                         </tr>
                       </tbody>
                     </table>
-                   <div>
-                   <span>
-                      <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
-                      สายหนองแขม 4. สายวงเวียนใหญ่
-                    </span>
-                   </div>
+                    <div>
+                      <span>
+                        <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
+                        สายหนองแขม 4. สายวงเวียนใหญ่
+                      </span>
+                    </div>
                     <button
                       type="submit"
                       className="btn btn-primary mt-2 float-right"
@@ -464,6 +468,7 @@ const manageCar = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
+                          <th>เลือก</th>
                           <th>แก้ไขล่าสุด</th>
                           <th>จัดทำโดย</th>
                         </tr>
@@ -511,24 +516,18 @@ const manageCar = () => {
                                 size={1}
                                 className="form-control"
                                 type="text"
-                                value={
-                                  e.bus_stations === "จุดที่ 1" &&
-                                  e.bus_point_1 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 2" &&
-                                      e.bus_point_2 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 3" &&
-                                      e.bus_point_3 !== "0"
-                                    ? "0"
-                                    : e.bus_stations === "จุดที่ 4" &&
-                                      e.bus_point_4 !== "0"
-                                    ? "0"
-                                    : "30"
-                                }
+                                value={(e.check_price)?('30'):('0')}
                                 {...register(`test_2.${index}.bus_price`, {
                                   required: false,
                                 })}
+                              />
+                            </td>
+                            <td>
+                              <input 
+                              type="checkbox" 
+                              {...register(`test_2.${index}.check_price`, {
+                                required: false,
+                              })}
                               />
                             </td>
                             <td>{dayjs(e.updated_at).format("HH.mm")}</td>
@@ -550,14 +549,14 @@ const manageCar = () => {
                           <td colSpan={3}>รวมพนักงานทั้งหมด</td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
                                 value="1"
                                 {...register("bus_point_1", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -571,14 +570,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
                                 value="2"
                                 {...register("bus_point_2", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -592,14 +591,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
                                 value="3"
                                 {...register("bus_point_3", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -613,14 +612,14 @@ const manageCar = () => {
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
+                              {/* <input
                                 className="form-check-input"
                                 type="checkbox"
                                 value="4"
                                 {...register("bus_point_4", {
                                   required: false,
                                 })}
-                              />
+                              /> */}
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -664,4 +663,4 @@ const manageCar = () => {
   );
 };
 
-export default manageCar;
+export default busPrice;

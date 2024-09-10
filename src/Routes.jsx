@@ -23,6 +23,7 @@ import EmployeeCreate from "./pages/admin/employees/create";
 import TimeScan from "./pages/admin/timescan";
 import OvertimeAdmin from './pages/admin/overtime'
 import OverTimeViewAdmin from './pages/admin/overtime/view'
+import BusPriceAdmin from './pages/admin/overtime/busprice'
 import ApproverMaster from "./pages/admin/approver";
 import ApproverMasterCreate from './pages/admin/approver/create'
 import ApproverMasterUpdate from './pages/admin/approver/update'
@@ -61,6 +62,7 @@ const RoutesPage = () => {
           <Route path="/admin/approver" element={<ApproverMaster/>} />
           <Route path="/admin/approver/create" element={<ApproverMasterCreate/>} />
           <Route path="/admin/approver/update/:id" element={<ApproverMasterUpdate/>} />
+          <Route path="/admin/overtime/busprice" element={<BusPriceAdmin/>} />
         </Route>
       </Routes>
     </Router>

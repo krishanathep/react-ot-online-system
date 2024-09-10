@@ -257,7 +257,7 @@ const viewAdmin = () => {
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <Link to={"/admin/overtime"} className="btn btn-danger">
-                              ย้อนกลับ
+                            <i className="fas fa-arrow-circle-left"></i>  ย้อนกลับ
                             </Link>{" "}
                           </div>
                         </div>
