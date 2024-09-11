@@ -95,9 +95,9 @@ const OfficeCar = () => {
                         <div className="float-right">
                           <Link
                             to="/officecar/edit"
-                            className="btn btn-success mb-3"
+                            className="btn btn-info mb-3"
                           >
-                            <i className="fas fa-edit"></i> จัดการข้อมูล
+                            <i className="fas fa-truck"></i>  การจัดรถ
                           </Link>
                         </div>
                       </div>

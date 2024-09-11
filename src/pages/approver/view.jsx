@@ -130,12 +130,18 @@ const view = () => {
                                   <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
                                 </td>
                                 <td>
-                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
+                                  <b>เวลารวม</b> : {overtimes.total_date}{" "}
+                                  {overtimes.total_date === "50"
+                                    ? "นาที"
+                                    : "ชม."}{" "}
                                 </td>
                                 <td>
                                   <b>พนักงาน</b> : {empcount} คน{" "}
                                   <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount} ชม.
+                                  {overtimes.total_date * empcount === 50
+                                    ? overtimes.total_date * empcount + " นาที"
+                                    : overtimes.total_date * empcount +
+                                      " ชม."}{" "}
                                 </td>
                               </tr>
                             </thead>
@@ -221,8 +227,12 @@ const view = () => {
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
-                                        member.out_time -
-                                        overtimes.start_date +
+                                        Math.round(
+                                          (member.out_time -
+                                            overtimes.start_date) *
+                                            100
+                                        ) /
+                                          100 +
                                         " ชม."
                                       )}
                                     </td>
