@@ -430,25 +430,38 @@ const Approver = () => {
       });
   };
 
-  // Approve all by selected
-  const handleApproveAll = async (data) => {
-
-    const selected = selectedRecords.map((r) => r.id);
-
-    console.log(selected);
-
-    await axios
-      .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-approve-all/" +  selected,data
-      )
-      .then((res) => {
-        console.log(res);
-        getData();
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleApproveAll = async () => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        axios
+          .put(import.meta.env.VITE_API_KEY + "/api/otrequest-approve-all", {
+            items: selectedRecords,
+          })
+          .then((res) => {
+            console.log(res);
+            getData();
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   return (
@@ -482,6 +495,16 @@ const Approver = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
+                              <div className="col-md-12">
+                                <button
+                                  onClick={handleApproveAll}
+                                  disabled={selectedRecords.length === 0}
+                                  className="btn btn-info float-right"
+                                  hidden={(userDatail().role!=='approver_3')?(true):(false)}
+                                >
+                                  <i className="fas fa-check-circle"></i> All
+                                </button>
+                              </div>
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่คำร้อง</label>
@@ -556,10 +579,9 @@ const Approver = () => {
                                 <button
                                   onClick={handleApproveAll}
                                   disabled={selectedRecords.length === 0}
-                                  className="btn btn-info"
+                                  className="btn btn-info float-right"
                                 >
-                                  <i className="fas fa-check-circle"></i>{" "}
-                                  Approve
+                                  <i className="fas fa-check-circle"></i>{" "}All
                                 </button>
                               </div> */}
                             </div>
@@ -676,6 +698,7 @@ const Approver = () => {
                           render: ({ ot_date }) =>
                             dayjs(ot_date).format("DD-MM-YYYY"),
                         },
+
                         // {
                         //   accessor: "start_date",
                         //   title: "เวลาเริ่มต้น",
@@ -805,6 +828,7 @@ const Approver = () => {
                       onRecordsPerPageChange={setPageSize}
                       selectedRecords={selectedRecords}
                       onSelectedRecordsChange={setSelectedRecords}
+                      isRecordSelectable={(record) => record.status === 'รอการอนุมัติ 3'}
                     />
                   </div>
                 </div>
