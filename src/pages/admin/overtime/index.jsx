@@ -16,7 +16,8 @@ const OverTimeAdmin = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
-  const [approver, setApprover] = useState([]);
+  const [approver, setApprover] = useState('')
+  const [startDate, setStartDate] = useState('');
 
   useEffect(() => {
     setPage(1);
@@ -48,12 +49,12 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-code?data=" + key
+        import.meta.env.VITE_API_KEY + "/api/otrequests"
       )
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        const code = res.data.data.filter(ot=>ot.ot_member_id.includes(key))
+        setOvertimes(code);
+        setRecords(code.slice(from, to));
         setLoading(false);
       });
   };
@@ -65,12 +66,12 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-name?data=" + key
+        import.meta.env.VITE_API_KEY + "/api/otrequests"
       )
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        const controller = res.data.data.filter(ot=>ot.create_name.includes(key))
+        setOvertimes(controller);
+        setRecords(controller.slice(from, to));
         setLoading(false);
       });
   };
@@ -101,14 +102,12 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-status?dept=${
-          userDatail().dept
-        }&data=${key}`
+        `${import.meta.env.VITE_API_KEY}/api/otrequests`
       )
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        const status = res.data.data.filter(ot=>ot.status.includes(key))
+        setOvertimes(status);
+        setRecords(status.slice(from, to));
         setLoading(false);
       });
   };
@@ -120,16 +119,16 @@ const OverTimeAdmin = () => {
 
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-date?dept=${
-          userDatail().dept
-        }&data=${key}`
+        `${import.meta.env.VITE_API_KEY}/api/otrequests`
       )
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        setStartDate(key)
+        const date_time = res.data.data.filter(ot=>ot.ot_date===key)
+        setOvertimes(date_time);
+        setRecords(date_time.slice(from, to));
         setLoading(false);
       });
+      console.log(overtimes)
   };
 
   useEffect(() => {
@@ -377,7 +376,7 @@ const OverTimeAdmin = () => {
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-export",
+        import.meta.env.VITE_API_KEY + "/api/otrequest-export?data="+startDate,
         { responseType: "blob" }
       );
       // Create a blob from the response data
@@ -389,7 +388,7 @@ const OverTimeAdmin = () => {
       // Create a link element and trigger the download
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "ot_request_export" + currentDate + ".txt");
+      link.setAttribute("download", "ot_request_" + currentDate + ".txt");
       document.body.appendChild(link);
       link.click();
 
@@ -445,19 +444,14 @@ const OverTimeAdmin = () => {
                         <div className="row">
                           <div className="col-md-12">
                             <div className="float-right">
+                              <Link to={'/admin/overtime/busprice'} className="btn btn-info mb-2 mr-1">
+                              <i className="fas fa-truck"></i>  การจัดรถ</Link>
                               <button
                                 onClick={textExport}
                                 className="btn btn-secondary mb-2"
-                                hidden={
-                                  userDatail().role === "approver"
-                                    ? true
-                                    : false
-                                }
                               >
                                 <i className="fas fa-download"></i> ดึงข้อมูล
                               </button>
-                              <Link to={'/admin/overtime/busprice'} className="btn btn-info mb-2 ml-1">
-                              <i className="fas fa-truck"></i>  การจัดรถ</Link>
                             </div>
                           </div>
                         </div>
