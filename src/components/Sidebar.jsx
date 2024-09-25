@@ -106,7 +106,7 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/officecar" className="nav-link">
+                    <Link to="/officecar/edit" className="nav-link">
                       <i className="nav-icon fas fa-truck"></i>
                       <p>Office-car</p>
                     </Link>

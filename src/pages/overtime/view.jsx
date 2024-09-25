@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
-import { First } from "react-bootstrap/esm/PageItem";
+import moment from "moment";
 
 const view = () => {
+
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
@@ -41,7 +42,7 @@ const view = () => {
           setComplete_1(true), setComplete_2(true), setComplete_3(true);
         }
         if (res.data.data.status === "ผ่านการอนุมัติ") {
-          setComplete_1(true),
+            setComplete_1(true),
             setComplete_2(true),
             setComplete_3(true),
             setComplete_4(true);
@@ -52,6 +53,21 @@ const view = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const convertToTime = () => {
+
+    const startValue = parseFloat('20.00.00');
+    const finishValue = parseFloat('17.00.00');
+
+    const floatValue = startValue - finishValue
+
+    const hours = Math.floor(floatValue);
+    const minutes = Math.round((floatValue - hours) * 60);
+
+    const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+    alert(time)
+  }
 
   return (
     <>
@@ -224,6 +240,9 @@ const view = () => {
                                         " ชม."
                                       )}
                                     </td>
+                                    <td>
+                                   
+                                    </td>
                                     <td>{member.bus_stations}</td>
                                     <td>{member.bus_price}</td>
                                     <td className="text-secondary">
@@ -314,8 +333,10 @@ const view = () => {
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
                             <Link to={"/overtime"} className="btn btn-danger">
-                            <i className="fas fa-arrow-circle-left"></i> ย้อนกลับ
+                              <i className="fas fa-arrow-circle-left"></i>{" "}
+                              ย้อนกลับ
                             </Link>{" "}
+                            <button className="btn btn-success" onClick={convertToTime}>Click me</button>
                           </div>
                         </div>
                       </div>
