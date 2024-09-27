@@ -651,7 +651,7 @@ const OverTimeAdmin = () => {
                           render: (otrequests) => (
                             <span>
                               {otrequests.employees.map((e, index) =>
-                                index === 0 ? e.bus_point_1 : null
+                                index === 0  ? e.bus_point_1 : null
                               )}{" "}
                               : {""}
                               {otrequests.employees.map((e, index) =>

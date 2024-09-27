@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 
 const view = () => {
+  dayjs.extend(duration);
+
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
@@ -224,16 +227,21 @@ const view = () => {
                                       )}
                                     </td>
                                     <td className="text-secondary">
-                                      {member.out_time === null ? (
+                                    {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
-                                        Math.round(
-                                          (member.out_time -
-                                            overtimes.start_date) *
-                                            100
-                                        ) /
-                                          100 +
-                                        " ชม."
+                                        dayjs
+                                          .duration(
+                                            dayjs(
+                                              "2001-01-01" + member.out_time,
+                                            ).diff(
+                                              dayjs(
+                                                "2001-01-01" +
+                                                  overtimes.start_date
+                                              )
+                                            )
+                                          )
+                                          .asHours()
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>

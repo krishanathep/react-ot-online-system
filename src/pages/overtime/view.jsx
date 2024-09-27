@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
-import moment from "moment";
+import duration from "dayjs/plugin/duration";
 
 const view = () => {
-
+  dayjs.extend(duration);
   const { id } = useParams();
 
   const [overtimes, setOvertimes] = useState({});
@@ -42,7 +42,7 @@ const view = () => {
           setComplete_1(true), setComplete_2(true), setComplete_3(true);
         }
         if (res.data.data.status === "ผ่านการอนุมัติ") {
-            setComplete_1(true),
+          setComplete_1(true),
             setComplete_2(true),
             setComplete_3(true),
             setComplete_4(true);
@@ -50,24 +50,23 @@ const view = () => {
       });
   };
 
+  const [difference, setDifference] = useState("");
+
+  const getDiff = () => {
+    const time1 = dayjs("2001-01-01 20:00");
+    const time2 = dayjs("2001-01-01 17:30");
+
+    const diff = dayjs.duration(time1.diff(time2));
+
+    const hours = diff.asHours();
+
+    setDifference(hours);
+  };
+
   useEffect(() => {
     getData();
+    getDiff();
   }, []);
-
-  const convertToTime = () => {
-
-    const startValue = parseFloat('20.00.00');
-    const finishValue = parseFloat('17.00.00');
-
-    const floatValue = startValue - finishValue
-
-    const hours = Math.floor(floatValue);
-    const minutes = Math.round((floatValue - hours) * 60);
-
-    const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-    alert(time)
-  }
 
   return (
     <>
@@ -231,17 +230,19 @@ const view = () => {
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
-                                        Math.round(
-                                          (member.out_time -
-                                            overtimes.start_date) *
-                                            100
-                                        ) /
-                                          100 +
-                                        " ชม."
+                                        dayjs
+                                          .duration(
+                                            dayjs(
+                                              "2001-01-01" + member.out_time
+                                            ).diff(
+                                              dayjs(
+                                                "2001-01-01" +
+                                                  overtimes.start_date
+                                              )
+                                            )
+                                          )
+                                          .asHours()
                                       )}
-                                    </td>
-                                    <td>
-                                   
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     <td>{member.bus_price}</td>
@@ -336,7 +337,6 @@ const view = () => {
                               <i className="fas fa-arrow-circle-left"></i>{" "}
                               ย้อนกลับ
                             </Link>{" "}
-                            <button className="btn btn-success" onClick={convertToTime}>Click me</button>
                           </div>
                         </div>
                       </div>

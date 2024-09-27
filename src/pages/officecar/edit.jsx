@@ -23,6 +23,8 @@ const manageCar = () => {
   const [employees_1, setEmployees_1] = useState([]);
   const [employees_2, setEmployees_2] = useState([]);
 
+  const [buttonLock, setButtonLock] = useState(false);
+
   const userdetail = useAuthUser();
 
   const [loading, setLoading] = useState(false);
@@ -42,12 +44,14 @@ const manageCar = () => {
             (e.ot_create_date === startdate && e.end_time === "19.50")
         );
         setEmployees_1(otrequest1);
+
         const otrequest2 = res.data.employees.filter(
           (e) =>
             (e.ot_create_date === startdate && e.end_time === "22.00") ||
             (e.ot_create_date === startdate && e.end_time === "21.50")
         );
         setEmployees_2(otrequest2);
+
         reset({
           test: res.data.employees
             .filter(
@@ -64,6 +68,7 @@ const manageCar = () => {
               bus_point_4: employee.bus_point_4,
               //bus_price: employee.bus_price,
             })),
+
           test_2: res.data.employees
             .filter(
               (e) =>
@@ -94,12 +99,14 @@ const manageCar = () => {
             (e.ot_create_date === date && e.end_time === "19.50")
         );
         setEmployees_1(otrequest1);
+
         const otrequest2 = res.data.employees.filter(
           (e) =>
             (e.ot_create_date === date && e.end_time === "22.00") ||
             (e.ot_create_date === date && e.end_time === "21.50")
         );
         setEmployees_2(otrequest2);
+
         reset({
           test: res.data.employees
             .filter(
@@ -109,8 +116,13 @@ const manageCar = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              //bus_price: employee.bus_price,
+              check_price: employee.check_price,
+              bus_point_1: employee.bus_point_1,
+              bus_point_2: employee.bus_point_2,
+              bus_point_3: employee.bus_point_3,
+              bus_point_4: employee.bus_point_4,
             })),
+
           test_2: res.data.employees
             .filter(
               (e) =>
@@ -119,10 +131,11 @@ const manageCar = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              // bus_point_1: employee.bus_point_1,
-              // bus_point_2: employee.bus_point_2,
-              // bus_point_3: employee.bus_point_3,
-              // bus_point_4: employee.bus_point_4,
+              check_price: employee.check_price,
+              bus_point_1: employee.bus_point_1,
+              bus_point_2: employee.bus_point_2,
+              bus_point_3: employee.bus_point_3,
+              bus_point_4: employee.bus_point_4,
             })),
         });
         //setLoading(false);
@@ -208,23 +221,19 @@ const manageCar = () => {
                 <div className="card-body">
                   <div className="col-md-12">
                     <div className="row">
-                      <div className="col-md-12">
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <label htmlFor="">วันที่ทำ OT</label>
-                            <br />
-                            <DatePicker
-                              className="form-control"
-                              placeholderText="กรุณาเลือกวันที่"
-                              selected={startdate}
-                              onChange={(date) => {
-                                setStartDate(date);
-                                dateFilter(dayjs(date).format("YYYY-MM-DD"));
-                              }}
-                              dateFormat="dd-MM-yyyy"
-                            />
-                          </div>
-                        </div>
+                      <div className="form-group">
+                        <label htmlFor="">วันที่ทำ OT</label>
+                        <br />
+                        <DatePicker
+                          className="form-control"
+                          placeholderText="กรุณาเลือกวันที่"
+                          selected={startdate}
+                          onChange={(date) => {
+                            setStartDate(date);
+                            dateFilter(dayjs(date).format("YYYY-MM-DD"));
+                          }}
+                          dateFormat="dd-MM-yyyy"
+                        />
                       </div>
                     </div>
                   </div>
@@ -253,6 +262,7 @@ const manageCar = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
+                          <th>สถานะ</th>
                           <th>แก้ไขล่าสุด</th>
                           <th>จัดทำโดย</th>
                         </tr>
@@ -320,13 +330,27 @@ const manageCar = () => {
                                 })}
                               />
                             </td>
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
+                            <td>
+                              <h5>
+                                {e.bus_price !== "30" ? (
+                                  <span className="badge rounded-pill bg-danger">
+                                    ไม่จัดรถ
+                                  </span>
+                                ) : (
+                                  <span className="badge rounded-pill bg-success">
+                                    จัดรถ
+                                  </span>
+                                )}
+                              </h5>
+                            </td>
+                            <td>
+                              {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
+                            </td>
                             <td>
                               <input
                                 type="text"
                                 size={8}
                                 className="form-control"
-                                readOnly
                                 value={userdetail().name}
                                 {...register(`test.${index}.updated_by`, {
                                   required: false,
@@ -424,13 +448,14 @@ const manageCar = () => {
                         </tr>
                       </tbody>
                     </table>
-                   <div>
-                   <span>
-                      <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
-                      สายหนองแขม 4. สายวงเวียนใหญ่
-                    </span>
-                   </div>
+                    <div>
+                      <span>
+                        <b>จุดรถรับ-ส่ง</b> 1. สายศาลายา 2. สายนครชัยศรี 3.
+                        สายหนองแขม 4. สายวงเวียนใหญ่
+                      </span>
+                    </div>
                     <button
+                      disabled={buttonLock}
                       type="submit"
                       className="btn btn-primary mt-2 float-right"
                     >
@@ -464,6 +489,7 @@ const manageCar = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
+                          <th>สถานะ</th>
                           <th>แก้ไขล่าสุด</th>
                           <th>จัดทำโดย</th>
                         </tr>
@@ -531,13 +557,27 @@ const manageCar = () => {
                                 })}
                               />
                             </td>
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
+                            <td>
+                              <h5>
+                                {e.bus_price !== "30" ? (
+                                  <span className="badge rounded-pill bg-danger">
+                                    ไม่จัดรถ
+                                  </span>
+                                ) : (
+                                  <span className="badge rounded-pill bg-success">
+                                    จัดรถ
+                                  </span>
+                                )}
+                              </h5>
+                            </td>
+                            <td>
+                              {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
+                            </td>
                             <td>
                               <input
                                 type="text"
                                 size={8}
                                 className="form-control"
-                                readOnly
                                 value={userdetail().name}
                                 {...register(`test_2.${index}.updated_by`, {
                                   required: false,
@@ -642,18 +682,19 @@ const manageCar = () => {
                       </span>
                     </div>
                     <button
+                      disabled={buttonLock}
                       type="submit"
                       className="btn btn-primary mt-2 float-right"
                     >
                       <i className="fas fa-save"> บันทึก</i>
                     </button>
                   </form>
-                  <Link
+                  {/* <Link
                     to={"/officecar"}
                     className="btn btn-danger mt-2 float-right mr-1"
                   >
                     <i className="fas fa-arrow-circle-left"></i> ย้อนกลับ
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>

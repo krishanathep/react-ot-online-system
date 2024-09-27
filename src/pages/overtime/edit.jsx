@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 
 const edit = () => {
+  dayjs.extend(duration);
   const {
     register,
     handleSubmit,
@@ -253,28 +255,33 @@ const edit = () => {
                                         className="form-control"
                                         type="text"
                                         size="2"
-                                        placeholder="เพิ่มข้อมูล"
+                                        placeholder="20:00"
                                         {...register(`test.${index}.out_time`, {
                                           required: true,
                                         })}
                                       />
                                       {errors.test && (
                                         <span className="text-danger">
-                                          This field is required
+                                          This field is required.
                                         </span>
                                       )}
                                     </td>
                                     <td>
-                                      {member.out_time === null ? (
-                                        "0"
+                                    {member.out_time === null ? (
+                                        '0'
                                       ) : (
-                                        Math.round(
-                                          (member.out_time -
-                                            overtimes.start_date) *
-                                            100
-                                        ) /
-                                          100 +
-                                        " ชม."
+                                        dayjs
+                                          .duration(
+                                            dayjs(
+                                              "2001-01-01" + member.out_time
+                                            ).diff(
+                                              dayjs(
+                                                "2001-01-01" +
+                                                  overtimes.start_date
+                                              )
+                                            )
+                                          )
+                                          .asHours()
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>

@@ -43,12 +43,14 @@ const busPrice = () => {
             (e.ot_create_date === startdate && e.end_time === "19.50")
         );
         setEmployees_1(otrequest1);
+        
         const otrequest2 = res.data.employees.filter(
           (e) =>
             (e.ot_create_date === startdate && e.end_time === "22.00") ||
             (e.ot_create_date === startdate && e.end_time === "21.50")
         );
         setEmployees_2(otrequest2);
+        
         reset({
           test: res.data.employees
             .filter(

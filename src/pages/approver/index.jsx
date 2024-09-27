@@ -498,6 +498,40 @@ const Approver = () => {
     });
   };
 
+  const handleApproveAll_3 = async () => {
+    Swal.fire({
+      title: "ยืนยันการอนุมัติ OT",
+      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: "ระบบได้ทำการอนุมัติ OT เรียบร้อยแล้ว",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        axios
+          .put(import.meta.env.VITE_API_KEY + "/api/otrequest-approve-all-3", {
+            items: selectedRecords,
+          })
+          .then((res) => {
+            console.log(res);
+            getData();
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+  };
+
   return (
     <>
       <div className="content-wrapper">
@@ -534,19 +568,36 @@ const Approver = () => {
                                 <button
                                   onClick={handleApproveAll}
                                   disabled={selectedRecords.length === 0}
-                                  className="btn btn-info float-right"
+                                  className="btn btn-success float-right"
                                   hidden={
-                                    (userDatail().role!=='approver_3')?(true):(false)
+                                    userDatail().role !== "approver_3"
+                                      ? true
+                                      : false
                                   }
                                 >
                                   <i className="fas fa-check-circle"></i> All
-                                </button> {/* approv all for approver 2 */}
+                                </button>{" "}
+                                {/* approv all for approver 2 */}
+                                <button
+                                  onClick={handleApproveAll_3}
+                                  disabled={selectedRecords.length === 0}
+                                  className="btn btn-warning text-white float-right"
+                                  hidden={
+                                    userDatail().role !== "approver_2"
+                                      ? true
+                                      : false
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i> All
+                                </button>
                                 <button
                                   onClick={handleApproveAll_2}
                                   disabled={selectedRecords.length === 0}
-                                  className="btn btn-info float-right"
+                                  className="btn btn-success float-right mr-1"
                                   hidden={
-                                    (userDatail().role!=='approver_2')?(true):(false)
+                                    userDatail().role !== "approver_2"
+                                      ? true
+                                      : false
                                   }
                                 >
                                   <i className="fas fa-check-circle"></i> All
@@ -875,7 +926,14 @@ const Approver = () => {
                       onRecordsPerPageChange={setPageSize}
                       selectedRecords={selectedRecords}
                       onSelectedRecordsChange={setSelectedRecords}
-                      isRecordSelectable={(record) => (record.status === 'รอการอนุมัติ 3' && userDatail().role === 'approver_3') || (record.status === 'รอการอนุมัติ 2' && userDatail().role === 'approver_2')}
+                      isRecordSelectable={(record) =>
+                        (record.status === "รอการอนุมัติ 3" &&
+                          userDatail().role === "approver_3") ||
+                        (record.status === "รอการอนุมัติ 2" &&
+                          userDatail().role === "approver_2") ||
+                        (record.status === "ผ่านการอนุมัติ" &&
+                          record.result === "รอการปิด (ผจก)")  
+                      }
                     />
                   </div>
                 </div>
