@@ -50,22 +50,8 @@ const view = () => {
       });
   };
 
-  const [difference, setDifference] = useState("");
-
-  const getDiff = () => {
-    const time1 = dayjs("2001-01-01 20:00");
-    const time2 = dayjs("2001-01-01 17:30");
-
-    const diff = dayjs.duration(time1.diff(time2));
-
-    const hours = diff.asHours();
-
-    setDifference(hours);
-  };
-
   useEffect(() => {
     getData();
-    getDiff();
   }, []);
 
   return (
@@ -170,6 +156,18 @@ const view = () => {
                             </thead>
                             <tbody>
                               {members.map((member, index) => {
+                                const start = dayjs(
+                                  "01-01-2024 " + overtimes.start_date
+                                );
+                                const end = dayjs(
+                                  "01-01-2024 " + member.out_time
+                                );
+
+                                const diff = dayjs.duration(end.diff(start));
+
+                                const hours = Math.floor(diff.asHours());
+                                const minutes = diff.minutes();
+
                                 return (
                                   <tr align="center" key={member.id}>
                                     <td>{index + 1}</td>
@@ -230,18 +228,11 @@ const view = () => {
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
-                                        dayjs
-                                          .duration(
-                                            dayjs(
-                                              "2001-01-01" + member.out_time
-                                            ).diff(
-                                              dayjs(
-                                                "2001-01-01" +
-                                                  overtimes.start_date
-                                              )
-                                            )
-                                          )
-                                          .asHours()
+                                        `${hours
+                                            .toString()
+                                            .padStart(2, "0")}:${minutes
+                                            .toString()
+                                            .padStart(2, "0")}`
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>

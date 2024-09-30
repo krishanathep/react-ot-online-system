@@ -171,6 +171,18 @@ const view = () => {
                             </thead>
                             <tbody>
                               {members.map((member, index) => {
+                                const start = dayjs(
+                                  "01-01-2024 " + overtimes.start_date
+                                );
+                                const end = dayjs(
+                                  "01-01-2024 " + member.out_time
+                                );
+
+                                const diff = dayjs.duration(end.diff(start));
+
+                                const hours = Math.floor(diff.asHours());
+                                const minutes = diff.minutes();
+
                                 return (
                                   <tr align="center" key={member.id}>
                                     <td>{index + 1}</td>
@@ -229,20 +241,13 @@ const view = () => {
                                     <td className="text-secondary">
                                     {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
-                                      ) : (
-                                        dayjs
-                                          .duration(
-                                            dayjs(
-                                              "2001-01-01" + member.out_time,
-                                            ).diff(
-                                              dayjs(
-                                                "2001-01-01" +
-                                                  overtimes.start_date
-                                              )
-                                            )
-                                          )
-                                          .asHours()
-                                      )}
+                                      ) : 
+                                        `${hours
+                                            .toString()
+                                            .padStart(2, "0")}:${minutes
+                                            .toString()
+                                            .padStart(2, "0")}`
+                                      }
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}

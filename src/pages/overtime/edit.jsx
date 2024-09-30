@@ -192,6 +192,18 @@ const edit = () => {
                             </thead>
                             <tbody>
                               {members.map((member, index) => {
+                                const start = dayjs(
+                                  "01-01-2024 " + overtimes.start_date
+                                );
+                                const end = dayjs(
+                                  "01-01-2024 " + member.out_time
+                                );
+
+                                const diff = dayjs.duration(end.diff(start));
+
+                                const hours = Math.floor(diff.asHours());
+                                const minutes = diff.minutes();
+
                                 return (
                                   <tr align="center" key={member.id}>
                                     <td>{index + 1}</td>
@@ -267,22 +279,14 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.out_time === null ? (
-                                        '0'
-                                      ) : (
-                                        dayjs
-                                          .duration(
-                                            dayjs(
-                                              "2001-01-01" + member.out_time
-                                            ).diff(
-                                              dayjs(
-                                                "2001-01-01" +
-                                                  overtimes.start_date
-                                              )
-                                            )
-                                          )
-                                          .asHours()
-                                      )}
+                                      {member.out_time === null
+                                        ? "0"
+                                        : `${hours
+                                            .toString()
+                                            .padStart(2, "0")}:${minutes
+                                            .toString()
+                                            .padStart(2, "0")}`}
+                                      {/* {Math.round((member.out_time - overtimes.start_date)*100) / 100} */}
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     <td>
@@ -442,7 +446,8 @@ const edit = () => {
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}
                             <Link to={"/overtime"} className="btn btn-danger">
-                            <i className="fas fa-arrow-circle-left"></i>  ย้อนกลับ
+                              <i className="fas fa-arrow-circle-left"></i>{" "}
+                              ย้อนกลับ
                             </Link>{" "}
                           </div>
                         </div>
