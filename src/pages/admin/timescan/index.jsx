@@ -122,7 +122,7 @@ const TimeScan = () => {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-12">
-                        <div className="float-right mb-3">
+                        <div className="float-right mb-2">
                           <div
                             className="file btn btn-primary mr-1"
                             style={{ position: "relative", overflow: "hidden" }}
@@ -172,35 +172,26 @@ const TimeScan = () => {
                           render: (record) => records.indexOf(record) + 1,
                         },
                         {
-                          accessor: "index",
-                          title: "Index",
+                          accessor: "emp_id",
+                          title: "รหัสพนักงาน",
                           textAlignment: "center",
-                          width: 80,
                         },
                         {
-                          accessor: "pin",
-                          title: "Pin",
+                          accessor: "date_scan",
+                          title: "วันที่สแกน",
                           textAlignment: "center",
+                          render: ({ date_scan }) =>
+                            dayjs(date_scan).format("DD-MMM-YYYY"),
                         },
 
                         {
-                          accessor: "time",
-                          title: "Time scan",
+                          accessor: "time_scan",
+                          title: "เวลาสแกน",
                           textAlignment: "center",
                         },
                         {
-                          accessor: "state",
-                          title: "Status",
-                          textAlignment: "center",
-                        },
-                        {
-                          accessor: "verification",
-                          title: "Verification",
-                          textAlignment: "center",
-                        },
-                        {
-                          accessor: "device",
-                          title: "Device",
+                          accessor: "status",
+                          title: "สถานะ",
                           textAlignment: "center",
                         },
                         {

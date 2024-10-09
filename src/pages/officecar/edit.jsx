@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import { useAuthUser } from "react-auth-kit";
 import "react-datepicker/dist/react-datepicker.css";
+import Switch from "react-switch";
 import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
 
 const manageCar = () => {
+
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -363,14 +366,6 @@ const manageCar = () => {
                           <td colSpan={3}>รวมพนักงานทั้งหมด</td>
                           <td>
                             <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value={1}
-                                {...register("bus_point_1", {
-                                  required: false,
-                                })}
-                              />
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -380,18 +375,22 @@ const manageCar = () => {
                                 }{" "}
                                 คน
                               </label>
+                              <Controller
+                                name="bus_point_1"
+                                control={control}
+                                render={({
+                                  field: { onChange, value }
+                                }) => (
+                                    <Switch
+                                      onChange={onChange}
+                                      checked={value}
+                                    />
+                                )}
+                              />
                             </div>
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value={2}
-                                {...register("bus_point_2", {
-                                  required: false,
-                                })}
-                              />
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -401,18 +400,22 @@ const manageCar = () => {
                                 }{" "}
                                 คน
                               </label>
+                              <Controller
+                                name="bus_point_2"
+                                control={control}
+                                render={({
+                                  field: { onChange, value }
+                                }) => (
+                                    <Switch
+                                      onChange={onChange}
+                                      checked={value}
+                                    />
+                                )}
+                              />
                             </div>
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value={3}
-                                {...register("bus_point_3", {
-                                  required: false,
-                                })}
-                              />
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -422,18 +425,22 @@ const manageCar = () => {
                                 }{" "}
                                 คน
                               </label>
+                              <Controller
+                                name="bus_point_3"
+                                control={control}
+                                render={({
+                                  field: { onChange, value }
+                                }) => (
+                                    <Switch
+                                      onChange={onChange}
+                                      checked={value}
+                                    />
+                                )}
+                              />
                             </div>
                           </td>
                           <td>
                             <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value={4}
-                                {...register("bus_point_4", {
-                                  required: false,
-                                })}
-                              />
                               <label className="form-check-label">
                                 จำนวน{" "}
                                 {
@@ -443,6 +450,18 @@ const manageCar = () => {
                                 }{" "}
                                 คน
                               </label>
+                              <Controller
+                                name="bus_point_4"
+                                control={control}
+                                render={({
+                                  field: { onChange, value }
+                                }) => (
+                                    <Switch
+                                      onChange={onChange}
+                                      checked={value}
+                                    />
+                                )}
+                              />
                             </div>
                           </td>
                         </tr>

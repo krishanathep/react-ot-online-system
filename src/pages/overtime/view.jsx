@@ -186,32 +186,28 @@ const view = () => {
                                     <td>
                                       {member.time_scan
                                         .filter((s) =>
-                                          s.time
+                                          s.date_scan
                                             .toLowerCase()
                                             .includes(overtimes.ot_date)
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0
-                                                ? dayjs(t.time).format("HH.mm")
-                                                : null}
+                                              {index === 0 ? t.time_scan.substring(0,5) : null}
                                             </span>
                                           );
                                         })}{" "}
                                       -{" "}
                                       {member.time_scan
                                         .filter((s) =>
-                                          s.time
+                                          s.date_scan
                                             .toLowerCase()
                                             .includes(overtimes.ot_date)
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 1
-                                                ? dayjs(t.time).format("HH.mm")
-                                                : null}
+                                              {index === 1 ? t.time_scan.substring(0,5) : null}
                                             </span>
                                           );
                                         })}
@@ -229,10 +225,10 @@ const view = () => {
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         `${hours
-                                            .toString()
-                                            .padStart(2, "0")}:${minutes
-                                            .toString()
-                                            .padStart(2, "0")}`
+                                          .toString()
+                                          .padStart(2, "0")}:${minutes
+                                          .toString()
+                                          .padStart(2, "0")}`
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>

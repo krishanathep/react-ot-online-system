@@ -230,34 +230,30 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                      {member.time_scan
+                                    {member.time_scan
                                         .filter((s) =>
-                                          s.time
+                                          s.date_scan
                                             .toLowerCase()
                                             .includes(overtimes.ot_date)
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0
-                                                ? dayjs(t.time).format("HH.mm")
-                                                : null}
+                                              {index === 0 ? t.time_scan.substring(0,5) : null}
                                             </span>
                                           );
                                         })}{" "}
                                       -{" "}
                                       {member.time_scan
                                         .filter((s) =>
-                                          s.time
+                                          s.date_scan
                                             .toLowerCase()
                                             .includes(overtimes.ot_date)
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 1
-                                                ? dayjs(t.time).format("HH.mm")
-                                                : null}
+                                              {index === 1 ? t.time_scan.substring(0,5) : null}
                                             </span>
                                           );
                                         })}
@@ -270,11 +266,14 @@ const edit = () => {
                                         placeholder="20:00"
                                         {...register(`test.${index}.out_time`, {
                                           required: true,
+                                          pattern: {
+                                            value: /^([01]\d|2[0-3]):([0-5]\d)$/,
+                                          }
                                         })}
                                       />
-                                      {errors.test && (
+                                      {errors.test && errors.test[index]?.out_time && (
                                         <span className="text-danger">
-                                          This field is required.
+                                          Please input time format hh:mm
                                         </span>
                                       )}
                                     </td>
