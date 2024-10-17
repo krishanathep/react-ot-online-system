@@ -372,13 +372,14 @@ const OverTimeAdmin = () => {
   const date = today.getDate();
   const currentDate = "_" + month + "_" + date + "_" + year;
 
-  // Text export function
+  // text export function
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-export?data="+startDate,
+        import.meta.env.VITE_API_KEY + "/api/otrequest-text-export",
         { responseType: "blob" }
       );
+
       // Create a blob from the response data
       const blob = new Blob([response.data], { type: "text/plain" });
 
@@ -399,7 +400,7 @@ const OverTimeAdmin = () => {
       console.error("Export failed:", error);
       //alert('Failed to export data. Please try again.');
     }
-  };
+  }
 
   const getApprover = async () => {
     await axios

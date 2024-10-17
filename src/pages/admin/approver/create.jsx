@@ -83,6 +83,7 @@ const ApproverCreate = () => {
                             <option value="PPD">PPD</option>
                             <option value="PRD">PRD</option>
                             <option value="HRD">HRD</option>
+                            <option value="HRD">ITD</option>
                           </select>
                           {errors.dept && (
                             <span className="text-danger">

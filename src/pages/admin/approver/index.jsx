@@ -37,7 +37,7 @@ const Approver = () => {
         setLoading(false);
       });
   };
-
+  
   const handleDeleteSubmit =async(blogs,data)=>{
     await axios
       .delete(import.meta.env.VITE_API_KEY + "/api/approve-delete/"+blogs.id,data)
