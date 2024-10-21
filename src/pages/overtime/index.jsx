@@ -35,7 +35,7 @@ const Overtime = () => {
       .get(
         import.meta.env.VITE_API_KEY +
           "/api/otrequests-dept?data=" +
-          userDatail().dept
+          userDatail().agency
       )
       .then((res) => {
         //Change api name

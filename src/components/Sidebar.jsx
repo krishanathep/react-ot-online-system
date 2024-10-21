@@ -1,34 +1,38 @@
-import React, { useState,useEffect } from "react";
-import { NavLink as Link,useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink as Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import logo from "/assets/dist/img/AdminLTELogo.png";
 
 export default function Sidebar() {
-
   const userdetail = useAuthUser();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [ruleUser, setRuleUser] = useState(false);
   const [ruleApprover, setRuleApprover] = useState(false);
   const [ruleAdmin, setRuleAdmin] = useState(false);
 
   const getRule = async () => {
-    if(userdetail().role==='user'){
-      setRuleUser(true)
-      return
-    } if (userdetail().role==='approver_1' || userdetail().role==='approver_2' || userdetail().role==='approver_3'){
-      setRuleApprover(true)
-      return
-    } if (userdetail().role==='admin'){
-      setRuleAdmin(true)
-      return
+    if (userdetail().role === "user") {
+      setRuleUser(true);
+      return;
     }
-  }
+    if (
+      userdetail().role === "approver_1" ||
+      userdetail().role === "approver_2" ||
+      userdetail().role === "approver_3"
+    ) {
+      setRuleApprover(true);
+      return;
+    }
+    if (userdetail().role === "admin") {
+      setRuleAdmin(true);
+      return;
+    }
+  };
 
-
-  useEffect(()=>{
-    getRule()
-  },[])
+  useEffect(() => {
+    getRule();
+  }, []);
 
   return (
     <>
@@ -77,7 +81,7 @@ export default function Sidebar() {
                   </li>
                   <li className="nav-item">
                     <Link to="/approver" className="nav-link">
-                    <i className="nav-icon fas fa-user-check"></i>
+                      <i className="nav-icon fas fa-user-check"></i>
                       <p>การอนุมัติ OT</p>
                     </Link>
                   </li>
@@ -85,10 +89,10 @@ export default function Sidebar() {
               ) : null}
               {ruleAdmin ? (
                 <>
-                <li className="nav-header">MAIN MENU</li>
-                <li className="nav-item">
+                  <li className="nav-header">MAIN MENU</li>
+                  <li className="nav-item">
                     <Link to="/" className="nav-link">
-                    <i className="nav-icon fas fa-tachometer-alt"></i>
+                      <i className="nav-icon fas fa-tachometer-alt"></i>
                       <p>Dashboard</p>
                     </Link>
                   </li>
@@ -103,12 +107,6 @@ export default function Sidebar() {
                     <Link to="/admin/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>
                       <p>Overtimes</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/officecar/edit" className="nav-link">
-                      <i className="nav-icon fas fa-truck"></i>
-                      <p>Office-car</p>
                     </Link>
                   </li>
                   <li className="nav-header">OTHER MENU</li>
@@ -130,6 +128,13 @@ export default function Sidebar() {
                       <p>Approver</p>
                     </Link>
                   </li>
+                  <li className="nav-header">CAR MENU</li>
+                  <li className="nav-item">
+                    <Link to="/officecar" className="nav-link">
+                    <i className="nav-icon fas fa-truck"></i>
+                      <p>Office Car</p>
+                    </Link>
+                  </li> 
                 </>
               ) : null}
             </ul>

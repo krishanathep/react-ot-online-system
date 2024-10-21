@@ -292,24 +292,25 @@ const edit = () => {
                                       <input
                                         className="form-control"
                                         type="text"
-                                        value={
-                                          member.bus_stations === "จุดที่ 1" &&
-                                          overtimes.bus_point_1 !== "0"
-                                            ? "0"
-                                            : member.bus_stations ===
-                                                "จุดที่ 2" &&
-                                              overtimes.bus_point_2 !== "0"
-                                            ? "0"
-                                            : member.bus_stations ===
-                                                "จุดที่ 3" &&
-                                              overtimes.bus_point_3 !== "0"
-                                            ? "0"
-                                            : member.bus_stations ===
-                                                "จุดที่ 4" &&
-                                              overtimes.bus_point_4 !== "0"
-                                            ? "0"
-                                            : "30"
-                                        }
+                                        value={30}
+                                        // value={
+                                        //   member.bus_stations === "จุดที่ 1" &&
+                                        //   overtimes.bus_point_1 !== "0"
+                                        //     ? "0"
+                                        //     : member.bus_stations ===
+                                        //         "จุดที่ 2" &&
+                                        //       overtimes.bus_point_2 !== "0"
+                                        //     ? "0"
+                                        //     : member.bus_stations ===
+                                        //         "จุดที่ 3" &&
+                                        //       overtimes.bus_point_3 !== "0"
+                                        //     ? "0"
+                                        //     : member.bus_stations ===
+                                        //         "จุดที่ 4" &&
+                                        //       overtimes.bus_point_4 !== "0"
+                                        //     ? "0"
+                                        //     : "30"
+                                        // }
                                         size="1"
                                         {...register(
                                           `test.${index}.bus_price`,
