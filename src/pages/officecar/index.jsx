@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import { useAuthUser } from "react-auth-kit";
 import "react-datepicker/dist/react-datepicker.css";
-import Switch from "react-switch";
 import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -13,22 +12,13 @@ const manageCar = () => {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      test: [{}],
-      bus_point_1: false,
-      bus_point_2: false,
-      bus_point_3: false,
-      bus_point_4: false,
-    },
+
   });
 
   const [employees_1, setEmployees_1] = useState([]);
   const [employees_2, setEmployees_2] = useState([]);
-
-  const [value, setValue] = useState(1);
 
   const [buttonLock, setButtonLock] = useState(false);
 
@@ -296,16 +286,16 @@ const manageCar = () => {
                                 className="form-control"
                                 type="text"
                                 value={
-                                  e.bus_point_1 === value &&
+                                  e.bus_point_1 === '1' &&
                                   e.bus_stations === "จุดที่ 1"
                                     ? 0
-                                    : e.bus_point_2 === value &&
+                                    : e.bus_point_2 === '1' &&
                                       e.bus_stations === "จุดที่ 2"
                                     ? 0
-                                    : e.bus_point_3 === value &&
+                                    : e.bus_point_3 === '1' &&
                                       e.bus_stations === "จุดที่ 3"
                                     ? 0
-                                    : e.bus_point_4 === value &&
+                                    : e.bus_point_4 === '1' &&
                                       e.bus_stations === "จุดที่ 4"
                                     ? 0
                                     : 30
@@ -507,16 +497,16 @@ const manageCar = () => {
                                 className="form-control"
                                 type="text"
                                 value={
-                                  e.bus_point_1 === value &&
+                                  e.bus_point_1 === '1' &&
                                   e.bus_stations === "จุดที่ 1"
                                     ? 0
-                                    : e.bus_point_2 === value &&
+                                    : e.bus_point_2 === '1' &&
                                       e.bus_stations === "จุดที่ 2"
                                     ? 0
-                                    : e.bus_point_3 === value &&
+                                    : e.bus_point_3 === '1' &&
                                       e.bus_stations === "จุดที่ 3"
                                     ? 0
-                                    : e.bus_point_4 === value &&
+                                    : e.bus_point_4 === '1' &&
                                       e.bus_stations === "จุดที่ 4"
                                     ? 0
                                     : 30
