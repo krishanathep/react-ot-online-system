@@ -293,8 +293,6 @@ const manageCar = () => {
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
                           <th>แก้ไขล่าสุด</th>
-                          <th>จัดทำโดย</th>
-                          <th>b1</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -363,8 +361,9 @@ const manageCar = () => {
                             <td>
                               {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
                             </td>
-                            <td>
+                        
                               <input
+                                hidden
                                 type="text"
                                 size={8}
                                 className="form-control"
@@ -373,8 +372,7 @@ const manageCar = () => {
                                   required: false,
                                 })}
                               />
-                            </td>
-                            <td>{e.bus_point_1}</td>
+                      
                           </tr>
                         ))}
                         <tr align="center">
@@ -457,9 +455,11 @@ const manageCar = () => {
                                   ).length
                                 }{" "}
                                 คน
-                               
                               </label>
                             </div>
+                          </td>
+                          <td colSpan={4}>
+                            แก้ไขโดย : {employees_1.filter((e,index)=>index===0).map(e=>e.updated_by)}
                           </td>
                         </tr>
                       </tbody>
@@ -506,7 +506,6 @@ const manageCar = () => {
                           <th>ค่าเดินทาง</th>
                           {/* <th>สถานะ</th> */}
                           <th>แก้ไขล่าสุด</th>
-                          <th>จัดทำโดย</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -575,8 +574,9 @@ const manageCar = () => {
                             <td>
                               {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
                             </td>
-                            <td>
+                        
                               <input
+                              hidden
                                 type="text"
                                 size={8}
                                 className="form-control"
@@ -585,7 +585,7 @@ const manageCar = () => {
                                   required: false,
                                 })}
                               />
-                            </td>
+                       
                           </tr>
                         ))}
                         <tr align="center">
@@ -669,6 +669,9 @@ const manageCar = () => {
                                 คน
                               </label>
                             </div>
+                          </td>
+                          <td colSpan={4}>
+                            แก้ไขโดย : {employees_1.filter((e,index)=>index===0).map(e=>e.updated_by)}
                           </td>
                         </tr>
                       </tbody>
