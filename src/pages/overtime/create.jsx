@@ -201,15 +201,15 @@ const create = ({ prefix = "OT" }) => {
     deptFilter();
     getEmployeesByrole();
     const generateId = () => {
-      const dept_cut = userDetail().dept.slice(0, -1);
+      //const dept_cut = userDetail().dept.slice(0, -1);
       const date = new Date();
       const day = (date.getDate()).toString().padStart(2, "0");
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
       const year = date.getFullYear().toString().slice(-2);
       const randomNum = Math.floor(Math.random() * 1000)
         .toString()
-        .padStart(3, "0");
-      return `${prefix}-${dept_cut}-${day}${month}${year}-${randomNum}`;
+        .padStart(5, "0");
+      return `${prefix}-${day}${month}${year}-${randomNum}`;
     };
 
     setId(generateId());

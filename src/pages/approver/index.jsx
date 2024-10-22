@@ -31,13 +31,30 @@ const Approver = () => {
   const getData = async () => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-
     // get ot requrst data from dept by user login
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
           "/api/otrequests-dept?data=" +
           userDatail().dept
+      )
+      .then((res) => {
+        //Change api name
+        setOvertimes(res.data.otrequests);
+        setRecords(res.data.otrequests.slice(from, to));
+        setLoading(false);
+      });
+  };
+
+  const getData2 = async () => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+    // get ot requrst data from dept by user login
+    await axios
+      .get(
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequests-agency?data=" +
+          userDatail().agency
       )
       .then((res) => {
         //Change api name
@@ -139,7 +156,13 @@ const Approver = () => {
   };
 
   useEffect(() => {
-    getData();
+    if (userDatail().role==='approver_1') {
+      getData2();
+    } else  if (userDatail().role==='approver_2'){
+      getData()
+    } else {
+      getData2()
+    }
     getApprover();
   }, [page, pageSize, selectedRecords]);
 

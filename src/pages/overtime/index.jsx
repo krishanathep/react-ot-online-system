@@ -34,7 +34,7 @@ const Overtime = () => {
     await axios
       .get(
         import.meta.env.VITE_API_KEY +
-          "/api/otrequests-dept?data=" +
+          "/api/otrequests-agency?data=" +
           userDatail().agency
       )
       .then((res) => {
