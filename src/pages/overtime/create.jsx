@@ -336,36 +336,6 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label>
-                                  <br />
-                                  <Controller
-                                  rules={{ required: true }}
-                                    control={control}
-                                    name="ot_date"
-                                    render={({ field }) => (
-                                      <DatePicker
-                                        minDate={dayjs().toDate()}
-                                        className="form-control"
-                                        placeholderText="กรุณาเลือกวันที่"
-                                        onChange={(date) =>
-                                          field.onChange(
-                                            dayjs(date).format("YYYY-MM-DD")
-                                          )
-                                        }
-                                        dateFormat="dd-MM-yyyy"
-                                        selected={field.value}
-                                      />
-                                    )}
-                                  />
-                                  {errors.ot_date && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
                                   <label htmlFor="">ประเภทการทำงาน OT</label>
                                   <select
                                     className="form-control"
@@ -544,6 +514,36 @@ const create = ({ prefix = "OT" }) => {
                                     type="text"
                                   />
                                   {errors.total_date && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">วันที่จัดทำ</label>
+                                  <br />
+                                  <Controller
+                                  rules={{ required: true }}
+                                    control={control}
+                                    name="ot_date"
+                                    render={({ field }) => (
+                                      <DatePicker
+                                        minDate={dayjs().toDate()}
+                                        className="form-control"
+                                        placeholderText="กรุณาเลือกวันที่"
+                                        onChange={(date) =>
+                                          field.onChange(
+                                            dayjs(date).format("YYYY-MM-DD")
+                                          )
+                                        }
+                                        dateFormat="dd-MM-yyyy"
+                                        selected={field.value}
+                                      />
+                                    )}
+                                  />
+                                  {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>

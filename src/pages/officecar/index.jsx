@@ -12,9 +12,20 @@ const manageCar = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    setValue,
+    watch,
+    formState: {},
   } = useForm({
-
+    defaultValues: {
+      bus_point_1: false,
+      bus_point_2: false,
+      bus_point_3: false,
+      bus_point_4: false,
+      bus_point_5: false,
+      bus_point_6: false,
+      bus_point_7: false,
+      bus_point_8: false,
+    }
   });
 
   const [employees_1, setEmployees_1] = useState([]);
@@ -59,7 +70,7 @@ const manageCar = () => {
             .map((employee) => ({
               id: employee.id,
               check_price: employee.check_price,
-              bus_point_1: employee.bus_point_1,
+              bus_point_1: 0,
               bus_point_2: employee.bus_point_2,
               bus_point_3: employee.bus_point_3,
               bus_point_4: employee.bus_point_4,
@@ -128,8 +139,11 @@ const manageCar = () => {
 
 
   const handleUpdate_01 = async (data) => {
-    //alert(JSON.stringify(data)
-    console.log(data);
+    localStorage.setItem("bus_point_1", JSON.stringify(data.bus_point_1));
+    localStorage.setItem("bus_point_2", JSON.stringify(data.bus_point_2));
+    localStorage.setItem("bus_point_3", JSON.stringify(data.bus_point_3));
+    localStorage.setItem("bus_point_4", JSON.stringify(data.bus_point_4));
+
     await axios
       .put(
         import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update",
@@ -148,7 +162,11 @@ const manageCar = () => {
   };
 
   const handleUpdate_02 = async (data) => {
-    //alert(JSON.stringify(data))
+    localStorage.setItem("bus_point_5", JSON.stringify(data.bus_point_5));
+    localStorage.setItem("bus_point_6", JSON.stringify(data.bus_point_6));
+    localStorage.setItem("bus_point_7", JSON.stringify(data.bus_point_7));
+    localStorage.setItem("bus_point_8", JSON.stringify(data.bus_point_8));
+
     await axios
       .put(
         import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update2",
@@ -166,9 +184,45 @@ const manageCar = () => {
       });
   };
 
+  const getValue =()=> {
+    const savedAcceptTerm1 = JSON.parse(localStorage.getItem("bus_point_1"));
+    if (savedAcceptTerm1 !== null) {
+      setValue("bus_point_1", savedAcceptTerm1);
+    }
+    const savedAcceptTerm2 = JSON.parse(localStorage.getItem("bus_point_2"));
+    if (savedAcceptTerm2 !== null) {
+      setValue("bus_point_2", savedAcceptTerm2);
+    }
+    const savedAcceptTerm3 = JSON.parse(localStorage.getItem("bus_point_3"));
+    if (savedAcceptTerm3 !== null) {
+      setValue("bus_point_3", savedAcceptTerm3);
+    }
+    const savedAcceptTerm4 = JSON.parse(localStorage.getItem("bus_point_4"));
+    if (savedAcceptTerm4 !== null) {
+      setValue("bus_point_4", savedAcceptTerm4);
+    }
+    const savedAcceptTerm5 = JSON.parse(localStorage.getItem("bus_point_5"));
+    if (savedAcceptTerm5 !== null) {
+      setValue("bus_point_5", savedAcceptTerm5);
+    }
+    const savedAcceptTerm6 = JSON.parse(localStorage.getItem("bus_point_6"));
+    if (savedAcceptTerm6 !== null) {
+      setValue("bus_point_6", savedAcceptTerm6);
+    }
+    const savedAcceptTerm7 = JSON.parse(localStorage.getItem("bus_point_7"));
+    if (savedAcceptTerm7 !== null) {
+      setValue("bus_point_7", savedAcceptTerm7);
+    }
+    const savedAcceptTerm8 = JSON.parse(localStorage.getItem("bus_point_8"));
+    if (savedAcceptTerm8 !== null) {
+      setValue("bus_point_8", savedAcceptTerm8);
+    }
+  }
+
   useEffect(() => {
     getData();
-  }, []);
+    getValue();
+  }, [setValue]);
 
   if (loading === true) {
     return (
@@ -240,6 +294,7 @@ const manageCar = () => {
                           <th>ค่าเดินทาง</th>
                           <th>แก้ไขล่าสุด</th>
                           <th>จัดทำโดย</th>
+                          <th>b1</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -319,6 +374,7 @@ const manageCar = () => {
                                 })}
                               />
                             </td>
+                            <td>{e.bus_point_1}</td>
                           </tr>
                         ))}
                         <tr align="center">
