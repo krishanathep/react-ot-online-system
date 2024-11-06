@@ -19,6 +19,7 @@ import AppView from './pages/approver/view'
 import OfficeCar from "./pages/officecar";
 import Employees from './pages/admin/employees'
 import EmployeeCreate from "./pages/admin/employees/create";
+import EmployeeUpdate from './pages/admin/employees/edit'
 import TimeScan from "./pages/admin/timescan";
 import OvertimeAdmin from './pages/admin/overtime'
 import OverTimeViewAdmin from './pages/admin/overtime/view'
@@ -29,7 +30,8 @@ import ApproverMasterUpdate from './pages/admin/approver/update'
 
 const RoutesPage = () => {
   return (
-    <Router>
+    // <Router basename="/otrequest">
+      <Router>
       <Routes>
         <Route element={<WithOutnavbar />}>
           <Route exact  path="/auth/signin" element={<Signin />} />
@@ -57,6 +59,7 @@ const RoutesPage = () => {
           <Route path="/admin/overtime/view/:id" element={<OverTimeViewAdmin />} />
           <Route path="/admin/employees" element={<Employees/>} />
           <Route path="/admin/employees/create" element={<EmployeeCreate/>} />
+          <Route path="/admin/employees/update/:id" element={<EmployeeUpdate/>} />
           <Route path="/admin/timescan" element={<TimeScan/>} />
           <Route path="/admin/approver" element={<ApproverMaster/>} />
           <Route path="/admin/approver/create" element={<ApproverMasterCreate/>} />

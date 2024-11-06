@@ -25,7 +25,7 @@ const manageCar = () => {
       bus_point_6: false,
       bus_point_7: false,
       bus_point_8: false,
-    }
+    },
   });
 
   const [employees_1, setEmployees_1] = useState([]);
@@ -69,12 +69,13 @@ const manageCar = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              check_price: employee.check_price,
+              //check_price: employee.check_price,
               bus_point_1: 0,
               bus_point_2: employee.bus_point_2,
               bus_point_3: employee.bus_point_3,
               bus_point_4: employee.bus_point_4,
               //bus_price: employee.bus_price,
+              bus_stations: employee.bus_stations,
             })),
 
           test_2: res.data.employees
@@ -137,7 +138,6 @@ const manageCar = () => {
       });
   };
 
-
   const handleUpdate_01 = async (data) => {
     localStorage.setItem("bus_point_1", JSON.stringify(data.bus_point_1));
     localStorage.setItem("bus_point_2", JSON.stringify(data.bus_point_2));
@@ -184,7 +184,7 @@ const manageCar = () => {
       });
   };
 
-  const getValue =()=> {
+  const getValue = () => {
     const savedAcceptTerm1 = JSON.parse(localStorage.getItem("bus_point_1"));
     if (savedAcceptTerm1 !== null) {
       setValue("bus_point_1", savedAcceptTerm1);
@@ -217,7 +217,7 @@ const manageCar = () => {
     if (savedAcceptTerm8 !== null) {
       setValue("bus_point_8", savedAcceptTerm8);
     }
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -336,19 +336,18 @@ const manageCar = () => {
                             <td width={100} align="center">
                               <input
                                 size={1}
-                                className="form-control"
                                 type="text"
                                 value={
-                                  e.bus_point_1 === '1' &&
+                                  e.bus_point_1 === 1 &&
                                   e.bus_stations === "จุดที่ 1"
                                     ? 0
-                                    : e.bus_point_2 === '1' &&
+                                    : e.bus_point_2 === 1 &&
                                       e.bus_stations === "จุดที่ 2"
                                     ? 0
-                                    : e.bus_point_3 === '1' &&
+                                    : e.bus_point_3 === 1 &&
                                       e.bus_stations === "จุดที่ 3"
                                     ? 0
-                                    : e.bus_point_4 === '1' &&
+                                    : e.bus_point_4 === 1 &&
                                       e.bus_stations === "จุดที่ 4"
                                     ? 0
                                     : 30
@@ -361,18 +360,17 @@ const manageCar = () => {
                             <td>
                               {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
                             </td>
-                        
-                              <input
-                                hidden
-                                type="text"
-                                size={8}
-                                className="form-control"
-                                value={userdetail().name}
-                                {...register(`test.${index}.updated_by`, {
-                                  required: false,
-                                })}
-                              />
-                      
+
+                            <input
+                              hidden
+                              type="text"
+                              size={1}
+                              className="form-control"
+                              value={userdetail().name}
+                              {...register(`test.${index}.updated_by`, {
+                                required: false,
+                              })}
+                            />
                           </tr>
                         ))}
                         <tr align="center">
@@ -380,7 +378,7 @@ const manageCar = () => {
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
-                              <input
+                                <input
                                   type="checkbox"
                                   value={1}
                                   {...register("bus_point_1", {
@@ -400,7 +398,7 @@ const manageCar = () => {
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
-                              <input
+                                <input
                                   type="checkbox"
                                   value={1}
                                   {...register("bus_point_2", {
@@ -420,7 +418,7 @@ const manageCar = () => {
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
-                              <input
+                                <input
                                   type="checkbox"
                                   value={1}
                                   {...register("bus_point_3", {
@@ -434,14 +432,13 @@ const manageCar = () => {
                                   ).length
                                 }{" "}
                                 คน
-                              
                               </label>
                             </div>
                           </td>
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
-                              <input
+                                <input
                                   type="checkbox"
                                   value={1}
                                   {...register("bus_point_4", {
@@ -459,7 +456,10 @@ const manageCar = () => {
                             </div>
                           </td>
                           <td colSpan={4}>
-                            แก้ไขโดย : {employees_1.filter((e,index)=>index===0).map(e=>e.updated_by)}
+                            แก้ไขโดย :{" "}
+                            {employees_1
+                              .filter((e, index) => index === 0)
+                              .map((e) => e.updated_by)}
                           </td>
                         </tr>
                       </tbody>
@@ -504,7 +504,6 @@ const manageCar = () => {
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
-                          {/* <th>สถานะ</th> */}
                           <th>แก้ไขล่าสุด</th>
                         </tr>
                       </thead>
@@ -548,20 +547,21 @@ const manageCar = () => {
                             <td>{e.end_time} </td>
                             <td width={100} align="center">
                               <input
+                                style={{ border: 0 }}
                                 size={1}
                                 className="form-control"
                                 type="text"
                                 value={
-                                  e.bus_point_1 === '1' &&
+                                  e.bus_point_1 === 1 &&
                                   e.bus_stations === "จุดที่ 1"
                                     ? 0
-                                    : e.bus_point_2 === '1' &&
+                                    : e.bus_point_2 === 1 &&
                                       e.bus_stations === "จุดที่ 2"
                                     ? 0
-                                    : e.bus_point_3 === '1' &&
+                                    : e.bus_point_3 === 1 &&
                                       e.bus_stations === "จุดที่ 3"
                                     ? 0
-                                    : e.bus_point_4 === '1' &&
+                                    : e.bus_point_4 === 1 &&
                                       e.bus_stations === "จุดที่ 4"
                                     ? 0
                                     : 30
@@ -574,18 +574,17 @@ const manageCar = () => {
                             <td>
                               {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
                             </td>
-                        
-                              <input
+
+                            <input
                               hidden
-                                type="text"
-                                size={8}
-                                className="form-control"
-                                value={userdetail().name}
-                                {...register(`test_2.${index}.updated_by`, {
-                                  required: false,
-                                })}
-                              />
-                       
+                              type="text"
+                              size={8}
+                              className="form-control"
+                              value={userdetail().name}
+                              {...register(`test_2.${index}.updated_by`, {
+                                required: false,
+                              })}
+                            />
                           </tr>
                         ))}
                         <tr align="center">
@@ -602,7 +601,7 @@ const manageCar = () => {
                                 />{" "}
                                 จำนวน{" "}
                                 {
-                                  employees_1.filter(
+                                  employees_2.filter(
                                     (e) => e.bus_stations === "จุดที่ 1"
                                   ).length
                                 }{" "}
@@ -622,7 +621,7 @@ const manageCar = () => {
                                 />{" "}
                                 จำนวน{" "}
                                 {
-                                  employees_1.filter(
+                                  employees_2.filter(
                                     (e) => e.bus_stations === "จุดที่ 2"
                                   ).length
                                 }{" "}
@@ -642,7 +641,7 @@ const manageCar = () => {
                                 />{" "}
                                 จำนวน{" "}
                                 {
-                                  employees_1.filter(
+                                  employees_2.filter(
                                     (e) => e.bus_stations === "จุดที่ 3"
                                   ).length
                                 }{" "}
@@ -662,7 +661,7 @@ const manageCar = () => {
                                 />{" "}
                                 จำนวน{" "}
                                 {
-                                  employees_1.filter(
+                                  employees_2.filter(
                                     (e) => e.bus_stations === "จุดที่ 4"
                                   ).length
                                 }{" "}
@@ -671,7 +670,10 @@ const manageCar = () => {
                             </div>
                           </td>
                           <td colSpan={4}>
-                            แก้ไขโดย : {employees_1.filter((e,index)=>index===0).map(e=>e.updated_by)}
+                            แก้ไขโดย :{" "}
+                            {employees_2
+                              .filter((e, index) => index === 0)
+                              .map((e) => e.updated_by)}
                           </td>
                         </tr>
                       </tbody>

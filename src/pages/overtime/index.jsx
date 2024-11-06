@@ -4,6 +4,7 @@ import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -16,7 +17,7 @@ const Overtime = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
-  const [startDate, setStartDate] = useState('');
+  const [startDate, setStartDate] = useState("");
 
   useEffect(() => {
     setPage(1);
@@ -104,7 +105,6 @@ const Overtime = () => {
 
   //filter function by date
   const dateFilter = async (key) => {
-
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
@@ -120,6 +120,42 @@ const Overtime = () => {
         setRecords(res.data.otrequest.slice(from, to));
         setLoading(false);
       });
+  };
+
+  const handleDeleteSubmit = (blogs, data) => {
+    Swal.fire({
+      title: "ยืนยันการลบ OT",
+      text: "คุณต้องการลบคำร้อง OT ใช่ไหม",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: "ระบบได้ทำการลบ OT เรียบร้อยแล้ว",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        //setLoading(true);
+        axios
+          .delete(
+            import.meta.env.VITE_API_KEY + "/api/otrequest-delete/" + blogs.id,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            getData();
+            //setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
 
   useEffect(() => {
@@ -256,9 +292,11 @@ const Overtime = () => {
                                     //isClearable
                                     placeholderText="กรุณาเลือกวันที่"
                                     selected={startDate}
-                                    onChange={(date)=>{
-                                      setStartDate(date)
-                                      dateFilter(dayjs(date).format("YYYY-MM-DD"))
+                                    onChange={(date) => {
+                                      setStartDate(date);
+                                      dateFilter(
+                                        dayjs(date).format("YYYY-MM-DD")
+                                      );
                                     }}
                                     dateFormat="dd-MM-yyyy"
                                   />
@@ -406,6 +444,12 @@ const Overtime = () => {
                               >
                                 <i className="far fa-edit"></i>
                               </Link>{" "}
+                              <button
+                                onClick={() => handleDeleteSubmit(blogs)}
+                                className="btn btn-danger"
+                              >
+                                <i className="far fa-trash-alt"></i>
+                              </button>
                             </>
                           ),
                         },

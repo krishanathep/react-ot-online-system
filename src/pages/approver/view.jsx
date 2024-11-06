@@ -141,10 +141,9 @@ const view = () => {
                                 <td>
                                   <b>พนักงาน</b> : {empcount} คน{" "}
                                   <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount === 50
-                                    ? overtimes.total_date * empcount + " นาที"
-                                    : overtimes.total_date * empcount +
-                                      " ชม."}{" "}
+                                  {overtimes.total_date * empcount} {overtimes.total_date === "50"
+                                    ? "นาที"
+                                    : "ชม."}
                                 </td>
                               </tr>
                             </thead>

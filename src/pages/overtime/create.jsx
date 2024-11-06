@@ -125,14 +125,10 @@ const create = ({ prefix = "OT" }) => {
   const finishFilter = async (key) => {
     await axios
       .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-finish?data=" +
-          key
-      )
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-finish?data=${key}`)
       .then((res) => {
-        //setTime(res.data.time.ot_total);
        reset({total_date: res.data.time.ot_total})
-      });
+    });
   };
 
   const handleCreateSubmit = async (data) => {
@@ -652,6 +648,7 @@ const create = ({ prefix = "OT" }) => {
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
+                                  style={{border:0}}
                                     className="form-control"
                                     type="text"
                                     value={
@@ -666,6 +663,7 @@ const create = ({ prefix = "OT" }) => {
                                 </td>
                                 <td>
                                   <input
+                                  style={{border:0}}
                                     className="form-control"
                                     type="text"
                                     value={
@@ -680,6 +678,7 @@ const create = ({ prefix = "OT" }) => {
                                 </td>
                                 <td>
                                   <input
+                                  style={{border:0}}
                                     className="form-control"
                                     type="text"
                                     value={

@@ -92,6 +92,21 @@ const Employees = () => {
     }
   };
 
+  const handleDeleteSubmit =async(blogs,data)=>{
+    await axios
+      .delete(import.meta.env.VITE_API_KEY + "/api/employees-delete/"+blogs.id,data)
+      .then((res) => {
+        console.log(res.data.employees)
+        Swal.fire({
+          icon: "error",
+          title: "Your employees has been deleted",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        getData()
+      });
+  }
+
   useEffect(() => {
     getData();
   }, [page, pageSize]);
@@ -123,7 +138,7 @@ const Employees = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-12">
+                      <div className="col-md-12 mb-2">
                         <div className="float-right mb-2">
                           <div className="file btn btn-primary mr-1" style={{position:"relative",overflow:"hidden"}}>
                             <i className="fas fa-folder-plus"></i> เลือกไฟล์
@@ -150,35 +165,6 @@ const Employees = () => {
                           <Link to={'/admin/employees/create'} className="btn btn-success"><i className="fas fa-plus"></i> Create</Link>
                         </div>
                       </div>
-                      {/* <div className="col-md-12">
-                        <div className="card shadow-none border">
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-md-3">
-                                <label htmlFor="">รหัสพนักงาน</label>
-                                <input 
-                                type="text" 
-                                className="form-control" 
-                                placeholder="กรุณากรอกข้อมูล" 
-                                onChange={(e)=>setSearch(e.target.value)}
-                                />
-                              </div>
-                              <div className="col-md-3">
-                                <label htmlFor="">ชื่อพนักงาน</label>
-                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
-                              </div>
-                              <div className="col-md-3">
-                                <label htmlFor="">กลุ่มงาน</label>
-                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
-                              </div>
-                              <div className="col-md-3">
-                                <label htmlFor="">แผนก</label>
-                                <input type="text" className="form-control" placeholder="กรุณากรอกข้อมูล" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div> */}
                     </div>
                     <DataTable
                       style={{
@@ -221,34 +207,6 @@ const Employees = () => {
                           textAlignment: "center",
                         },
                         {
-                          accessor: "department",
-                          title: "หน่วยงาน",
-                          textAlignment: "center",
-                          render: ({ department }) => (
-                            <>
-                              {department === null ? (
-                                 <h5><blade className="badge bg-info"><span>ไม่ระบุข้อมูล</span></blade></h5>
-                              ) : (
-                                <span>{department}</span>
-                              )}
-                            </>
-                          ),
-                        },
-                        {
-                          accessor: "agency",
-                          title: "ส่วนงาน",
-                          textAlignment: "center",
-                          render: ({ agency }) => (
-                            <>
-                              {agency === null ? (
-                                 <h5><blade className="badge bg-info"><span>ไม่ระบุข้อมูล</span></blade></h5>
-                              ) : (
-                                <span>{agency}</span>
-                              )}
-                            </>
-                          ),
-                        },
-                        {
                           accessor: "dept",
                           title: "แผนก",
                           textAlignment: "center",
@@ -264,6 +222,28 @@ const Employees = () => {
                           textAlignment: "center",
                           render: ({ created_at }) =>
                             dayjs(created_at).format("DD-MM-YYYY"),
+                        },
+                        {
+                          accessor: "actions",
+                          textAlignment: "center",
+                          title: "ดำเนินการ",
+                          render: (blogs) => (
+                            <>
+                              <Link
+                                to={"/admin/employees/update/" + blogs.id}
+                                className="btn btn-primary"
+                              >
+                                <i className="far fa-edit"></i>
+                              </Link>{" "}
+                              <button
+                                onClick={()=>handleDeleteSubmit(blogs)}
+                               
+                                className="btn btn-danger"
+                              >
+                                <i className="fas fa-trash"></i>
+                              </button>
+                            </>
+                          ),
                         },
                       ]}
                       records={records}

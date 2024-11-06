@@ -42,7 +42,7 @@ const edit = () => {
 
         const bus = res.data.data.employees;
 
-        setMemebers(bus.filter((b) => b.bus_stations !== "no"));
+        setMemebers(bus);
 
         reset({
           test: res.data.data.employees.map((employee) => ({
@@ -160,12 +160,17 @@ const edit = () => {
                                   <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
                                 </td>
                                 <td>
-                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
+                                  <b>เวลารวม</b> : {overtimes.total_date}{" "}
+                                  {overtimes.total_date === "50"
+                                    ? "นาที"
+                                    : "ชม."}{" "}
                                 </td>
                                 <td>
                                   <b>พนักงาน</b> : {empcount} คน{" "}
                                   <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount} ชม.
+                                  {overtimes.total_date * empcount} {overtimes.total_date === "50"
+                                    ? "นาที"
+                                    : "ชม."}
                                 </td>
                               </tr>
                             </thead>
@@ -289,35 +294,13 @@ const edit = () => {
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     <td>
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        value={30}
-                                        // value={
-                                        //   member.bus_stations === "จุดที่ 1" &&
-                                        //   overtimes.bus_point_1 !== "0"
-                                        //     ? "0"
-                                        //     : member.bus_stations ===
-                                        //         "จุดที่ 2" &&
-                                        //       overtimes.bus_point_2 !== "0"
-                                        //     ? "0"
-                                        //     : member.bus_stations ===
-                                        //         "จุดที่ 3" &&
-                                        //       overtimes.bus_point_3 !== "0"
-                                        //     ? "0"
-                                        //     : member.bus_stations ===
-                                        //         "จุดที่ 4" &&
-                                        //       overtimes.bus_point_4 !== "0"
-                                        //     ? "0"
-                                        //     : "30"
-                                        // }
-                                        size="1"
-                                        {...register(
-                                          `test.${index}.bus_price`,
-                                          {
-                                            required: false,
-                                          }
-                                        )}
+                                      <input type="text" size={1} className="form-control"
+                                      value={
+                                        member.bus_stations==="no"?"0":"30"
+                                      }
+                                      {...register(`test.${index}.bus_price`, {
+                                        required: true,
+                                      })}
                                       />
                                     </td>
                                     <td>
