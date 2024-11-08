@@ -447,6 +447,11 @@ const Overtime = () => {
                               <button
                                 onClick={() => handleDeleteSubmit(blogs)}
                                 className="btn btn-danger"
+                                disabled={
+                                  blogs.status === "รอการอนุมัติ 1"
+                                    ? false
+                                    : true
+                                }
                               >
                                 <i className="far fa-trash-alt"></i>
                               </button>

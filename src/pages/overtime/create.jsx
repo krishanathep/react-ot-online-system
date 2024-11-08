@@ -40,11 +40,12 @@ const create = ({ prefix = "OT" }) => {
 
   const [employees, setEmployees] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [loading, setLoading2] = useState(false)
+  const [loading, setLoading2] = useState(false);
 
   const [time, setTime] = useState(0);
   const [timeList, setTimeList] = useState([]);
   const [timeList_2, setTimeList_2] = useState([]);
+  const [bus_point, setBusPoint] = useState([]);
 
   const [startDate, setStartDate] = useState("");
 
@@ -82,7 +83,22 @@ const create = ({ prefix = "OT" }) => {
       append({ option: item });
     });
     setNullTable(false);
-    SetLock(false)
+    SetLock(false);
+  };
+
+  const getBusPrice = async () => {
+    try {
+      setLoading(true);
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequest-bus-price-select")
+        .then((res) => {
+          setBusPoint(res.data.bus_price);
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getEmployees = async () => {
@@ -100,7 +116,7 @@ const create = ({ prefix = "OT" }) => {
     }
   };
 
-  //filter function by ot list
+  //filter เวลาที่เริ่มต้น
   const listFilter = async (key) => {
     await axios
       .get(
@@ -109,32 +125,28 @@ const create = ({ prefix = "OT" }) => {
       .then((res) => {
         setTimeList(res.data.time);
       });
-
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-list_2?data=" +
-          key
-      )
-      .then((res) => {
-        setTimeList_2(res.data.time);
-      });
   };
 
-  //filter function by ot time finish
+  //filter เวลาที่สิ้นสุด
   const finishFilter = async (key) => {
     await axios
       .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-finish?data=${key}`)
+        `${
+          import.meta.env.VITE_API_KEY
+        }/api/otrequests-filter-finish?data=${key}`
+      )
       .then((res) => {
-       reset({total_date: res.data.time.ot_total})
-    });
+        reset({
+          total_date: res.data.time.ot_total,
+          end_date: res.data.time.ot_finish,
+        });
+      });
   };
 
   const handleCreateSubmit = async (data) => {
     try {
       SetLock(true);
-      setLoading2(true)
+      setLoading2(true);
       await axios
         .post(import.meta.env.VITE_API_KEY + "/api/otrequest-create", data)
         .then((res) => {
@@ -192,6 +204,7 @@ const create = ({ prefix = "OT" }) => {
   };
 
   useEffect(() => {
+    getBusPrice();
     getEmployees();
     getApprover();
     deptFilter();
@@ -199,7 +212,7 @@ const create = ({ prefix = "OT" }) => {
     const generateId = () => {
       //const dept_cut = userDetail().dept.slice(0, -1);
       const date = new Date();
-      const day = (date.getDate()).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
       const year = date.getFullYear().toString().slice(-2);
       const randomNum = Math.floor(Math.random() * 1000)
@@ -330,7 +343,7 @@ const create = ({ prefix = "OT" }) => {
                                   )}
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ประเภทการทำงาน OT</label>
                                   <select
@@ -366,7 +379,7 @@ const create = ({ prefix = "OT" }) => {
                                   )}
                                 </div>
                               </div>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">ประเภท OT</label>
                                   <select
@@ -403,34 +416,34 @@ const create = ({ prefix = "OT" }) => {
                                     </option>
                                     {/* OT ประเภท ทำงานเป็นกะ */}
                                     <option value="OT วันธรรมดา ก่อนเข้ากะ 1">
-                                    OT วันธรรมดา ก่อนกะ 21.45
+                                      OT วันธรรมดา ก่อนกะ 21.45
                                     </option>
                                     <option value="OT วันธรรมดา หลังกะ 1">
-                                    OT วันธรรมดา หลังกะ 7.05
+                                      OT วันธรรมดา หลังกะ 7.05
                                     </option>
                                     <option value="OT วันหยุดปกติ 1">
-                                    OT วันหยุดปกติ 21.45-6.45
+                                      OT วันหยุดปกติ 21.45-6.45
                                     </option>
                                     <option value="OT วันหยุด ก่อนเข้ากะ 1">
-                                    OT วันหยุด ก่อนกะ 21.45
+                                      OT วันหยุด ก่อนกะ 21.45
                                     </option>
                                     <option value="OT วันหยุด หลังกะ 1">
-                                    OT วันหยุด หลังกะ 6.45
+                                      OT วันหยุด หลังกะ 6.45
                                     </option>
                                     <option value="OT วันธรรมดา ก่อนเข้ากะ 2">
-                                    OT วันธรรมดา ก่อนกะ 20.15
+                                      OT วันธรรมดา ก่อนกะ 20.15
                                     </option>
                                     <option value="OT วันธรรมดา หลังกะ 2">
-                                    OT วันธรรมดา หลังกะ 5.35
+                                      OT วันธรรมดา หลังกะ 5.35
                                     </option>
                                     <option value="OT วันหยุดปกติ 2">
-                                    OT วันหยุดปกติ 20.15-5.15
+                                      OT วันหยุดปกติ 20.15-5.15
                                     </option>
                                     <option value="OT วันหยุด ก่อนเข้ากะ 2">
-                                    OT วันหยุด ก่อนกะ 20.15
+                                      OT วันหยุด ก่อนกะ 20.15
                                     </option>
                                     <option value="OT วันหยุด หลังกะ 2">
-                                    OT วันหยุด หลังกะ 5.15
+                                      OT วันหยุด หลังกะ 5.15
                                     </option>
                                   </select>
                                   {errors.ot_type && (
@@ -440,15 +453,19 @@ const create = ({ prefix = "OT" }) => {
                                   )}
                                 </div>
                               </div>
+
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">เวลาที่เริ่มต้น</label>
+                                  <label htmlFor="">เวลาที่ทำ OT</label>
                                   <select
-                                    className="form-control"
-                                    id="sel1"
                                     {...register("start_date", {
                                       required: true,
                                     })}
+                                    className="form-control"
+                                    id="sele1"
+                                    onChange={(event) =>
+                                      finishFilter(event.target.value)
+                                    }
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
                                     {timeList.map((item) => (
@@ -460,42 +477,27 @@ const create = ({ prefix = "OT" }) => {
                                       </option>
                                     ))}
                                   </select>
-                                  {errors.start_date && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor="">เวลาที่สิ้นสุด</label>
-                                  <select
-                                    {...register("end_date", {
-                                      required: true,
-                                    })}
-                                    className="form-control"
-                                    id="sele1"
-                                    onChange={(event) =>
-                                      finishFilter(event.target.value)
-                                    }
-                                  >
-                                    <option value="">กรุณาเลือกข้อมูล</option>
-                                    {timeList_2.map((item) => (
-                                      <option
-                                        key={item.id}
-                                        value={item.ot_finish}
-                                      >
-                                        {item.ot_finish}
-                                      </option>
-                                    ))}
-                                  </select>
                                   {errors.end_date && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
                                   )}
                                 </div>
+                              </div>
+                              <div>
+                                <input
+                                  hidden
+                                  className="form-control"
+                                  id="sel1"
+                                  {...register("end_date", {
+                                    required: true,
+                                  })}
+                                />
+                                {errors.start_date && (
+                                  <span className="text-danger">
+                                    This field is required
+                                  </span>
+                                )}
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
@@ -521,7 +523,7 @@ const create = ({ prefix = "OT" }) => {
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   <br />
                                   <Controller
-                                  rules={{ required: true }}
+                                    rules={{ required: true }}
                                     control={control}
                                     name="ot_date"
                                     render={({ field }) => (
@@ -648,7 +650,8 @@ const create = ({ prefix = "OT" }) => {
                                 <td>{index + 1}</td>
                                 <td>
                                   <input
-                                  style={{border:0}}
+                                    style={{ border: 0 }}
+                                    size={1}
                                     className="form-control"
                                     type="text"
                                     value={
@@ -663,7 +666,7 @@ const create = ({ prefix = "OT" }) => {
                                 </td>
                                 <td>
                                   <input
-                                  style={{border:0}}
+                                    style={{ border: 0 }}
                                     className="form-control"
                                     type="text"
                                     value={
@@ -678,7 +681,8 @@ const create = ({ prefix = "OT" }) => {
                                 </td>
                                 <td>
                                   <input
-                                  style={{border:0}}
+                                    size={6}
+                                    style={{ border: 0 }}
                                     className="form-control"
                                     type="text"
                                     value={
@@ -730,19 +734,14 @@ const create = ({ prefix = "OT" }) => {
                                     })}
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
-                                    <option value={"จุดที่ 1"}>
-                                      จุดที่ 1 สายศาลายา
-                                    </option>
-                                    <option value={"จุดที่ 2"}>
-                                      จุดที่ 2 สายนครชัยศรี
-                                    </option>
-                                    <option value={"จุดที่ 3"}>
-                                      จุดที่ 3 สายหนองแขม
-                                    </option>
-                                    <option value={"จุดที่ 4"}>
-                                      จุดที่ 4 สายวงเวียนใหญ่
-                                    </option>
-                                    <option value={"no"}>ไม่ใช้บริการ</option>
+                                    {bus_point.map((item) => (
+                                      <option
+                                        key={item.id}
+                                        value={item.bus_point}
+                                      >
+                                        {item.bus_name}
+                                      </option>
+                                    ))}
                                   </select>
                                 </td>
                               </tr>
@@ -771,7 +770,8 @@ const create = ({ prefix = "OT" }) => {
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}
                             <Link to={"/overtime"} className="btn btn-danger">
-                            <i className="fas fa-arrow-circle-left"></i> ย้อนกลับ
+                              <i className="fas fa-arrow-circle-left"></i>{" "}
+                              ย้อนกลับ
                             </Link>
                           </div>
                         </div>

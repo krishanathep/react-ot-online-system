@@ -102,17 +102,17 @@ const viewAdmin = () => {
                                   )}
                                 </td>
                                 <td>
-                                  <b>เวลาเริ่มต้น</b> : {overtimes.start_date}{" "}
+                                  <b>เวลาที่ทำ OT</b> : {overtimes.start_date}{" "}
                                   น.
                                 </td>
                                 <td>
-                                  <b>เวลาสิ้นสุด</b> : {overtimes.end_date} น.
+                                <b>เวลาทั้งหมด</b> : {overtimes.total_date}
                                 </td>
                                 <td>
-                                  <b>เวลาทั้งหมด</b> : {overtimes.total_date}
+                                <b>จำนวนพนักงาน</b> : 1 คน
                                 </td>
                                 <td>
-                                  <b>จำนวนพนักงาน</b> : 1 คน
+                                 
                                 </td>
                               </tr>
                             </thead>
@@ -140,7 +140,7 @@ const viewAdmin = () => {
                             <tbody>
                               {members.map((member, index) => {
                                 const start = dayjs(
-                                  "01-01-2024 " + overtimes.start_date
+                                  "01-01-2024 " + member.ot_in_time
                                 );
                                 const end = dayjs(
                                   "01-01-2024 " + member.out_time
@@ -184,12 +184,12 @@ const viewAdmin = () => {
                                         .filter((s) =>
                                           s.date_scan
                                             .toLowerCase()
-                                            .includes(overtimes.ot_date)
+                                            .includes(overtimes.ot_date) && s.time_scan > '12:00:00'
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 1 ? t.time_scan.substring(0,5) : null}
+                                              {index === 0 ? t.time_scan.substring(0,5) : null}
                                             </span>
                                           );
                                         })}
