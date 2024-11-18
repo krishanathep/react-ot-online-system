@@ -49,7 +49,7 @@ const edit = () => {
             id: employee.id,
             objective: employee.objective,
             out_time: employee.out_time,
-            //bus_price: employee.bus_price,
+            bus_price: employee.bus_price,
             remark: employee.remark,
             ot_create_date: res.data.data.ot_date,
             ot_in_time: res.data.data.start_date.substring(0,5).trim(),

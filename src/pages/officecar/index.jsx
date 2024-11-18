@@ -74,7 +74,7 @@ const manageCar = () => {
               bus_point_2: employee.bus_point_2,
               bus_point_3: employee.bus_point_3,
               bus_point_4: employee.bus_point_4,
-              //bus_price: employee.bus_price,
+              bus_price: employee.bus_price,
               bus_stations: employee.bus_stations,
             })),
 
@@ -91,7 +91,8 @@ const manageCar = () => {
               bus_point_6: employee.bus_point_2,
               bus_point_7: employee.bus_point_3,
               bus_point_8: employee.bus_point_4,
-              //bus_price: employee.bus_price,
+              bus_price: employee.bus_price,
+              bus_stations: employee.bus_stations,
             })),
         });
         //setLoading(false);
@@ -289,6 +290,7 @@ const manageCar = () => {
                           <th>จุดรับส่ง 2</th>
                           <th>จุดรับส่ง 3</th>
                           <th>จุดรับส่ง 4</th>
+                          <th>ไม่ใช้บริการ</th>
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
@@ -330,28 +332,22 @@ const manageCar = () => {
                               )}
                             </td>
                             <td>
+                              {e.bus_stations === "ไม่ใช้บริการ" ? (
+                                <i className="fas fa-ban text-danger"></i>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td>
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>
                             <td>{e.end_time} </td>
-                            <td width={100} align="center">
+                            <td hidden><input size={2} type="text" value={ e.bus_stations}/></td>
+                            <td>
                               <input
+                                style={{ border: 0 }}
                                 size={1}
                                 type="text"
-                                value={
-                                  e.bus_point_1 === 1 &&
-                                  e.bus_stations === "จุดที่ 1"
-                                    ? 0
-                                    : e.bus_point_2 === 1 &&
-                                      e.bus_stations === "จุดที่ 2"
-                                    ? 0
-                                    : e.bus_point_3 === 1 &&
-                                      e.bus_stations === "จุดที่ 3"
-                                    ? 0
-                                    : e.bus_point_4 === 1 &&
-                                      e.bus_stations === "จุดที่ 4"
-                                    ? 0
-                                    : 30
-                                }
                                 {...register(`test.${index}.bus_price`, {
                                   required: false,
                                 })}
@@ -455,6 +451,8 @@ const manageCar = () => {
                               </label>
                             </div>
                           </td>
+                          <td>
+                          </td>
                           <td colSpan={4}>
                             แก้ไขโดย :{" "}
                             {employees_1
@@ -501,6 +499,7 @@ const manageCar = () => {
                           <th>จุดรับส่ง 2</th>
                           <th>จุดรับส่ง 3</th>
                           <th>จุดรับส่ง 4</th>
+                          <th>ไม่ใช้บริการ</th>
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
@@ -542,30 +541,23 @@ const manageCar = () => {
                               )}
                             </td>
                             <td>
+                              {e.bus_stations === "ไม่ใช้บริการ" ? (
+                                <i className="fas fa-ban text-danger"></i>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td>
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>
                             <td>{e.end_time} </td>
-                            <td width={100} align="center">
+                            <td hidden><input type="text" size={1} value={e.bus_stations} /></td>
+                            <td>
                               <input
                                 style={{ border: 0 }}
                                 size={1}
                                 className="form-control"
                                 type="text"
-                                value={
-                                  e.bus_point_1 === 1 &&
-                                  e.bus_stations === "จุดที่ 1"
-                                    ? 0
-                                    : e.bus_point_2 === 1 &&
-                                      e.bus_stations === "จุดที่ 2"
-                                    ? 0
-                                    : e.bus_point_3 === 1 &&
-                                      e.bus_stations === "จุดที่ 3"
-                                    ? 0
-                                    : e.bus_point_4 === 1 &&
-                                      e.bus_stations === "จุดที่ 4"
-                                    ? 0
-                                    : 30
-                                }
                                 {...register(`test_2.${index}.bus_price`, {
                                   required: false,
                                 })}
@@ -668,6 +660,8 @@ const manageCar = () => {
                                 คน
                               </label>
                             </div>
+                          </td>
+                          <td>
                           </td>
                           <td colSpan={4}>
                             แก้ไขโดย :{" "}
