@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import InputMask from "react-input-mask";
 import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
-const edit = () => {
+const edit = ({ index }) => {
   dayjs.extend(duration);
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      test: [{}],
+      test: [{ out_time: "" }],
     },
   });
 
@@ -52,7 +54,7 @@ const edit = () => {
             bus_price: employee.bus_price,
             remark: employee.remark,
             ot_create_date: res.data.data.ot_date,
-            ot_in_time: res.data.data.start_date.substring(0,5).trim(),
+            ot_in_time: res.data.data.start_date.substring(0, 5).trim(),
             //ot_in_time: res.data.data.start_date,
             ot_out_time: res.data.data.end_date,
           })),
@@ -85,7 +87,7 @@ const edit = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-        console.log(res)
+        console.log(res);
         navigate("/overtime");
       })
       .catch((error) => {
@@ -159,18 +161,18 @@ const edit = () => {
                                   น.
                                 </td>
                                 <td>
-                                <b>เวลารวม</b> : {overtimes.total_date}{" "}
+                                  <b>เวลารวม</b> : {overtimes.total_date}{" "}
                                   {overtimes.total_date === "50"
                                     ? "นาที"
                                     : "ชม."}{" "}
                                 </td>
                                 <td>
-                                <b>พนักงาน</b> : {empcount} คน{" "}
+                                  <b>พนักงาน</b> : {empcount} คน{" "}
                                 </td>
                                 <td>
-                                  
                                   <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount} {overtimes.total_date === "50"
+                                  {overtimes.total_date * empcount}{" "}
+                                  {overtimes.total_date === "50"
                                     ? "นาที"
                                     : "ชม."}
                                 </td>
@@ -198,7 +200,6 @@ const edit = () => {
                               </tr>
                             </thead>
                             <tbody>
-
                               {members.map((member, index) => {
                                 const start = dayjs(
                                   "01-01-2024 " + member.ot_in_time
@@ -238,7 +239,7 @@ const edit = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.time_scan
+                                      {member.time_scan
                                         .filter((s) =>
                                           s.date_scan
                                             .toLowerCase()
@@ -247,43 +248,49 @@ const edit = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
+                                              {index === 0
+                                                ? t.time_scan.substring(0, 5)
+                                                : null}
                                             </span>
                                           );
                                         })}{" "}
                                       -{" "}
                                       {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date) && s.time_scan > '12:00:00'
+                                        .filter(
+                                          (s) =>
+                                            s.date_scan
+                                              .toLowerCase()
+                                              .includes(overtimes.ot_date) &&
+                                            s.time_scan > "12:00:00"
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
+                                              {index === 0
+                                                ? t.time_scan.substring(0, 5)
+                                                : null}
                                             </span>
                                           );
                                         })}
                                     </td>
                                     <td>
-                                      <input
-                                        className="form-control"
-                                        type="text"
-                                        size="2"
-                                        placeholder="20:00"
-                                        {...register(`test.${index}.out_time`, {
-                                          required: true,
-                                          pattern: {
-                                            value: /^([01]\d|2[0-3]):([0-5]\d)$/,
-                                          }
-                                        })}
+                                      <Controller
+                                        name={`test.${index}.out_time`}
+                                        control={control}
+                                        rules={{
+                                          required: "This field is required",
+                                        }}
+                                        render={({ field }) => (
+                                          <InputMask
+                                            size={1}
+                                            {...field}
+                                            value={field.value || ""} // จัดการ null/undefined
+                                            mask="99:99" // รูปแบบเวลาที่ต้องการ
+                                            placeholder="HH:MM"
+                                            className="form-control"
+                                          />
+                                        )}
                                       />
-                                      {errors.test && errors.test[index]?.out_time && (
-                                        <span className="text-danger">
-                                          Please input time format hh:mm
-                                        </span>
-                                      )}
                                     </td>
                                     <td>
                                       {member.out_time === null
