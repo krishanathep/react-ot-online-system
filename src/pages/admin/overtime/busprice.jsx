@@ -61,7 +61,8 @@ const busPrice = () => {
             .map((employee) => ({
               id: employee.id,
               check_price: employee.check_price,
-              //bus_price: employee.bus_price,
+              bus_price: employee.bus_price,
+              //updated_by: employee.updated_by,
             })),
           test_2: res.data.employees
             .filter(
@@ -71,11 +72,13 @@ const busPrice = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              bus_point_1: employee.bus_point_1,
-              bus_point_2: employee.bus_point_2,
-              bus_point_3: employee.bus_point_3,
-              bus_point_4: employee.bus_point_4,
-              check_price: employee.check_price,
+              // bus_point_1: employee.bus_point_1,
+              // bus_point_2: employee.bus_point_2,
+              // bus_point_3: employee.bus_point_3,
+              // bus_point_4: employee.bus_point_4,
+              //check_price: employee.check_price,
+              bus_price: employee.bus_price,
+              //updated_by: employee.updated_by,
             })),
         });
         //setLoading(false);
@@ -132,7 +135,7 @@ const busPrice = () => {
     //alert(JSON.stringify(data))
     await axios
       .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update",
+        import.meta.env.VITE_API_KEY + "/api/employees-update-bus-price_1",
         data
       )
       .then((res) => {
@@ -151,7 +154,7 @@ const busPrice = () => {
     //alert(JSON.stringify(data))
     await axios
       .put(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update2",
+        import.meta.env.VITE_API_KEY + "/api/employees-update-bus-price_2",
         data
       )
       .then((res) => {
@@ -262,9 +265,7 @@ const busPrice = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
-                          <th>เลือก</th>
-                          <th>แก้ไขล่าสุด</th>
-                          <th>จัดทำโดย</th>
+                          <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -309,25 +310,14 @@ const busPrice = () => {
                               <input
                                 size={1}
                                 className="form-control"
-                                value={(e.check_price)?('30'):('0')}
                                 type="text"
                                 {...register(`test.${index}.bus_price`, {
                                   required: false,
                                 })}
                               />
                             </td>
-
-                            <td>
-                              <input 
-                              type="checkbox" 
-                              {...register(`test.${index}.check_price`, {
-                                required: false,
-                              })}
-                              />
-                            </td>
-
                             <td>{dayjs(e.updated_at).format("HH.mm")}</td>
-                            <td>
+                            <td hidden>
                               <input
                                 type="text"
                                 size={8}
@@ -427,6 +417,12 @@ const busPrice = () => {
                               </label>
                             </div>
                           </td>
+                          <td colSpan={4}>
+                            บันทึกโดย :{" "}
+                            {employees_1
+                              .filter((e, index) => index === 0)
+                              .map((e) => e.updated_by)}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -470,9 +466,7 @@ const busPrice = () => {
                           <th>วันที่ทำ OT</th>
                           <th>เวลาเลิก OT</th>
                           <th>ค่าเดินทาง</th>
-                          <th>เลือก</th>
-                          <th>แก้ไขล่าสุด</th>
-                          <th>จัดทำโดย</th>
+                          <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -518,22 +512,14 @@ const busPrice = () => {
                                 size={1}
                                 className="form-control"
                                 type="text"
-                                value={(e.check_price)?('30'):('0')}
                                 {...register(`test_2.${index}.bus_price`, {
                                   required: false,
                                 })}
                               />
                             </td>
-                            <td>
-                              <input 
-                              type="checkbox" 
-                              {...register(`test_2.${index}.check_price`, {
-                                required: false,
-                              })}
-                              />
-                            </td>
+                           
                             <td>{dayjs(e.updated_at).format("HH.mm")}</td>
-                            <td>
+                            <td hidden>
                               <input
                                 type="text"
                                 size={8}
@@ -632,6 +618,12 @@ const busPrice = () => {
                                 คน
                               </label>
                             </div>
+                          </td>
+                          <td colSpan={4}>
+                            บันทึกโดย :{" "}
+                            {employees_2
+                              .filter((e, index) => index === 0)
+                              .map((e) => e.updated_by)}
                           </td>
                         </tr>
                       </tbody>

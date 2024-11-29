@@ -10,6 +10,7 @@ export default function Sidebar() {
   const [ruleUser, setRuleUser] = useState(false);
   const [ruleApprover, setRuleApprover] = useState(false);
   const [ruleAdmin, setRuleAdmin] = useState(false);
+  const [ruleCarManage, setRuleCarManage] = useState(false);
 
   const getRule = async () => {
     if (userdetail().role === "user") {
@@ -26,6 +27,10 @@ export default function Sidebar() {
     }
     if (userdetail().role === "admin") {
       setRuleAdmin(true);
+      return;
+    }
+    if (userdetail().role === "car_manage") {
+      setRuleCarManage(true);
       return;
     }
   };
@@ -128,15 +133,27 @@ export default function Sidebar() {
                       <p>Approver</p>
                     </Link>
                   </li>
-                  <li className="nav-header">CAR MENU</li>
-                  <li className="nav-item">
-                    <Link to="/officecar" className="nav-link">
-                    <i className="nav-icon fas fa-truck"></i>
-                      <p>Office Car</p>
-                    </Link>
-                  </li> 
                 </>
               ) : null}
+              {ruleCarManage ? (
+                <>
+                  <li className="nav-header">MAIN MENU</li>
+                  <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                      <i className="nav-icon fas fa-home"></i>
+                      <p>หน้าหลัก</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/officecar" className="nav-link">
+                      <i className="nav-icon fas fa-truck"></i>
+                      <p>Office Cars</p>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                ""
+              )}
             </ul>
           </nav>
         </div>

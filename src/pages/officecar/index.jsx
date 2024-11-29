@@ -294,7 +294,7 @@ const manageCar = () => {
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
-                          <th>แก้ไขล่าสุด</th>
+                          <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -354,7 +354,7 @@ const manageCar = () => {
                               />
                             </td>
                             <td>
-                              {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
+                              {dayjs(e.updated_at).format("HH.mm")}{' '}น.
                             </td>
 
                             <input
@@ -454,7 +454,7 @@ const manageCar = () => {
                           <td>
                           </td>
                           <td colSpan={4}>
-                            แก้ไขโดย :{" "}
+                            บันทึกโดย :{" "}
                             {employees_1
                               .filter((e, index) => index === 0)
                               .map((e) => e.updated_by)}
@@ -503,7 +503,7 @@ const manageCar = () => {
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
-                          <th>แก้ไขล่าสุด</th>
+                          <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -564,7 +564,7 @@ const manageCar = () => {
                               />
                             </td>
                             <td>
-                              {dayjs(e.updated_at).format("DD-MM-YYYY HH.mm")}
+                              {dayjs(e.updated_at).format("HH.mm")}{' '}น.
                             </td>
 
                             <input
@@ -664,7 +664,7 @@ const manageCar = () => {
                           <td>
                           </td>
                           <td colSpan={4}>
-                            แก้ไขโดย :{" "}
+                            บันทึกโดย :{" "}
                             {employees_2
                               .filter((e, index) => index === 0)
                               .map((e) => e.updated_by)}

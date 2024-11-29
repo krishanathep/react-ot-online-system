@@ -30,8 +30,7 @@ import ApproverMasterUpdate from './pages/admin/approver/update'
 
 const RoutesPage = () => {
   return (
-    // <Router basename="/otrequest">
-    <Router >
+    <Router basename="/otrequest">
       <Routes>
         <Route element={<WithOutnavbar />}>
           <Route exact  path="/auth/signin" element={<Signin />} />

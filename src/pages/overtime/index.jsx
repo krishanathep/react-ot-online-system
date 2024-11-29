@@ -438,12 +438,23 @@ const Overtime = () => {
                               >
                                 <i className="fas fa-bars"></i>
                               </Link>{" "}
-                              <Link
-                                to={"/overtime/edit/" + blogs.id}
-                                className="btn btn-info"
-                              >
-                                <i className="far fa-edit"></i>
-                              </Link>{" "}
+                              {blogs.result != "รอการรายงาน" ? (
+                                <>
+                                <button disabled className="btn btn-info">
+                                    <i className="far fa-edit"></i>
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <Link
+                                    to={"/overtime/edit/" + blogs.id}
+                                    className="btn btn-info"
+                                  >
+                                    <i className="far fa-edit"></i>
+                                  </Link>
+                                  
+                                </>
+                              )}{" "}
                               <button
                                 onClick={() => handleDeleteSubmit(blogs)}
                                 className="btn btn-danger"

@@ -51,6 +51,7 @@ const view = () => {
             setComplete_3(true),
             setComplete_4(true);
         }
+        
 
         //stepper complete 2
         if (res.data.data.result === "รอการปิด (ส่วน)") {
@@ -62,8 +63,30 @@ const view = () => {
         if (res.data.data.result === "ปิดการรายงาน") {
           setComplete_5(true), setComplete_6(true), setComplete_7(true);
         }
+
+        //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
+        const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
+        const count = res.data.data.employees.length;
+
+        const calculateOvertime = () => {
+          // แยกชั่วโมงและนาทีจาก overtime
+          const [hours, minutes] = overtime.split(".").map(Number);
+
+          // คำนวณเวลาล่วงเวลาทั้งหมด
+          const totalMinutes = (hours * 60 + minutes) * count; // แปลงทั้งหมดเป็นนาที
+          const totalHours = Math.floor(totalMinutes / 60); // คำนวณชั่วโมง
+          const remainingMinutes = totalMinutes % 60; // คำนวณนาทีที่เหลือ
+
+          // แสดงผลลัพธ์เป็นรูปแบบ 'ชั่วโมง:นาที'
+          return `${totalHours}:${
+            remainingMinutes < 10 ? "0" : ""
+          }${remainingMinutes}`;
+        };
+
+        setResult(calculateOvertime);
       });
   };
+  const [result, setResult] = useState("");
 
   useEffect(() => {
     getData();
@@ -130,19 +153,13 @@ const view = () => {
                                   น.
                                 </td>
                                 <td>
-                                <b>เวลารวม</b> : {overtimes.total_date}{" "}
-                                  {overtimes.total_date === "50"
-                                    ? "นาที"
-                                    : "ชม."}{" "}
+                                <b>เวลารวม</b> : {overtimes.total_date}{" "}ชม.
                                 </td>
                                 <td>
                                 <b>พนักงาน</b> : {empcount} คน{" "}
                                 </td>
                                 <td>
-                                  <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount} {overtimes.total_date === "50"
-                                    ? "นาที"
-                                    : "ชม."}
+                                  <b>รวมทั้งหมด</b> : {result}{" "}ชม.
                                 </td>
                               </tr>
                             </thead>

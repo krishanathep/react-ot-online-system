@@ -42,13 +42,35 @@ const view = () => {
           setComplete_1(true), setComplete_2(true), setComplete_3(true);
         }
         if (res.data.data.status === "ผ่านการอนุมัติ") {
-          setComplete_1(true),
+            setComplete_1(true),
             setComplete_2(true),
             setComplete_3(true),
             setComplete_4(true);
         }
+        //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
+        const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
+        const count = res.data.data.employees.length;
+
+        const calculateOvertime = () => {
+          // แยกชั่วโมงและนาทีจาก overtime
+          const [hours, minutes] = overtime.split(".").map(Number);
+
+          // คำนวณเวลาล่วงเวลาทั้งหมด
+          const totalMinutes = (hours * 60 + minutes) * count; // แปลงทั้งหมดเป็นนาที
+          const totalHours = Math.floor(totalMinutes / 60); // คำนวณชั่วโมง
+          const remainingMinutes = totalMinutes % 60; // คำนวณนาทีที่เหลือ
+
+          // แสดงผลลัพธ์เป็นรูปแบบ 'ชั่วโมง:นาที'
+          return `${totalHours}:${
+            remainingMinutes < 10 ? "0" : ""
+          }${remainingMinutes}`;
+        };
+
+        setResult(calculateOvertime);
       });
   };
+
+  const [result, setResult] = useState("");
 
   useEffect(() => {
     getData();
@@ -115,19 +137,13 @@ const view = () => {
                                   น.
                                 </td>
                                 <td>
-                                <b>เวลารวม</b> : {overtimes.total_date}{" "}
-                                  {overtimes.total_date === "50"
-                                    ? "นาที"
-                                    : "ชม."}{" "}
+                                  <b>เวลารวม</b> : {overtimes.total_date}{' '}ชม.
                                 </td>
                                 <td>
-                                <b>พนักงาน</b> : {empcount} คน{" "}
+                                  <b>พนักงาน</b> : {empcount} คน{" "}
                                 </td>
-                                <td> 
-                                  <b>รวมทั้งหมด</b> :{" "}
-                                  {overtimes.total_date * empcount} {overtimes.total_date === "50"
-                                    ? "นาที"
-                                    : "ชม."}
+                                <td>
+                                  <b>รวมทั้งหมด</b> : {result}{" "}ชม.
                                 </td>
                               </tr>
                             </thead>
@@ -191,21 +207,27 @@ const view = () => {
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
+                                              {index === 0
+                                                ? t.time_scan.substring(0, 5)
+                                                : null}
                                             </span>
                                           );
                                         })}{" "}
                                       -{" "}
                                       {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date) && s.time_scan > '12:00:00'
+                                        .filter(
+                                          (s) =>
+                                            s.date_scan
+                                              .toLowerCase()
+                                              .includes(overtimes.ot_date) &&
+                                            s.time_scan > "12:00:00"
                                         )
                                         .map((t, index) => {
                                           return (
                                             <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
+                                              {index === 0
+                                                ? t.time_scan.substring(0, 5)
+                                                : null}
                                             </span>
                                           );
                                         })}
