@@ -63,8 +63,22 @@ const viewAdmin = () => {
 
   const [result, setResult] = useState("");
 
+  const [timeRecord, setTimeRecord] = useState([]);
+
+  const getTimeRecord = () => {
+    axios
+      .get(
+        "http://129.200.6.52/laravel_oracle11g_hrcompu_api/public/api/time-records"
+      )
+      .then((res) => {
+        const time = res.data.time_records
+        setTimeRecord(time);
+      });
+  };
+
   useEffect(() => {
     getData();
+    getTimeRecord();
   }, []);
 
   return (
@@ -79,7 +93,7 @@ const viewAdmin = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                  <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">การขออนุมัติ</li>
                   <li className="breadcrumb-item active">
@@ -191,33 +205,11 @@ const viewAdmin = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date)
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
-                                            </span>
-                                          );
-                                        })}{" "}
-                                      -{" "}
-                                      {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date) && s.time_scan > '12:00:00'
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
-                                            </span>
-                                          );
-                                        })}
+                                    {member.scan_data === null ? (
+                                      <span>ไม่มีข้อมูล</span>
+                                    ):(
+                                      member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
+                                    )}
                                     </td>
                                     <td className="text-secondary">
                                       {member.out_time === null ? (

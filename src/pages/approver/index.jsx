@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -17,6 +19,7 @@ const Approver = () => {
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
   const [approver, setApprover] = useState([]);
+  const [startDate, setStartDate] = useState("");
 
   const [selectedRecords, setSelectedRecords] = useState([]);
 
@@ -156,12 +159,12 @@ const Approver = () => {
   };
 
   useEffect(() => {
-    if (userDatail().role==='approver_1') {
+    if (userDatail().role === "approver_1") {
       getData2();
-    } else  if (userDatail().role==='approver_2'){
-      getData()
+    } else if (userDatail().role === "approver_2") {
+      getData();
     } else {
-      getData2()
+      getData2();
     }
     getApprover();
   }, [page, pageSize, selectedRecords]);
@@ -567,7 +570,7 @@ const Approver = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                    <Link to={"/"}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item active">การขออนุมัติ</li>
                 </ol>
@@ -682,17 +685,21 @@ const Approver = () => {
                               <div className="col-md-3">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  {/* <DatePicker/> */}
-                                  <input
-                                    type="date"
+                                  <br />
+                                  <DatePicker
+                                    //showIcon
+                                    //icon="fa fa-calendar"
                                     className="form-control"
-                                    onChange={(event) =>
+                                    //isClearable
+                                    placeholderText="กรุณาเลือกวันที่"
+                                    selected={startDate}
+                                    onChange={(date) => {
+                                      setStartDate(date);
                                       dateFilter(
-                                        dayjs(event.target.value).format(
-                                          "YYYY-MM-DD"
-                                        )
-                                      )
-                                    }
+                                        dayjs(date).format("YYYY-MM-DD")
+                                      );
+                                    }}
+                                    dateFormat="dd-MM-yyyy"
                                   />
                                 </div>
                               </div>
@@ -813,6 +820,11 @@ const Approver = () => {
                           ),
                         },
                         {
+                          accessor: "start_date",
+                          title: "เวลาที่ OT",
+                          textAlignment: "center",
+                        },
+                        {
                           accessor: "ot_date",
                           title: "วันที่ทำ OT",
                           textAlignment: "center",
@@ -844,6 +856,27 @@ const Approver = () => {
                               >
                                 <i className="fas fa-bars"></i>
                               </Link>{" "}
+                              {blogs.result != "รอการปิด (ส่วน)" ? (
+                                <>
+                                  <button
+                                    disabled
+                                    className="btn btn-info"
+                                    hidden={userDatail().role !== "approver_1"}
+                                  >
+                                    <i className="far fa-edit"></i>
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <Link
+                                    to={"/approver/edit/" + blogs.id}
+                                    className="btn btn-info"
+                                    hidden={userDatail().role !== "approver_1"}
+                                  >
+                                    <i className="far fa-edit"></i>
+                                  </Link>
+                                </>
+                              )}{" "}
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit2(blogs)}
@@ -955,7 +988,7 @@ const Approver = () => {
                         (record.status === "รอการอนุมัติ 2" &&
                           userDatail().role === "approver_2") ||
                         (record.status === "ผ่านการอนุมัติ" &&
-                          record.result === "รอการปิด (ผจก)")  
+                          record.result === "รอการปิด (ผจก)")
                       }
                     />
                   </div>

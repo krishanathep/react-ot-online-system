@@ -16,6 +16,7 @@ import OvertimeView from './pages/overtime/view'
 import OvertimeEdit from './pages/overtime/edit'
 import Approver from "./pages/approver";
 import AppView from './pages/approver/view'
+import AppEdit from './pages/approver/edit'
 import OfficeCar from "./pages/officecar";
 import Employees from './pages/admin/employees'
 import EmployeeCreate from "./pages/admin/employees/create";
@@ -50,6 +51,7 @@ const RoutesPage = () => {
           <Route path="/overtime/edit/:id" element={<OvertimeEdit />} />
           <Route path="/approver" element={<Approver />} />
           <Route path="/approver/view/:id" element={<AppView />} />
+          <Route path="/approver/edit/:id" element={<AppEdit />} />
           <Route path="/officecar/" element={<OfficeCar/>} />
     
 

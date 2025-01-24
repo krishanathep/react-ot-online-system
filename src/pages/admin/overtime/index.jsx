@@ -76,24 +76,22 @@ const OverTimeAdmin = () => {
       });
   };
 
-  //filter function by department
-  const departmentFilter = async (key) => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
+  //filter function by result
+ const resultFilter = async (key) => {
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize;
 
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-department?data=" +
-          key
-      )
-      .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
-        setLoading(false);
-      });
-  };
+  await axios
+    .get(
+      import.meta.env.VITE_API_KEY + "/api/otrequests"
+    )
+    .then((res) => {
+      const controller = res.data.data.filter(ot=>ot.result.includes(key))
+      setOvertimes(controller);
+      setRecords(controller.slice(from, to));
+      setLoading(false);
+    });
+};
 
   //filter function by status
   const statusFilter = async (key) => {
@@ -126,9 +124,12 @@ const OverTimeAdmin = () => {
         const date_time = res.data.data.filter(ot=>ot.ot_date===key)
         setOvertimes(date_time);
         setRecords(date_time.slice(from, to));
+        setSelectDate(key)
         setLoading(false);
       });
       console.log(overtimes)
+      
+      
   };
 
   useEffect(() => {
@@ -371,12 +372,13 @@ const OverTimeAdmin = () => {
   const year = today.getFullYear();
   const date = today.getDate();
   const currentDate = "_" + month + "_" + date + "_" + year;
+  const [selectDate, setSelectDate] = useState('')
 
   // text export function
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-text-export",
+        import.meta.env.VITE_API_KEY + "/api/otrequest-text-export?data="+selectDate,
         { responseType: "blob" }
       );
 
@@ -414,6 +416,8 @@ const OverTimeAdmin = () => {
       });
   };
 
+  console.log(selectDate)
+
   return (
     <>
       <div className="content-wrapper">
@@ -426,7 +430,7 @@ const OverTimeAdmin = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                  <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item active">การขออนุมัติ</li>
                 </ol>
@@ -461,7 +465,7 @@ const OverTimeAdmin = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-md-3">
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่คำร้อง</label>
                                   <input
@@ -475,7 +479,7 @@ const OverTimeAdmin = () => {
                                 </div>
                               </div>
 
-                              <div className="col-md-3">
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">ผู้ควบคุมงาน</label>
                                   <input
@@ -515,6 +519,34 @@ const OverTimeAdmin = () => {
                                 </div>
                               </div>
                               <div className="col-md-3">
+                                <div className="form-group">
+                                  <label htmlFor="">สถานะรายงาน</label>
+                                  <select
+                                    className="form-control"
+                                    id="sel1"
+                                    onChange={(event) =>
+                                      resultFilter(event.target.value)
+                                    }
+                                  >
+                                    <option defaultValue="">
+                                      กรุณาเลือกข้อมูล
+                                    </option>
+                                    <option value="รอการรายงาน">
+                                      รอการรายงาน
+                                    </option>
+                                    <option value="รอการปิด (ส่วน)">
+                                      รอการปิด (ส่วน)
+                                    </option>
+                                    <option value="รอการปิด (ผจก)">
+                                      รอการปิด (ผจก)
+                                    </option>
+                                    <option value="ปิดการรายงาน">
+                                      ปิดการรายงาน
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
                                   {/* <DatePicker/> */}
@@ -637,6 +669,11 @@ const OverTimeAdmin = () => {
                               </h5>
                             </>
                           ),
+                        },
+                        {
+                          accessor: "start_date",
+                          title: "เวลาที่ OT",
+                          textAlignment: "center",
                         },
                         {
                           accessor: "ot_date",

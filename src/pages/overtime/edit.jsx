@@ -17,7 +17,7 @@ const edit = ({ index }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      test: [{ out_time: "" }],
+      test: [{ out_time: "", scan_data: "" }],
     },
   });
 
@@ -25,49 +25,39 @@ const edit = ({ index }) => {
   const navigate = useNavigate();
 
   const [result, setResult] = useState("");
-
-  //stepper complete state
   const [complete_1, setComplete_1] = useState(false);
   const [complete_2, setComplete_2] = useState(false);
   const [complete_3, setComplete_3] = useState(false);
-
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
   const [empcount, setEmpcount] = useState(0);
+  const [timeRecord, setTimeRecord] = useState([]);
 
   const getData = async () => {
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequest/" + id)
       .then((res) => {
-        // count employee
         setEmpcount(res.data.data.employees.length);
         const ot = res.data.data;
         setOvertimes(ot);
-
         const bus = res.data.data.employees;
-
         setMemebers(bus);
 
-        //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
-        const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
+        const overtime = res.data.data.total_date;
         const count = res.data.data.employees.length;
 
         const calculateOvertime = () => {
-          // แยกชั่วโมงและนาทีจาก overtime
           const [hours, minutes] = overtime.split(".").map(Number);
-
-          // คำนวณเวลาล่วงเวลาทั้งหมด
-          const totalMinutes = (hours * 60 + minutes) * count; // แปลงทั้งหมดเป็นนาที
-          const totalHours = Math.floor(totalMinutes / 60); // คำนวณชั่วโมง
-          const remainingMinutes = totalMinutes % 60; // คำนวณนาทีที่เหลือ
-
-          // แสดงผลลัพธ์เป็นรูปแบบ 'ชั่วโมง:นาที'
+          const totalMinutes = (hours * 60 + minutes) * count;
+          const totalHours = Math.floor(totalMinutes / 60);
+          const remainingMinutes = totalMinutes % 60;
           return `${totalHours}:${
             remainingMinutes < 10 ? "0" : ""
           }${remainingMinutes}`;
         };
         setResult(calculateOvertime);
 
+        // Map existing data and include scan data
         reset({
           test: res.data.data.employees.map((employee) => ({
             id: employee.id,
@@ -77,30 +67,43 @@ const edit = ({ index }) => {
             remark: employee.remark,
             ot_create_date: res.data.data.ot_date,
             ot_in_time: res.data.data.start_date.substring(0, 5).trim(),
-            //ot_in_time: res.data.data.start_date,
             ot_out_time: res.data.data.end_date,
+            scan_data: employee.scan_data || "", // Add scan data field
           })),
         });
 
-        //stepper complete
         if (res.data.data.result === "รอการปิด (ส่วน)") {
           setComplete_1(true);
         }
         if (res.data.data.result === "รอการปิด (ผจก)") {
-          setComplete_1(true), setComplete_2(true);
+          setComplete_1(true);
+          setComplete_2(true);
         }
         if (res.data.data.result === "ปิดการรายงาน") {
-          setComplete_1(true), setComplete_2(true), setComplete_3(true);
+          setComplete_1(true);
+          setComplete_2(true);
+          setComplete_3(true);
         }
       });
   };
 
   const handleUpdateSubmit = async (data) => {
-    //alert(JSON.stringify(data))
+    // Add scan data to submission
+    const updatedData = {
+      ...data,
+      test: data.test.map((item, index) => ({
+        ...item,
+        scan_data: getScanDataForEmployee(
+          members[index].code,
+          overtimes.ot_date
+        ),
+      })),
+    };
+
     await axios
       .put(
         import.meta.env.VITE_API_KEY + "/api/otrequest-update-report/" + id,
-        data
+        updatedData
       )
       .then((res) => {
         Swal.fire({
@@ -114,11 +117,45 @@ const edit = ({ index }) => {
       })
       .catch((error) => {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error updating OT request",
+          text: "Please try again",
+          showConfirmButton: true,
+        });
       });
+  };
+
+  const getTimeRecord = () => {
+    axios
+      .get(
+        "http://129.200.6.52/laravel_oracle11g_hrcompu_api/public/api/time-records"
+      )
+      .then((res) => {
+        const time = res.data.time_records;
+        setTimeRecord(time);
+      });
+  };
+
+  // Helper function to get formatted scan data for an employee
+  const getScanDataForEmployee = (employeeCode, otDate) => {
+    const employeeScans = timeRecord.filter(
+      (r) => r.dl_date.startsWith(otDate) && r.em_code === employeeCode
+    );
+
+    if (employeeScans.length === 0) {
+      return null;
+    }
+
+    return employeeScans.map((scan_data) => ({
+      scan_in: scan_data.dl_sacttime.substring(11, 16),
+      scan_out: scan_data.dl_eacttime.substring(11, 16),
+    }));
   };
 
   useEffect(() => {
     getData();
+    getTimeRecord();
   }, []);
 
   return (
@@ -133,7 +170,7 @@ const edit = ({ index }) => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                  <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">คำขออนุมัติ</li>
                   <li className="breadcrumb-item active">รายงานผล</li>
@@ -183,14 +220,13 @@ const edit = ({ index }) => {
                                   น.
                                 </td>
                                 <td>
-                                  <b>เวลารวม</b> : {overtimes.total_date}{" "}ชม.
+                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
                                 </td>
                                 <td>
                                   <b>พนักงาน</b> : {empcount} คน{" "}
                                 </td>
                                 <td>
-                                  <b>รวมทั้งหมด</b> :{" "}
-                                  {result}{" "}ชม.
+                                  <b>รวมทั้งหมด</b> : {result} ชม.
                                 </td>
                               </tr>
                             </thead>
@@ -206,13 +242,22 @@ const edit = ({ index }) => {
                                 <th>ประเภทค่าแรง</th>
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
-                                <th>ทำได้จริง</th>
+                                <th>
+                                  <span className="text-danger">*</span>{" "}
+                                  ทำได้จริง
+                                </th>
                                 <th>ข้อมูลสแกนนิ้ว</th>
-                                <th>เลิกงานจริง</th>
+                                <th>
+                                  <span className="text-danger">*</span>{" "}
+                                  เลิกงานจริง
+                                </th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
                                 <th>ค่าเดินทาง</th>
-                                <th>หมายเหตุ</th>
+                                <th>
+                                  <span className="text-danger">*</span>{" "}
+                                  หมายเหตุ
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -255,39 +300,37 @@ const edit = ({ index }) => {
                                       )}
                                     </td>
                                     <td>
-                                      {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date)
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0
-                                                ? t.time_scan.substring(0, 5)
-                                                : null}
-                                            </span>
-                                          );
-                                        })}{" "}
-                                      -{" "}
-                                      {member.time_scan
-                                        .filter(
-                                          (s) =>
-                                            s.date_scan
-                                              .toLowerCase()
-                                              .includes(overtimes.ot_date) &&
-                                            s.time_scan > "12:00:00"
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0
-                                                ? t.time_scan.substring(0, 5)
-                                                : null}
-                                            </span>
-                                          );
-                                        })}
+                                      {timeRecord.filter(
+                                        (r) =>
+                                          r.dl_date.startsWith(
+                                            overtimes.ot_date
+                                          ) && r.em_code === member.code
+                                      ).length === 0 ? (
+                                        <div className="text-muted">
+                                          ไม่มีข้อมูล...
+                                        </div>
+                                      ) : (
+                                        timeRecord
+                                          .filter(
+                                            (r) =>
+                                              r.dl_date.startsWith(
+                                                overtimes.ot_date
+                                              ) && r.em_code === member.code
+                                          )
+                                          .map((s, index) => (
+                                            <div key={index} className="text-muted">
+                                              {s.dl_sacttime === null
+                                                ? "ไม่มีข้อมูล..."
+                                                : `${s.dl_sacttime.substring(
+                                                    11,
+                                                    16
+                                                  )} - ${s.dl_eacttime.substring(
+                                                    11,
+                                                    16
+                                                  )}`}
+                                            </div>
+                                          ))
+                                      )}
                                     </td>
                                     <td>
                                       <Controller

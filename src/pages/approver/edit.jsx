@@ -1,52 +1,52 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import InputMask from "react-input-mask";
+import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
-const view = () => {
+const edit = ({ index }) => {
   dayjs.extend(duration);
-  const { id } = useParams();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      test: [{ out_time: "" }],
+    },
+  });
 
-  const [overtimes, setOvertimes] = useState({});
-  const [members, setMemebers] = useState([]);
-  const [empcount, setEmpcount] = useState(0);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [result, setResult] = useState("");
 
   //stepper complete state
   const [complete_1, setComplete_1] = useState(false);
   const [complete_2, setComplete_2] = useState(false);
   const [complete_3, setComplete_3] = useState(false);
-  const [complete_4, setComplete_4] = useState(false);
+
+  const [overtimes, setOvertimes] = useState({});
+  const [members, setMemebers] = useState([]);
+  const [empcount, setEmpcount] = useState(0);
 
   const getData = async () => {
     await axios
-      .get(import.meta.env.VITE_API_KEY + "/api/otrequest/" + id, {
-        timeout: 5000,
-      })
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest/" + id)
       .then((res) => {
-        // overtime data
-        setOvertimes(res.data.data);
-        // employee data
-        setMemebers(res.data.data.employees);
-
+        // count employee
         setEmpcount(res.data.data.employees.length);
+        const ot = res.data.data;
+        setOvertimes(ot);
 
-        //stepper complete function
-        if (res.data.data.status === "รอการอนุมัติ 1") {
-          setComplete_1(true);
-        }
-        if (res.data.data.status === "รอการอนุมัติ 2") {
-          setComplete_1(true), setComplete_2(true);
-        }
-        if (res.data.data.status === "รอการอนุมัติ 3") {
-          setComplete_1(true), setComplete_2(true), setComplete_3(true);
-        }
-        if (res.data.data.status === "ผ่านการอนุมัติ") {
-          setComplete_1(true),
-          setComplete_2(true),
-          setComplete_3(true),
-          setComplete_4(true);
-        }
+        const bus = res.data.data.employees;
+
+        setMemebers(bus);
 
         //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
         const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
@@ -67,29 +67,59 @@ const view = () => {
           }${remainingMinutes}`;
         };
         setResult(calculateOvertime);
-        // Set recorDate from ot_date
-        const date = res.data.data.ot_date;
-        setRecordDate(date);
+
+        reset({
+          test: res.data.data.employees.map((employee) => ({
+            id: employee.id,
+            objective: employee.objective,
+            out_time: employee.out_time,
+            bus_price: employee.bus_price,
+            remark: employee.remark,
+            ot_create_date: res.data.data.ot_date,
+            ot_in_time: res.data.data.start_date.substring(0, 5).trim(),
+            //ot_in_time: res.data.data.start_date,
+            ot_out_time: res.data.data.end_date,
+            scan_data: employee.scan_data || "",
+          })),
+        });
+
+        //stepper complete
+        if (res.data.data.result === "รอการปิด (ส่วน)") {
+          setComplete_1(true);
+        }
+        if (res.data.data.result === "รอการปิด (ผจก)") {
+          setComplete_1(true), setComplete_2(true);
+        }
+        if (res.data.data.result === "ปิดการรายงาน") {
+          setComplete_1(true), setComplete_2(true), setComplete_3(true);
+        }
       });
   };
 
-  const [result, setResult] = useState("");
-  const [timeRecord, setTimeRecord] = useState([]);
-
-  const getTimeRecord = () => {
-    axios
-      .get(
-        "http://129.200.6.52/laravel_oracle11g_hrcompu_api/public/api/time-records"
+  const handleUpdateSubmit = async (data) => {
+    //alert(JSON.stringify(data))
+    await axios
+      .put(
+        import.meta.env.VITE_API_KEY + "/api/otrequest-update-report/" + id,
+        data
       )
       .then((res) => {
-        const time = res.data.time_records;
-        setTimeRecord(time);
+        Swal.fire({
+          icon: "success",
+          title: "Your OT request has been updated",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        console.log(res);
+        navigate("/approver");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   useEffect(() => {
     getData();
-    getTimeRecord();
   }, []);
 
   return (
@@ -99,15 +129,15 @@ const view = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">ข้อมูลการขออนุมัติ OT</h1>
+                <h1 className="m-0">รายงานผลการขออนุมัติ OT</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                  <Link to={'/'}>หน้าหลัก</Link>
+                    <Link to={'/'}>หน้าหลัก</Link>
                   </li>
-                  <li className="breadcrumb-item">การขออนุมัติ</li>
-                  <li className="breadcrumb-item active">ข้อมูลการขออนุมัติ</li>
+                  <li className="breadcrumb-item">คำขออนุมัติ</li>
+                  <li className="breadcrumb-item active">รายงานผล</li>
                 </ol>
               </div>
             </div>
@@ -126,10 +156,11 @@ const view = () => {
                             <thead>
                               <tr>
                                 <td>
-                                  <b>เลขที่คำร้อง</b> : {overtimes.ot_member_id}
+                                  <b>เลขคำร้อง</b> : {overtimes.ot_member_id}
                                 </td>
                                 <td>
-                                  <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
+                                  <b>ผู้จัดการฝ่าย</b> :{" "}
+                                  {overtimes.department_name}
                                 </td>
                                 <td>
                                   <b>ผู้ควบคุมงาน</b> : {overtimes.create_name}
@@ -175,13 +206,13 @@ const view = () => {
                                 <th>ประเภทค่าแรง</th>
                                 <th>ชนิดของงาน</th>
                                 <th>เป้าหมาย</th>
-                                <th>ทำได้จริง</th>
+                                <th><span className="text-danger">*</span> ทำได้จริง</th>
                                 <th>ข้อมูลสแกนนิ้ว</th>
-                                <th>เวลาเลิกงาน</th>
+                                <th><span className="text-danger">*</span> เลิกงานจริง</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
                                 <th>ค่าเดินทาง</th>
-                                <th>หมายเหตุ</th>
+                                <th><span className="text-danger">*</span> หมายเหตุ</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -207,10 +238,20 @@ const view = () => {
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
                                     <td>
-                                      {member.objective === null ? (
-                                        <i className="fas fa-pencil-alt"></i>
-                                      ) : (
-                                        member.objective
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size="2"
+                                        placeholder="เพิ่มข้อมูล"
+                                        {...register(
+                                          `test.${index}.objective`,
+                                          { required: true }
+                                        )}
+                                      />
+                                      {errors.test && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
                                       )}
                                     </td>
                                     <td>
@@ -221,31 +262,86 @@ const view = () => {
                                     )}
                                     </td>
                                     <td>
-                                      {member.out_time === null ? (
-                                        <i className="fas fa-pencil-alt"></i>
-                                      ) : (
-                                        member.out_time
-                                      )}
+                                      <Controller
+                                        name={`test.${index}.out_time`}
+                                        control={control}
+                                        rules={{
+                                          required: "This field is required",
+                                        }}
+                                        render={({ field }) => (
+                                          <InputMask
+                                            size={1}
+                                            {...field}
+                                            value={field.value || ""} // จัดการ null/undefined
+                                            mask="99:99" // รูปแบบเวลาที่ต้องการ
+                                            placeholder="HH:MM"
+                                            className="form-control"
+                                          />
+                                        )}
+                                      />
                                     </td>
-                                    {/* คำนวนเวลาเริ่มต้น ลบ เวลาเลิกงานจริง */}
                                     <td>
-                                      {member.out_time === null ? (
-                                        <i className="fas fa-pencil-alt"></i>
-                                      ) : (
-                                        `${hours
-                                          .toString()
-                                          .padStart(2, "0")}:${minutes
-                                          .toString()
-                                          .padStart(2, "0")}`
-                                      )}
+                                      {member.out_time === null
+                                        ? "0"
+                                        : `${hours
+                                            .toString()
+                                            .padStart(2, "0")}:${minutes
+                                            .toString()
+                                            .padStart(2, "0")}`}
+                                      {/* {Math.round((member.out_time - overtimes.start_date)*100) / 100} */}
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     <td>{member.bus_price}</td>
                                     <td>
-                                      {member.remark === null ? (
-                                        <i className="fas fa-pencil-alt"></i>
-                                      ) : (
-                                        member.remark
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        size="6"
+                                        placeholder="เพิ่มข้อมูล"
+                                        {...register(`test.${index}.remark`, {
+                                          required: true,
+                                        })}
+                                      />
+                                      {/* input hidden */}
+                                      <div hidden>
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_create_date`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_in_time`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
+                                        <input
+                                          className="form-control"
+                                          type="text"
+                                          size="6"
+                                          {...register(
+                                            `test.${index}.ot_out_time`,
+                                            {
+                                              required: false,
+                                            }
+                                          )}
+                                        />
+                                      </div>
+                                      {errors.test && (
+                                        <span className="text-danger">
+                                          This field is required
+                                        </span>
                                       )}
                                     </td>
                                   </tr>
@@ -254,30 +350,24 @@ const view = () => {
                             </tbody>
                           </table>
                         </div>
-                        <div className="col-md-12">
+                        <div className="col-md-10 offset-1">
                           <table className="table table-borderless mt-5">
                             <thead>
                               <tr align="center">
-                                <td>
-                                  <b>หัวหน้าหน่วย/ผู้จัดทำ</b> :{" "}
-                                  {overtimes.name_app_1}
-                                </td>
+                                <td width="20%"></td>
                                 <td>
                                   <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
                                 </td>
                                 <td>
                                   <b>ผู้จัดการฝ่าย</b> : {overtimes.name_app_3}
                                 </td>
-                                <td>
-                                  <b>ผู้จัดการอาวุโส</b> :{" "}
-                                  {overtimes.name_app_4}
-                                </td>
+                                <td width="20%"></td>
                               </tr>
                             </thead>
                           </table>
                         </div>
                         {/* Stepper Function */}
-                        <div className="col-md-12">
+                        <div className="col-md-6 offset-3">
                           <div
                             className="stepper-wrapper"
                             style={{ fontFamily: "Prompt" }}
@@ -290,9 +380,7 @@ const view = () => {
                               <div className="step-counter text-white">
                                 <i className="fas fa-check"></i>
                               </div>
-                              <div className="step-name">
-                                หัวหน้าหน่วย/ผู้จัดทำ
-                              </div>
+                              <div className="step-name">การรายงานผล</div>
                             </div>
                             <div
                               className={`stepper-item ${
@@ -314,21 +402,17 @@ const view = () => {
                               </div>
                               <div className="step-name">ผู้อนุมัติคนที่ 2</div>
                             </div>
-                            <div
-                              className={`stepper-item ${
-                                !complete_4 ? null : "completed"
-                              }`}
-                            >
-                              <div className="step-counter text-white">
-                                <i className="fas fa-check"></i>
-                              </div>
-                              <div className="step-name">ผู้อนุมัติคนที่ 3</div>
-                            </div>
                           </div>
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <Link to={"/overtime"} className="btn btn-danger">
+                            <button
+                              className="btn btn-primary"
+                              onClick={handleSubmit(handleUpdateSubmit)}
+                            >
+                              <i className="fas fa-save"></i> ยืนยัน
+                            </button>{" "}
+                            <Link to={"/approver"} className="btn btn-danger">
                               <i className="fas fa-arrow-circle-left"></i>{" "}
                               ย้อนกลับ
                             </Link>{" "}
@@ -347,4 +431,4 @@ const view = () => {
   );
 };
 
-export default view;
+export default edit;

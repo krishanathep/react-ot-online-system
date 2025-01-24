@@ -114,19 +114,18 @@ export default function Sidebar() {
                       <p>Overtimes</p>
                     </Link>
                   </li>
-                  <li className="nav-header">OTHER MENU</li>
                   <li className="nav-item">
                     <Link to="/admin/employees" className="nav-link">
                       <i className="nav-icon fas fa-users"></i>
                       <p>Employees</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/admin/timescan" className="nav-link">
                       <i className="nav-icon fas fa-business-time"></i>
                       <p>Time-scan</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/admin/approver" className="nav-link">
                       <i className="nav-icon fas fa-user-check"></i>

@@ -204,24 +204,42 @@ const create = ({ prefix = "OT" }) => {
   };
 
   useEffect(() => {
+    const fetchLastIdAndGenerate = async () => {
+      try {
+        // เรียก API เพื่อดึง last ID
+        const response = await axios.get(
+          import.meta.env.VITE_API_KEY +"/api/get-last-id"
+        );
+        let lastId = response.data.last_id; // ใช้ lastId หรือ fallback เป็น "00000"
+        
+        // Add leading zeros to lastId
+        lastId = lastId.toString().padStart(4, "0");
+
+        // Generate ID
+        const date = new Date();
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year = date.getFullYear().toString().slice(-2);
+        const generatedId = `${prefix}-${day}${month}${year}-${lastId}`;
+
+        console.log(lastId);
+
+        // ตั้งค่า ID
+        setId(generatedId);
+      } catch (error) {
+        console.error("Error fetching last ID:", error);
+      }
+    };
+
+    // เรียกฟังก์ชันเพื่อดึงข้อมูลและตั้ง ID
+    fetchLastIdAndGenerate();
+
+    // เรียกข้อมูลอื่น ๆ ที่จำเป็น
     getBusPrice();
     getEmployees();
     getApprover();
     deptFilter();
     getEmployeesByrole();
-    const generateId = () => {
-      //const dept_cut = userDetail().dept.slice(0, -1);
-      const date = new Date();
-      const day = date.getDate().toString().padStart(2, "0");
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const year = date.getFullYear().toString().slice(-2);
-      const randomNum = Math.floor(Math.random() * 1000)
-        .toString()
-        .padStart(5, "0");
-      return `${prefix}-${day}${month}${year}-${randomNum}`;
-    };
-
-    setId(generateId());
   }, [time, prefix]);
 
   //loading with css
@@ -247,7 +265,7 @@ const create = ({ prefix = "OT" }) => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                  <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
                   <li className="breadcrumb-item active">
@@ -273,7 +291,7 @@ const create = ({ prefix = "OT" }) => {
                                 <div className="form-group">
                                   <label htmlFor="">เลขที่ใบคำร้อง</label>
                                   <input
-                                    //readOnly
+                                    readOnly
                                     type="text"
                                     value={id}
                                     className="form-control"
@@ -294,7 +312,7 @@ const create = ({ prefix = "OT" }) => {
                                   <input
                                     className="form-control"
                                     id="sel1"
-                                    //readOnly
+                                    readOnly
                                     //value={}
                                     {...register("department_name", {
                                       required: true,
@@ -309,7 +327,7 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor="">ผู้ควบคุมงาน</label>
+                                  <label htmlFor=""><span className="text-danger">* </span>ผู้ควบคุมงาน</label>
                                   <input
                                     className="form-control"
                                     placeholder="กรุณากรอกข้อมูล"
@@ -329,7 +347,7 @@ const create = ({ prefix = "OT" }) => {
                                   <label htmlFor="">หน่วยงาน</label>
                                   <input
                                     value={approver.division}
-                                    //readOnly
+                                    readOnly
                                     className="form-control"
                                     id="sel1"
                                     {...register("department", {
@@ -345,7 +363,7 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor="">ประเภทการทำงาน OT</label>
+                                  <label htmlFor=""><span className="text-danger">* </span>ประเภทการทำงาน OT</label>
                                   <select
                                     className="form-control"
                                     id="sel1"
@@ -381,7 +399,7 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor="">ประเภท OT</label>
+                                  <label htmlFor=""><span className="text-danger">* </span>ประเภท OT</label>
                                   <select
                                     {...register("ot_type", {
                                       required: true,
@@ -456,7 +474,7 @@ const create = ({ prefix = "OT" }) => {
 
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">เวลาที่ทำ OT</label>
+                                  <label htmlFor=""><span className="text-danger">* </span>เวลาที่ทำ OT</label>
                                   <select
                                     {...register("start_date", {
                                       required: true,
@@ -503,7 +521,7 @@ const create = ({ prefix = "OT" }) => {
                                 <div className="form-group">
                                   <label htmlFor="">จำนวนชั่วโมง (ชม.)</label>
                                   <input
-                                    //readOnly
+                                    readOnly
                                     placeholder="0"
                                     className="form-control"
                                     {...register("total_date", {
@@ -520,7 +538,7 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">วันที่จัดทำ</label>
+                                  <label htmlFor=""><span className="text-danger">* </span>วันที่จัดทำ</label>
                                   <br />
                                   <Controller
                                     rules={{ required: true }}
@@ -639,9 +657,9 @@ const create = ({ prefix = "OT" }) => {
                               <th>รหัสพนักงาน</th>
                               <th>ชื่อพนักงาน</th>
                               <th>ประเภทค่าแรง</th>
-                              <th>ชนิดงานที่ทำ</th>
-                              <th>เป้าหมาย</th>
-                              <th>จุดรถรับส่ง</th>
+                              <th><span className="text-danger">* </span>ชนิดงานที่ทำ</th>
+                              <th><span className="text-danger">* </span>เป้าหมาย</th>
+                              <th><span className="text-danger">* </span>จุดรถรับส่ง</th>
                             </tr>
                           </thead>
                           <tbody>

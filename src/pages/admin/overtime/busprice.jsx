@@ -205,7 +205,7 @@ const busPrice = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                  <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">จัดการรถรับส่ง</li>
                 </ol>

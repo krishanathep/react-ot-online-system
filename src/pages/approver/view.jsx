@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
+import Swal from "sweetalert2";
 import axios from "axios";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -8,6 +10,9 @@ const view = () => {
   dayjs.extend(duration);
 
   const { id } = useParams();
+
+  //user login
+  const userDatail = useAuthUser();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
@@ -23,7 +28,6 @@ const view = () => {
   const [complete_5, setComplete_5] = useState(false);
   const [complete_6, setComplete_6] = useState(false);
   const [complete_7, setComplete_7] = useState(false);
-
 
   const getData = async () => {
     await axios
@@ -46,12 +50,11 @@ const view = () => {
           setComplete_1(true), setComplete_2(true), setComplete_3(true);
         }
         if (res.data.data.status === "ผ่านการอนุมัติ") {
-            setComplete_1(true),
+          setComplete_1(true),
             setComplete_2(true),
             setComplete_3(true),
             setComplete_4(true);
         }
-        
 
         //stepper complete 2
         if (res.data.data.result === "รอการปิด (ส่วน)") {
@@ -88,8 +91,23 @@ const view = () => {
   };
   const [result, setResult] = useState("");
 
+  const [timeRecord, setTimeRecord] = useState([]);
+
+  const getTimeRecord = () => {
+    axios
+      .get(
+        "http://129.200.6.52/laravel_oracle11g_hrcompu_api/public/api/time-records"
+      )
+      .then((res) => {
+        const time = res.data.time_records;
+        setTimeRecord(time);
+      });
+  };
+
+
   useEffect(() => {
     getData();
+    getTimeRecord();
   }, []);
 
   return (
@@ -104,7 +122,7 @@ const view = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">หน้าหลัก</a>
+                    <Link to={'/'}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">การขออนุมัติ</li>
                   <li className="breadcrumb-item active">ข้อมูลการขออนุมัติ</li>
@@ -153,13 +171,13 @@ const view = () => {
                                   น.
                                 </td>
                                 <td>
-                                <b>เวลารวม</b> : {overtimes.total_date}{" "}ชม.
+                                  <b>เวลารวม</b> : {overtimes.total_date} ชม.
                                 </td>
                                 <td>
-                                <b>พนักงาน</b> : {empcount} คน{" "}
+                                  <b>พนักงาน</b> : {empcount} คน{" "}
                                 </td>
                                 <td>
-                                  <b>รวมทั้งหมด</b> : {result}{" "}ชม.
+                                  <b>รวมทั้งหมด</b> : {result} ชม.
                                 </td>
                               </tr>
                             </thead>
@@ -206,7 +224,7 @@ const view = () => {
                                     <td>{member.cost_type}</td>
                                     <td>{member.job_type}</td>
                                     <td>{member.target}</td>
-                                    <td className="text-secondary">
+                                    <td>
                                       {member.objective === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
@@ -214,55 +232,33 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date)
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
-                                            </span>
-                                          );
-                                        })}{" "}
-                                      -{" "}
-                                      {member.time_scan
-                                        .filter((s) =>
-                                          s.date_scan
-                                            .toLowerCase()
-                                            .includes(overtimes.ot_date) && s.time_scan > '12:00:00'
-                                        )
-                                        .map((t, index) => {
-                                          return (
-                                            <span key={index}>
-                                              {index === 0 ? t.time_scan.substring(0,5) : null}
-                                            </span>
-                                          );
-                                        })}
+                                    {member.scan_data === null ? (
+                                      <span>ไม่มีข้อมูล</span>
+                                    ):(
+                                      member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
+                                    )}
                                     </td>
-                                    <td className="text-secondary">
+                                    <td>
                                       {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
                                         member.out_time
                                       )}
                                     </td>
-                                    <td className="text-secondary">
-                                    {member.out_time === null ? (
+                                    <td>
+                                      {member.out_time === null ? (
                                         <i className="fas fa-pencil-alt"></i>
-                                      ) : 
+                                      ) : (
                                         `${hours
-                                            .toString()
-                                            .padStart(2, "0")}:${minutes
-                                            .toString()
-                                            .padStart(2, "0")}`
-                                      }
+                                          .toString()
+                                          .padStart(2, "0")}:${minutes
+                                          .toString()
+                                          .padStart(2, "0")}`
+                                      )}
                                     </td>
                                     <td>{member.bus_stations}</td>
                                     {/* <td>{member.bus_price}</td> */}
-                                    <td className="text-secondary">
+                                    <td>
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>
                                       ) : (
@@ -387,8 +383,82 @@ const view = () => {
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
+                            {/* อนุมัติเอกสาร OT  */}
+                            {/* <button className="btn btn-success"
+                            onClick={handleApproverSubmit2}
+                             hidden={
+                              userDatail().role === "approver_1"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              overtimes.status === "รอการอนุมัติ 1"
+                                ? false
+                                : true
+                            }
+                            >
+                              <i className="fas fa-check-circle"></i> อนุมัติ
+                            </button>{" "}
+                            <button className="btn btn-success"
+                             hidden={
+                              userDatail().role === "approver_2"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              overtimes.status === "รอการอนุมัติ 2"
+                                ? false
+                                : true
+                            }
+                            >
+                              <i className="fas fa-check-circle"></i> อนุมัติ
+                            </button>{" "}
+                            <button className="btn btn-success"
+                             hidden={
+                              userDatail().role === "approver_3"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              overtimes.status === "รอการอนุมัติ 3"
+                                ? false
+                                : true
+                            }
+                            >
+                              <i className="fas fa-check-circle"></i> อนุมัติ
+                            </button>{" "}
+                            {/* อนุมัติเอกสาร OT Report  */}
+                            {/* <button className="btn btn-warning text-white"
+                             hidden={
+                              userDatail().role === "approver_1"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              overtimes.result === "รอการปิด (ส่วน)" 
+                                ? false
+                                : true
+                            }
+                            >
+                              <i className="fas fa-check-circle"></i> อนุมัติ
+                            </button>{" "}
+                            <button className="btn btn-warning text-white"
+                             hidden={
+                              userDatail().role === "approver_2"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              overtimes.result === "รอการปิด (ส่วน)" 
+                                ? false
+                                : true
+                            }
+                            >
+                              <i className="fas fa-check-circle"></i> อนุมัติ
+                            </button>{" "}  */}
                             <Link to={"/approver"} className="btn btn-danger">
-                            <i className="fas fa-arrow-circle-left"></i>  ย้อนกลับ
+                              <i className="fas fa-arrow-circle-left"></i>{" "}
+                              ย้อนกลับ
                             </Link>{" "}
                           </div>
                         </div>
