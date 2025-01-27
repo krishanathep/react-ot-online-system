@@ -48,14 +48,15 @@ const manageCar = () => {
       .then((res) => {
         const otrequest1 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === startdate && e.end_time === "20.00") ||
-            (e.ot_create_date === startdate && e.end_time === "19.50")
+            (e.ot_create_date === startdate && e.end_time === "20.00" && e.bus_stations != "ไม่ใช้บริการ") ||
+            (e.ot_create_date === startdate && e.end_time === "19.50" && e.bus_stations != "ไม่ใช้บริการ")
+
         );
 
         const otrequest2 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === startdate && e.end_time === "22.00") ||
-            (e.ot_create_date === startdate && e.end_time === "21.50")
+            (e.ot_create_date === startdate && e.end_time === "22.00" && e.bus_stations != "ไม่ใช้บริการ") ||
+            (e.ot_create_date === startdate && e.end_time === "21.50" && e.bus_stations != "ไม่ใช้บริการ")
         );
         setEmployees_1(otrequest1);
         setEmployees_2(otrequest2);
@@ -106,14 +107,14 @@ const manageCar = () => {
       .then((res) => {
         const otrequest1 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === date && e.end_time === "20.00") ||
-            (e.ot_create_date === date && e.end_time === "19.50")
+            (e.ot_create_date === date && e.end_time === "20.00" && e.bus_stations != "ไม่ใช้บริการ") ||
+            (e.ot_create_date === date && e.end_time === "19.50" && e.bus_stations != "ไม่ใช้บริการ")
         );
 
         const otrequest2 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === date && e.end_time === "22.00") ||
-            (e.ot_create_date === date && e.end_time === "21.50")
+            (e.ot_create_date === date && e.end_time === "22.00"  && e.bus_stations != "ไม่ใช้บริการ") ||
+            (e.ot_create_date === date && e.end_time === "21.50"  && e.bus_stations != "ไม่ใช้บริการ")
         );
         setEmployees_1(otrequest1);
         setEmployees_2(otrequest2);
@@ -133,6 +134,25 @@ const manageCar = () => {
               bus_point_2: employee.bus_point_2,
               bus_point_3: employee.bus_point_3,
               bus_point_4: employee.bus_point_4,
+              bus_price: employee.bus_price,
+              bus_stations: employee.bus_stations,
+            })),
+
+            test_2: res.data.employees
+            .filter(
+              (e) =>
+                (e.ot_create_date === startdate && e.end_time === "22.00") ||
+                (e.ot_create_date === startdate && e.end_time === "21.50")
+            )
+            .map((employee) => ({
+              id: employee.id,
+              check_price: employee.check_price,
+              bus_point_5: employee.bus_point_1,
+              bus_point_6: employee.bus_point_2,
+              bus_point_7: employee.bus_point_3,
+              bus_point_8: employee.bus_point_4,
+              bus_price: employee.bus_price,
+              bus_stations: employee.bus_stations,
             })),
         });
         //setLoading(false);
@@ -290,7 +310,7 @@ const manageCar = () => {
                           <th>จุดรับส่ง 2</th>
                           <th>จุดรับส่ง 3</th>
                           <th>จุดรับส่ง 4</th>
-                          <th>ไม่ใช้บริการ</th>
+                          {/* <th>ไม่ใช้บริการ</th> */}
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
@@ -331,13 +351,13 @@ const manageCar = () => {
                                 "-"
                               )}
                             </td>
-                            <td>
+                            {/* <td>
                               {e.bus_stations === "ไม่ใช้บริการ" ? (
                                 <i className="fas fa-ban text-danger"></i>
                               ) : (
                                 "-"
                               )}
-                            </td>
+                            </td> */}
                             <td>
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>
@@ -499,7 +519,7 @@ const manageCar = () => {
                           <th>จุดรับส่ง 2</th>
                           <th>จุดรับส่ง 3</th>
                           <th>จุดรับส่ง 4</th>
-                          <th>ไม่ใช้บริการ</th>
+                          {/* <th>ไม่ใช้บริการ</th> */}
                           <th>วันที่ทำ</th>
                           <th>เวลาเลิก</th>
                           <th>ค่าเดินทาง</th>
@@ -540,13 +560,13 @@ const manageCar = () => {
                                 "-"
                               )}
                             </td>
-                            <td>
+                            {/* <td>
                               {e.bus_stations === "ไม่ใช้บริการ" ? (
                                 <i className="fas fa-ban text-danger"></i>
                               ) : (
                                 "-"
                               )}
-                            </td>
+                            </td> */}
                             <td>
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>

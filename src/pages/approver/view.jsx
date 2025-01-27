@@ -198,7 +198,7 @@ const view = () => {
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
-                                {/* <th>ค่ารถ</th> */}
+                                <th>ค่าเดินทาง</th>
                                 <th>หมายเหตุ</th>
                               </tr>
                             </thead>
@@ -232,7 +232,7 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.scan_data === null ? (
+                                    {member.scan_data === null || member.scan_data === "[null]" ? (
                                       <span>ไม่มีข้อมูล</span>
                                     ):(
                                       member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
@@ -257,7 +257,7 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>{member.bus_stations}</td>
-                                    {/* <td>{member.bus_price}</td> */}
+                                    <td>{member.bus_price}</td>
                                     <td>
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>

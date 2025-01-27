@@ -111,7 +111,7 @@ const busPrice = () => {
             )
             .map((employee) => ({
               id: employee.id,
-              //bus_price: employee.bus_price,
+              bus_price: employee.bus_price,
             })),
           test_2: res.data.employees
             .filter(
@@ -121,6 +121,7 @@ const busPrice = () => {
             )
             .map((employee) => ({
               id: employee.id,
+              bus_price: employee.bus_price,
               // bus_point_1: employee.bus_point_1,
               // bus_point_2: employee.bus_point_2,
               // bus_point_3: employee.bus_point_3,

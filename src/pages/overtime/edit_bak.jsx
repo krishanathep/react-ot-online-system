@@ -156,7 +156,7 @@ const edit = ({ index }) => {
       if (!scan_data.dl_sacttime && !scan_data.dl_eacttime) return null;
       return {
           scan_in: scan_data.dl_sacttime ? scan_data.dl_sacttime.substring(11, 16) : scan_data.dl_sacttime,
-          scan_out: scan_data.dl_eacttime ? scan_data.dl_eacttime.substring(11, 16) : "00:00"
+          scan_out: scan_data.dl_eacttime ? scan_data.dl_eacttime.substring(11, 16) : scan_data.dl_eacttime
       };
    });
   };
@@ -327,7 +327,7 @@ const edit = ({ index }) => {
                                           )
                                           .map((s, index) => (
                                             <div key={index} className="text-muted">
-                                              {s.dl_sacttime === null || s.dl_eacttime === null
+                                              {s.dl_sacttime === null
                                                 ? "ไม่มีข้อมูล..."
                                                 : `${s.dl_sacttime.substring(
                                                     11,

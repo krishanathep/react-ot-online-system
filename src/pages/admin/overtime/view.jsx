@@ -17,6 +17,11 @@ const viewAdmin = () => {
   const [complete_3, setComplete_3] = useState(false);
   const [complete_4, setComplete_4] = useState(false);
 
+   //stepper complete state 1
+      const [complete_5, setComplete_5] = useState(false);
+      const [complete_6, setComplete_6] = useState(false);
+      const [complete_7, setComplete_7] = useState(false);
+
   const getData = async () => {
     await axios
       .get(import.meta.env.VITE_API_KEY+"/api/otrequest/" + id, {
@@ -37,6 +42,17 @@ const viewAdmin = () => {
         } if(res.data.data.status==='ผ่านการอนุมัติ'){
           setComplete_1(true),setComplete_2(true),setComplete_3(true),setComplete_4(true)
         }
+
+          //stepper complete 2
+          if (res.data.data.result === "รอการปิด (ส่วน)") {
+            setComplete_5(true);
+          }
+          if (res.data.data.result === "รอการปิด (ผจก)") {
+            setComplete_5(true), setComplete_6(true);
+          }
+          if (res.data.data.result === "ปิดการรายงาน") {
+            setComplete_5(true), setComplete_6(true), setComplete_7(true);
+          }
 
          //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
          const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
@@ -172,7 +188,7 @@ const viewAdmin = () => {
                                 <th>เวลาเลิกงาน</th>
                                 <th>รวมเวลา</th>
                                 <th>รถรับส่ง</th>
-                                {/* <th>ค่ารถ</th> */}
+                                <th>ค่าเดินทาง</th>
                                 <th>หมายเหตุ</th>
                               </tr>
                             </thead>
@@ -205,7 +221,7 @@ const viewAdmin = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.scan_data === null ? (
+                                    {member.scan_data === null || member.scan_data === "[null]" ? (
                                       <span>ไม่มีข้อมูล</span>
                                     ):(
                                       member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
@@ -230,7 +246,7 @@ const viewAdmin = () => {
                                       }
                                     </td>
                                     <td>{member.bus_stations}</td>
-                                    {/* <td>{member.bus_price}</td> */}
+                                    <td>{member.bus_price}</td>
                                     <td className="text-secondary">
                                       {member.remark === null ? (
                                         <i className="fas fa-pencil-alt"></i>
@@ -283,6 +299,44 @@ const viewAdmin = () => {
                             <div className={`stepper-item ${(!complete_4)?(null):('completed')}`}>
                               <div className="step-counter text-white"><i className="fas fa-check"></i></div>
                               <div className="step-name">ผู้อนุมัติคนที่ 3</div>
+                            </div>
+                          </div>
+                        </div>
+                         {/* Stepper Function */}
+                         <div className="col-md-6 offset-3">
+                          <div
+                            className="stepper-wrapper"
+                            style={{ fontFamily: "Prompt" }}
+                          >
+                            <div
+                              className={`stepper-item ${
+                                !complete_5 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
+                              <div className="step-name">การรายงานผล</div>
+                            </div>
+                            <div
+                              className={`stepper-item ${
+                                !complete_6 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 1</div>
+                            </div>
+                            <div
+                              className={`stepper-item ${
+                                !complete_7 ? null : "completed"
+                              }`}
+                            >
+                              <div className="step-counter text-white">
+                                <i className="fas fa-check"></i>
+                              </div>
+                              <div className="step-name">ผู้อนุมัติคนที่ 2</div>
                             </div>
                           </div>
                         </div>
