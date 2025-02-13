@@ -598,11 +598,11 @@ const OverTimeAdmin = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
-                        // {
-                        //   accessor: "dept",
-                        //   title: "แผนก",
-                        //   textAlignment: "center",
-                        // },
+                        {
+                          accessor: "dept",
+                          title: "ฝ่ายงาน",
+                          textAlignment: "center",
+                        },
                         {
                           accessor: "department",
                           title: "หน่วยงาน",

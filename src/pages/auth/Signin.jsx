@@ -81,13 +81,13 @@ export default function Signin() {
           </div>
           <div  id="auth_bg" className="card">
             <div className="card-body login-card-body">
-              <p className="login-box-msg">Sign in to create your OT request</p>
+              <p className="login-box-msg">Sign in to Access the OT SYSTEM</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="input-group mb-3">
-                <input className="form-control"   type="email" {...register("email", { required: true })} placeholder="Email" />
+                <input className="form-control"   type="name" {...register("email", { required: true })} placeholder="Username" />
                   <div className="input-group-append">
                     <div className="input-group-text">
-                      <span className="fas fa-envelope" />
+                      <span className="fas fa-user" />
                     </div>
                   </div>
                 </div>

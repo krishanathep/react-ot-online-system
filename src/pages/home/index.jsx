@@ -3,7 +3,6 @@ import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
 
 export default function Home() {
-  
   //user login
   const userDatail = useAuthUser();
 
@@ -15,10 +14,7 @@ export default function Home() {
   const getAll = async () => {
     if (userDatail().role === "admin") {
       await axios
-        .get(
-          import.meta.env.VITE_API_KEY +
-            "/api/otrequests"
-        )
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
         .then((res) => {
           const counter1 = res.data.data.filter(
             (ot) =>
@@ -34,6 +30,189 @@ export default function Home() {
           );
 
           setOvertimes(res.data.data.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+    } else if (userDatail().role === "user") {
+      await axios
+        .get(
+          import.meta.env.VITE_API_KEY +
+            "/api/otrequests-agency?data=" +
+            userDatail().agency
+        )
+        .then((res) => {
+          const counter1 = res.data.otrequests.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = res.data.otrequests.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = res.data.otrequests.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(res.data.otrequests.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+    } else if (
+      userDatail().role === "approver_1" &&
+      userDatail().agency === "AFD_GROUP_1"
+    ) {
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+        .then((res) => {
+          // Filter for PLD and FED departments
+          const filteredData = res.data.data.filter(
+            (ot) => 
+            ot.department === "FED" || 
+            ot.department === "หน่วย E3"
+          );
+
+          const counter1 = filteredData.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = filteredData.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = filteredData.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(filteredData.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+      } else if (
+        userDatail().role === "approver_1" &&
+        userDatail().agency === "PLD_GROUP_1"
+      ) {
+        await axios
+          .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+          .then((res) => {
+            // Filter for PLD and FED departments
+            const filteredData = res.data.data.filter(
+              (ot) => 
+              ot.department === "กลุ่มงานวางแผนการผลิต-โรงประกอบ" || 
+              ot.department === "กลุ่มงานวางแผนการผลิต-โรงผลิตชิ้นส่วน" ||
+              ot.department === "หน่วย ควบคุมวัตถุดิบ(MC)"
+            );
+  
+            const counter1 = filteredData.filter(
+              (ot) =>
+                ot.status === "รอการอนุมัติ 1" ||
+                ot.status === "รอการอนุมัติ 2" ||
+                ot.status === "รอการอนุมัติ 3"
+            );
+            const counter3 = filteredData.filter(
+              (ot) => ot.status === "ผ่านการอนุมัติ"
+            );
+            const counter5 = filteredData.filter(
+              (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+            );
+  
+            setOvertimes(filteredData.length);
+            setInprogress1(counter1.length);
+            setApproved1(counter3.length);
+            setRejected(counter5.length);
+          });
+        } else if (
+          userDatail().role === "approver_1" &&
+          userDatail().agency === "PLD_GROUP_2"
+        ) {
+          await axios
+            .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+            .then((res) => {
+              // Filter for PLD and FED departments
+              const filteredData = res.data.data.filter(
+                (ot) => 
+                ot.department === "หน่วย Logistic 1 - Machinery" || 
+                ot.department === "หน่วย Logistic 2 - OEM" ||
+                ot.department === "หน่วย คลังสินค้าโรงผลิตชิ้นส่วน(SP)" ||
+                ot.department === "หน่วย คลังสินค้าโรงประกอบ 1" ||
+                ot.department === "หน่วย คลังสินค้าโรงประกอบ 2"
+              );
+    
+              const counter1 = filteredData.filter(
+                (ot) =>
+                  ot.status === "รอการอนุมัติ 1" ||
+                  ot.status === "รอการอนุมัติ 2" ||
+                  ot.status === "รอการอนุมัติ 3"
+              );
+              const counter3 = filteredData.filter(
+                (ot) => ot.status === "ผ่านการอนุมัติ"
+              );
+              const counter5 = filteredData.filter(
+                (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+              );
+    
+              setOvertimes(filteredData.length);
+              setInprogress1(counter1.length);
+              setApproved1(counter3.length);
+              setRejected(counter5.length);
+            });
+    } else if (userDatail().role === "approver_1") {
+      await axios
+        .get(
+          import.meta.env.VITE_API_KEY +
+            "/api/otrequests-agency?data=" +
+            userDatail().agency
+        )
+        .then((res) => {
+          const counter1 = res.data.otrequests.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = res.data.otrequests.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = res.data.otrequests.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(res.data.otrequests.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+    } else if (
+      userDatail().role === "approver_3" &&
+      userDatail().agency === "MD_GROUP_1"
+    ) {
+      console.log(userDatail().role);
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+        .then((res) => {
+          // Filter for PLD and FED departments
+          const filteredData = res.data.data.filter(
+            (ot) => ot.dept === "PLD" || ot.dept === "FED"
+          );
+
+          const counter1 = filteredData.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = filteredData.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = filteredData.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(filteredData.length);
           setInprogress1(counter1.length);
           setApproved1(counter3.length);
           setRejected(counter5.length);

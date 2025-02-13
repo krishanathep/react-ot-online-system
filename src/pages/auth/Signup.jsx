@@ -64,9 +64,9 @@ export default function Signup() {
               <div className="input-group mb-3">
                 <input
                   className="form-control"
-                  type="email"
+                  type="name"
                   {...register("email", { required: true })}
-                  placeholder="Email"
+                  placeholder="Username"
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
@@ -112,6 +112,8 @@ export default function Signup() {
                   placeholder="Departments"
                 >
                   <option value="">Please Select</option>
+                  <option value="ITD">ITD</option>
+                  <option value="HRD">HRD</option>
                   <option value="RDD">RDD</option>
                   <option value="ADD">ADD</option>
                   <option value="PED">PED</option>

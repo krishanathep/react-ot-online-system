@@ -34,52 +34,82 @@ const Approver = () => {
   const getData = async () => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-    // get ot requrst data from dept by user login
+
+    const userRole = userDatail().role; // Assuming userDatail() returns the user details
+    const userAgency = userDatail().agency;
+
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-dept?data=" +
-          userDatail().dept
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        //Change api name
-        setOvertimes(res.data.otrequests);
-        setRecords(res.data.otrequests.slice(from, to));
+        let filteredData = res.data.data;
+
+        //กรณี approver 1 ดูแลหลายหน่วยงาน
+        if (userRole === 'approver_1') {
+          if (userAgency === 'AFD_GROUP_1') {
+            filteredData = filteredData.filter(item => 
+              item.department === 'หน่วย E3' || 
+              item.department === 'FED'
+            );
+          } else if (userAgency === 'PLD_GROUP_1') {
+            filteredData = filteredData.filter(item => 
+              item.department === 'กลุ่มงานวางแผนการผลิต-โรงประกอบ' || 
+              item.department === 'กลุ่มงานวางแผนการผลิต-โรงผลิตชิ้นส่วน' || 
+              item.department === 'หน่วย ควบคุมวัตถุดิบ(MC)'              
+            );
+          } else if (userAgency === 'PLD_GROUP_2') {
+            filteredData = filteredData.filter(item => 
+              item.department === 'หน่วย Logistic 1 - Machinery' || 
+              item.department === 'หน่วย Logistic 2 - OEM' || 
+              item.department === 'หน่วย คลังสินค้าโรงผลิตชิ้นส่วน(SP)' ||
+              item.department === 'หน่วย คลังสินค้าโรงประกอบ 1' || 
+              item.department === 'หน่วย คลังสินค้าโรงประกอบ 2'
+            );
+          } else {
+            filteredData = filteredData.filter(item => item.department === userAgency);
+          }
+        } else if (userRole === 'approver_2') {
+          filteredData = filteredData.filter(item => item.dept === userDatail().dept);
+        } else if (userRole === 'approver_3' && userAgency === 'MD_GROUP_1') {
+          filteredData = filteredData.filter(item => 
+            item.dept === 'PLD' || 
+            item.dept === 'FED'
+          );
+        }
+
+        setOvertimes(filteredData);
+        setRecords(filteredData.slice(from, to));
         setLoading(false);
       });
   };
 
-  const getData2 = async () => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-    // get ot requrst data from dept by user login
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-agency?data=" +
-          userDatail().agency
-      )
-      .then((res) => {
-        //Change api name
-        setOvertimes(res.data.otrequests);
-        setRecords(res.data.otrequests.slice(from, to));
-        setLoading(false);
-      });
-  };
 
   //filter function by ot code
   const codeFilter = async (key) => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-
+  
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-code?data=" + key
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        // First filter by department
+        const deptFiltered = res.data.data.filter(
+          (item) => item.dept === userDatail().dept
+        );
+  
+        // Then filter by key if it exists
+        const keyFiltered = key
+          ? deptFiltered.filter((item) =>
+              Object.values(item).some(
+                (value) =>
+                  value &&
+                  value.toString().toLowerCase().includes(key.toLowerCase())
+              )
+            )
+          : deptFiltered;
+  
+        setOvertimes(keyFiltered);
+        console.log(keyFiltered);
+        setRecords(keyFiltered.slice(from, to));
         setLoading(false);
       });
   };
@@ -88,37 +118,33 @@ const Approver = () => {
   const nameFilter = async (key) => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-
+  
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests-filter-name?data=" + key
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
+        // First filter by department
+        const deptFiltered = res.data.data.filter(
+          (item) => item.dept === userDatail().dept
+        );
+  
+        // Then filter by key if it exists
+        const keyFiltered = key
+          ? deptFiltered.filter((item) =>
+              Object.values(item).some(
+                (value) =>
+                  value &&
+                  value.toString().toLowerCase().includes(key.toLowerCase())
+              )
+            )
+          : deptFiltered;
+  
+        setOvertimes(keyFiltered);
+        console.log(keyFiltered);
+        setRecords(keyFiltered.slice(from, to));
         setLoading(false);
       });
   };
 
-  //filter function by department
-  const departmentFilter = async (key) => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-
-    await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-filter-department?data=" +
-          key
-      )
-      .then((res) => {
-        setOvertimes(res.data.otrequest);
-        console.log(overtimes);
-        setRecords(res.data.otrequest.slice(from, to));
-        setLoading(false);
-      });
-  };
 
   //filter function by status
   const statusFilter = async (key) => {
@@ -159,13 +185,7 @@ const Approver = () => {
   };
 
   useEffect(() => {
-    if (userDatail().role === "approver_1") {
-      getData2();
-    } else if (userDatail().role === "approver_2") {
-      getData();
-    } else {
-      getData2();
-    }
+    getData()
     getApprover();
   }, [page, pageSize, selectedRecords]);
 
@@ -289,8 +309,8 @@ const Approver = () => {
   // Approver 5 update status
   const handleApproverSubmit5 = (blogs, data) => {
     Swal.fire({
-      title: "ยืนยันการอนุมัติ OT",
-      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      title: "ยืนยันการอนุมัติ",
+      text: "คุณต้องการอนุมัติการรายงานผลใช่ไหม",
       icon: "success",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -332,8 +352,8 @@ const Approver = () => {
   // Approver 6 update status
   const handleApproverSubmit6 = (blogs, data) => {
     Swal.fire({
-      title: "ยืนยันการอนุมัติ OT",
-      text: "คุณต้องการอนุมัติคำร้อง OT ใช่ไหม",
+      title: "ยืนยันการอนุมัติ",
+      text: "คุณต้องการอนุมัติการรายงานผลใช่ไหม",
       icon: "success",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -749,7 +769,7 @@ const Approver = () => {
                         },
                         {
                           accessor: "dept",
-                          title: "แผนก",
+                          title: "ฝ่ายงาน",
                           textAlignment: "center",
                         },
                         {
@@ -880,8 +900,8 @@ const Approver = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit2(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_1"
+                                hidden = {
+                                  (userDatail().role === "approver_1")
                                     ? false
                                     : true
                                 }
@@ -928,8 +948,8 @@ const Approver = () => {
                               <button
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit5(blogs)}
-                                hidden={
-                                  userDatail().role === "approver_1"
+                                hidden = {
+                                  (userDatail().role === "approver_1")
                                     ? false
                                     : true
                                 }

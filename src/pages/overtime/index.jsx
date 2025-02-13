@@ -339,7 +339,7 @@ const Overtime = () => {
                         },
                         {
                           accessor: "dept",
-                          title: "แผนก",
+                          title: "ฝ่ายงาน",
                           textAlignment: "center",
                         },
                         {
