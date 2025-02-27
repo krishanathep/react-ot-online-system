@@ -709,6 +709,8 @@ const Approver = () => {
                                   <DatePicker
                                     //showIcon
                                     //icon="fa fa-calendar"
+                                    style={{ width: "100%" }}  // กำหนดความกว้างตรงๆ
+                                    wrapperClassName="w-100" // ใช้ class ควบคุม wrapper
                                     className="form-control"
                                     //isClearable
                                     placeholderText="กรุณาเลือกวันที่"
@@ -767,14 +769,15 @@ const Approver = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
-                        {
-                          accessor: "dept",
-                          title: "ฝ่ายงาน",
-                          textAlignment: "center",
-                        },
+                    
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "dept",
+                          title: "ฝ่ายงาน",
                           textAlignment: "center",
                         },
                         {

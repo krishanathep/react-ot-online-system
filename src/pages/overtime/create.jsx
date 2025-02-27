@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -11,6 +11,71 @@ import dayjs from "dayjs";
 import axios from "axios";
 
 const create = ({ prefix = "OT" }) => {
+  const [employeeSource, setEmployeeSource] = useState("agency"); // Default to department view
+  const [displayedEmployees, setDisplayedEmployees] = useState([]);
+  const [employeesByrole, setEmployeesbyrole] = useState([]);
+  const [employeesByDept, setEmployeesByDept] = useState([]);
+  const [employeesByAgency, setEmployeesByAgency] = useState([]);
+
+  const otOptions = {
+    normal_ot: [
+      { value: "OT หลังเลิกงาน-ไม่พัก", label: "OT หลังเลิกงาน-ไม่พัก" },
+      {
+        value: "OT หลังเลิกงาน-พัก 20 นาที",
+        label: "OT หลังเลิกงาน-พัก 20 นาที",
+      },
+      { value: "OT ก่อนเข้างาน", label: "OT ก่อนเข้างาน" },
+      { value: "OT ช่วงพักเที่ยง", label: "OT ช่วงพักเที่ยง" },
+      { value: "OT วันธรรมดา ก่อนเข้ากะ 1", label: "OT วันธรรมดา ก่อนกะ 21.45"},
+      { value: "OT วันธรรมดา หลังกะ 1", label: "OT วันธรรมดา หลังกะ 7.05"},
+      {
+        value: "OT วันธรรมดา ก่อนเข้ากะ 2",
+        label: "OT วันธรรมดา ก่อนกะ 20.15",
+      },
+      { value: "OT วันธรรมดา หลังกะ 2", label: "OT วันธรรมดา หลังกะ 5.35" },
+    ],
+    holiday_ot: [
+      { value: "OT วันหยุด ทำเต็มวัน", label: "OT วันหยุด ทำเต็มวัน" },
+      {
+        value: "OT วันหยุด หลังเลิกงาน-ไม่พัก",
+        label: "OT วันหยุด หลังเลิกงาน-ไม่พัก",
+      },
+      {
+        value: "OT วันหยุด หลังเลิกงาน-พัก 20 นาที",
+        label: "OT วันหยุด หลังเลิกงาน-พัก 20 นาที",
+      },
+    ],
+    spacial_ot: [
+      { value: "OT วันหยุดปกติ 1", label: "OT วันหยุดปกติ 21.45-6.45"},
+      { value: "OT วันหยุด ก่อนเข้ากะ 1", label: "OT วันหยุด ก่อนกะ 21.45"},
+      { value: "OT วันหยุด หลังกะ 1", label: "OT วันหยุด หลังกะ 6.45"},
+      { value: "OT วันหยุดปกติ 2", label: "OT วันหยุดปกติ 20.15-5.15" },
+      { value: "OT วันหยุด ก่อนเข้ากะ 2", label: "OT วันหยุด ก่อนกะ 20.15" },
+      { value: "OT วันหยุด หลังกะ 2", label: "OT วันหยุด หลังกะ 5.15" },
+    ],
+  };
+
+  const handleStartDateChange = (event) => {
+    const value = event.target.value;
+    setValue("start_date", value); // ตั้งค่าตัวแปร start_date
+    finishFilter(value);
+  };
+
+  // Function to handle employee source change
+  const handleSourceChange = (e) => {
+    const source = e.target.value;
+    setEmployeeSource(source);
+    if (source === "agency") {
+      setDisplayedEmployees(employeesByAgency);
+    } else if (source === "dept") {
+      setDisplayedEmployees(employeesByrole);
+    } else if (source === "department") {
+      setDisplayedEmployees(employeesByDept);
+    } else {
+      setDisplayedEmployees(employees);
+    }
+  };
+
   const [id, setId] = useState("");
 
   const [lock, SetLock] = useState(true);
@@ -20,10 +85,15 @@ const create = ({ prefix = "OT" }) => {
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {},
   });
+
+  const workType = watch("work_type"); // ดูค่าที่เลือกในประเภทการทำงาน OT
+
   const { fields, append } = useFieldArray({
     control,
     name: "test",
@@ -49,10 +119,86 @@ const create = ({ prefix = "OT" }) => {
 
   const [startDate, setStartDate] = useState("");
 
-  const [employeesByrole, setEmployeesbyrole] = useState([]);
-
   const [ottime, setOttime] = useState("");
 
+  // filter by All
+  const getEmployees = async () => {
+    try {
+      setLoading(true);
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/employees")
+        .then((res) => {
+          setEmployees(
+            res.data.employees.map((employee) => ({
+              value: employee.emp_name,
+              label: `${employee.emp_id} | ${employee.emp_name} | ${employee.department} | ${employee.agency} | ${employee.dept}`,
+              code: employee.emp_id,
+              cost: employee.bus_group,
+            }))
+          );
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // filter by Agency (หน่วยงาน)
+  const getEmployeebyAgency = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        import.meta.env.VITE_API_KEY + "/api/employees"
+      );
+
+      const userAgency = userDetail().agency; // ดึงค่า agency ของผู้ใช้ปัจจุบัน
+
+      const filteredEmployees = response.data.employees
+        .filter((employee) => employee.agency.startsWith(userAgency)) // กรองเฉพาะพนักงานใน agency เดียวกัน
+        .map((employee) => ({
+          value: employee.emp_name,
+          label: `${employee.emp_id} | ${employee.emp_name} | ${employee.department} | ${employee.agency} | ${employee.dept}`,
+          code: employee.emp_id,
+          cost: employee.bus_group,
+        }));
+
+      setEmployeesByAgency(filteredEmployees);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // filter by Department (ส่วนงาน)
+  const getEmployeebyDept = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        import.meta.env.VITE_API_KEY + "/api/employees"
+      );
+
+      const userDepartment = userDetail().department;
+
+      const filteredEmployees = response.data.employees
+        .filter((employee) => employee.department===userDepartment) // กรองเฉพาะพนักงานใน agency เดียวกัน
+        .map((employee) => ({
+          value: employee.emp_name,
+          label: `${employee.emp_id} | ${employee.emp_name} | ${employee.department} | ${employee.agency} | ${employee.dept}`,
+          code: employee.emp_id,
+          cost: employee.bus_group,
+        }));
+
+      setEmployeesByDept(filteredEmployees);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // fillter by dept (ฝ่ายงาน)
   const getEmployeesByrole = async () => {
     try {
       await axios
@@ -63,9 +209,9 @@ const create = ({ prefix = "OT" }) => {
         )
         .then((res) => {
           setEmployeesbyrole(
-            res.data.employees.map((employee, index) => ({
+            res.data.employees.map((employee) => ({
               value: employee.emp_name,
-              label: employee.emp_id + " | " + employee.emp_name,
+              label: `${employee.emp_id} | ${employee.emp_name} | ${employee.department} | ${employee.agency} | ${employee.dept}`,
               code: employee.emp_id,
               cost: employee.bus_group,
             }))
@@ -101,21 +247,6 @@ const create = ({ prefix = "OT" }) => {
     }
   };
 
-  const getEmployees = async () => {
-    try {
-      setLoading(true);
-      await axios
-        .get(import.meta.env.VITE_API_KEY + "/api/employees")
-        .then((res) => {
-          setEmployees(res.data.employees);
-        });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   //filter เวลาที่เริ่มต้น
   const listFilter = async (key) => {
     await axios
@@ -129,18 +260,17 @@ const create = ({ prefix = "OT" }) => {
 
   //filter เวลาที่สิ้นสุด
   const finishFilter = async (key) => {
-    await axios
-      .get(
-        `${
-          import.meta.env.VITE_API_KEY
-        }/api/otrequests-filter-finish?data=${key}`
-      )
-      .then((res) => {
-        reset({
-          total_date: res.data.time.ot_total,
-          end_date: res.data.time.ot_finish,
-        });
-      });
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_KEY}/api/otrequests-filter-finish?data=${key}`
+      );
+  
+      // ใช้ setValue เพื่ออัปเดตเฉพาะ field ที่ต้องการ ไม่ให้ค่าอื่นโดนรีเซต
+      setValue("total_date", res.data.time.ot_total);
+      setValue("end_date", res.data.time.ot_finish);
+    } catch (error) {
+      console.error("Error fetching OT data:", error);
+    }
   };
 
   const handleCreateSubmit = async (data) => {
@@ -208,10 +338,10 @@ const create = ({ prefix = "OT" }) => {
       try {
         // เรียก API เพื่อดึง last ID
         const response = await axios.get(
-          import.meta.env.VITE_API_KEY +"/api/get-last-id"
+          import.meta.env.VITE_API_KEY + "/api/get-last-id"
         );
         let lastId = response.data.last_id; // ใช้ lastId หรือ fallback เป็น "00000"
-        
+
         // Add leading zeros to lastId
         lastId = lastId.toString().padStart(4, "0");
 
@@ -240,7 +370,28 @@ const create = ({ prefix = "OT" }) => {
     getApprover();
     deptFilter();
     getEmployeesByrole();
+    getEmployeebyAgency();
+    getEmployeebyDept();
   }, [time, prefix]);
+
+  // Update displayedEmployees when employees or employeesByrole changes
+  useEffect(() => {
+    if (employeeSource === "dept") {
+      setDisplayedEmployees(employeesByrole);
+    } else if (employeeSource === "agency") {
+      setDisplayedEmployees(employeesByAgency);
+    } else if (employeeSource === "department") {
+      setDisplayedEmployees(employeesByDept);
+    } else {
+      setDisplayedEmployees(employees);
+    }
+  }, [
+    employees,
+    employeesByrole,
+    employeeSource,
+    employeesByAgency,
+    employeesByDept,
+  ]);
 
   //loading with css
   if (loading === true) {
@@ -265,7 +416,7 @@ const create = ({ prefix = "OT" }) => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                  <Link to={'/'}>หน้าหลัก</Link>
+                    <Link to={"/"}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">คำร้องขออนุมัติ OT</li>
                   <li className="breadcrumb-item active">
@@ -327,7 +478,10 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor=""><span className="text-danger">* </span>ผู้ควบคุมงาน</label>
+                                  <label htmlFor="">
+                                    <span className="text-danger">* </span>
+                                    ผู้ควบคุมงาน
+                                  </label>
                                   <input
                                     className="form-control"
                                     placeholder="กรุณากรอกข้อมูล"
@@ -361,9 +515,45 @@ const create = ({ prefix = "OT" }) => {
                                   )}
                                 </div>
                               </div>
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">
+                                    <span className="text-danger">* </span>
+                                    วันที่จัดทำ
+                                  </label>
+                                  <br />
+                                  <Controller
+                                    rules={{ required: true }}
+                                    control={control}
+                                    name="ot_date"
+                                    render={({ field }) => (
+                                      <DatePicker
+                                        minDate={dayjs().toDate()}
+                                        className="form-control"
+                                        placeholderText="กรุณาเลือกวันที่"
+                                        onChange={(date) =>
+                                          field.onChange(
+                                            dayjs(date).format("YYYY-MM-DD")
+                                          )
+                                        }
+                                        dateFormat="dd-MM-yyyy"
+                                        selected={field.value}
+                                      />
+                                    )}
+                                  />
+                                  {errors.ot_date && (
+                                    <span className="text-danger">
+                                      This field is required
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor=""><span className="text-danger">* </span>ประเภทการทำงาน OT</label>
+                                  <label htmlFor="">
+                                    <span className="text-danger">* </span>
+                                    ประเภทการทำงาน OT
+                                  </label>
                                   <select
                                     className="form-control"
                                     id="sel1"
@@ -372,22 +562,14 @@ const create = ({ prefix = "OT" }) => {
                                     })}
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
-                                    <option value={"ล่วงเวลาวันปกติ"}>
+                                    <option value={"normal_ot"}>
                                       ล่วงเวลาวันปกติ
                                     </option>
-                                    <option value={"ทำงานวันหยุด"}>
+                                    <option value={"holiday_ot"}>
                                       ทำงานวันหยุด
                                     </option>
-                                    <option value={"ล่วงเวลาวันหยุด"}>
+                                    <option value={"spacial_ot"}>
                                       ล่วงเวลาวันหยุด
-                                    </option>
-                                    <option value={"ทำงานวันหยุดประเพณี"}>
-                                      ทำงานวันหยุดประเพณี
-                                    </option>
-                                    <option
-                                      value={"ล่วงเวลาทำงานวันหยุดประเพณี"}
-                                    >
-                                      ล่วงเวลาทำงานวันหยุดประเพณี
                                     </option>
                                   </select>
                                   {errors.work_type && (
@@ -399,70 +581,28 @@ const create = ({ prefix = "OT" }) => {
                               </div>
                               <div className="col-md-3">
                                 <div className="form-group">
-                                  <label htmlFor=""><span className="text-danger">* </span>ประเภท OT</label>
+                                  <label htmlFor="">
+                                    <span className="text-danger">* </span>
+                                    ช่วงเวลา OT
+                                  </label>
                                   <select
-                                    {...register("ot_type", {
-                                      required: true,
-                                    })}
                                     className="form-control"
-                                    id="sel3"
+                                    {...register("ot_type", { required: true })}
                                     onChange={(event) =>
                                       listFilter(event.target.value)
                                     }
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
-                                    <option value="OT หลังเลิกงาน-ไม่พัก">
-                                      OT หลังเลิกงาน-ไม่พัก
-                                    </option>
-                                    <option value="OT หลังเลิกงาน-พัก 20 นาที">
-                                      OT หลังเลิกงาน-พัก 20 นาที
-                                    </option>
-                                    <option value="OT ก่อนเข้างาน">
-                                      OT ก่อนเข้างาน
-                                    </option>
-                                    <option value="OT ช่วงพักเที่ยง">
-                                      OT ช่วงพักเที่ยง
-                                    </option>
-                                    <option value="OT วันหยุด ทำเต็มวัน">
-                                      OT วันหยุด ทำเต็มวัน
-                                    </option>
-                                    <option value="OT วันหยุด หลังเลิกงาน-ไม่พัก">
-                                      OT วันหยุด หลังเลิกงาน-ไม่พัก
-                                    </option>
-                                    <option value="OT วันหยุด หลังเลิกงาน-พัก 20 นาที">
-                                      OT วันหยุด หลังเลิกงาน-พัก 20 นาที
-                                    </option>
-                                    {/* OT ประเภท ทำงานเป็นกะ */}
-                                    <option value="OT วันธรรมดา ก่อนเข้ากะ 1">
-                                      OT วันธรรมดา ก่อนกะ 21.45
-                                    </option>
-                                    <option value="OT วันธรรมดา หลังกะ 1">
-                                      OT วันธรรมดา หลังกะ 7.05
-                                    </option>
-                                    <option value="OT วันหยุดปกติ 1">
-                                      OT วันหยุดปกติ 21.45-6.45
-                                    </option>
-                                    <option value="OT วันหยุด ก่อนเข้ากะ 1">
-                                      OT วันหยุด ก่อนกะ 21.45
-                                    </option>
-                                    <option value="OT วันหยุด หลังกะ 1">
-                                      OT วันหยุด หลังกะ 6.45
-                                    </option>
-                                    <option value="OT วันธรรมดา ก่อนเข้ากะ 2">
-                                      OT วันธรรมดา ก่อนกะ 20.15
-                                    </option>
-                                    <option value="OT วันธรรมดา หลังกะ 2">
-                                      OT วันธรรมดา หลังกะ 5.35
-                                    </option>
-                                    <option value="OT วันหยุดปกติ 2">
-                                      OT วันหยุดปกติ 20.15-5.15
-                                    </option>
-                                    <option value="OT วันหยุด ก่อนเข้ากะ 2">
-                                      OT วันหยุด ก่อนกะ 20.15
-                                    </option>
-                                    <option value="OT วันหยุด หลังกะ 2">
-                                      OT วันหยุด หลังกะ 5.15
-                                    </option>
+                                    {(otOptions[workType] || []).map(
+                                      (option) => (
+                                        <option
+                                          key={option.value}
+                                          value={option.value}
+                                        >
+                                          {option.label}
+                                        </option>
+                                      )
+                                    )}
                                   </select>
                                   {errors.ot_type && (
                                     <span className="text-danger">
@@ -474,16 +614,17 @@ const create = ({ prefix = "OT" }) => {
 
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor=""><span className="text-danger">* </span>เวลาที่ทำ OT</label>
+                                  <label htmlFor="">
+                                    <span className="text-danger">* </span>
+                                    เวลาที่ทำ OT
+                                  </label>
                                   <select
                                     {...register("start_date", {
                                       required: true,
                                     })}
                                     className="form-control"
                                     id="sele1"
-                                    onChange={(event) =>
-                                      finishFilter(event.target.value)
-                                    }
+                                    onChange={handleStartDateChange}
                                   >
                                     <option value="">กรุณาเลือกข้อมูล</option>
                                     {timeList.map((item) => (
@@ -530,36 +671,6 @@ const create = ({ prefix = "OT" }) => {
                                     type="text"
                                   />
                                   {errors.total_date && (
-                                    <span className="text-danger">
-                                      This field is required
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div className="form-group">
-                                  <label htmlFor=""><span className="text-danger">* </span>วันที่จัดทำ</label>
-                                  <br />
-                                  <Controller
-                                    rules={{ required: true }}
-                                    control={control}
-                                    name="ot_date"
-                                    render={({ field }) => (
-                                      <DatePicker
-                                        minDate={dayjs().toDate()}
-                                        className="form-control"
-                                        placeholderText="กรุณาเลือกวันที่"
-                                        onChange={(date) =>
-                                          field.onChange(
-                                            dayjs(date).format("YYYY-MM-DD")
-                                          )
-                                        }
-                                        dateFormat="dd-MM-yyyy"
-                                        selected={field.value}
-                                      />
-                                    )}
-                                  />
-                                  {errors.ot_date && (
                                     <span className="text-danger">
                                       This field is required
                                     </span>
@@ -630,10 +741,80 @@ const create = ({ prefix = "OT" }) => {
                           <div className="card-body">
                             <div className="row">
                               <div className="col-md-12 mb-3">
+                                <div className="d-flex justify-content-end mb-3">
+                                  <div className="form-check form-check-inline">
+                                    <input
+                                      className="form-check-input"
+                                      type="radio"
+                                      name="employeeFilter"
+                                      id="agencyFilter"
+                                      value="agency"
+                                      checked={employeeSource === "agency"}
+                                      onChange={handleSourceChange}
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="agencyFilter"
+                                    >
+                                      หน่วย
+                                    </label>
+                                  </div>
+                                  <div className="form-check form-check-inline">
+                                    <input
+                                      className="form-check-input"
+                                      type="radio"
+                                      name="employeeFilter"
+                                      id="departmentFilter"
+                                      value="department"
+                                      checked={employeeSource === "department"}
+                                      onChange={handleSourceChange}
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="departmentFilter"
+                                    >
+                                      ส่วน
+                                    </label>
+                                  </div>
+                                  <div className="form-check form-check-inline">
+                                    <input
+                                      className="form-check-input"
+                                      type="radio"
+                                      name="employeeFilter"
+                                      id="deptFilter"
+                                      value="dept"
+                                      checked={employeeSource === "dept"}
+                                      onChange={handleSourceChange}
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="deptFilter"
+                                    >
+                                      ฝ่าย
+                                    </label>
+                                  </div>
+                                  <div className="form-check form-check-inline">
+                                    <input
+                                      className="form-check-input"
+                                      type="radio"
+                                      name="employeeFilter"
+                                      id="allFilter"
+                                      value="all"
+                                      checked={employeeSource === "all"}
+                                      onChange={handleSourceChange}
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="allFilter"
+                                    >
+                                      ทั้งหมด
+                                    </label>
+                                  </div>
+                                </div>
                                 <DualListBox
                                   canFilter
                                   required
-                                  options={employeesByrole}
+                                  options={displayedEmployees}
                                   selected={selected}
                                   onChange={(newValue) => setSelected(newValue)}
                                 />
@@ -657,9 +838,17 @@ const create = ({ prefix = "OT" }) => {
                               <th>รหัสพนักงาน</th>
                               <th>ชื่อพนักงาน</th>
                               <th>ประเภทค่าแรง</th>
-                              <th><span className="text-danger">* </span>ชนิดงานที่ทำ</th>
-                              <th><span className="text-danger">* </span>เป้าหมาย</th>
-                              <th><span className="text-danger">* </span>จุดรถรับส่ง</th>
+                              <th>
+                                <span className="text-danger">* </span>
+                                ชนิดงานที่ทำ
+                              </th>
+                              <th>
+                                <span className="text-danger">* </span>เป้าหมาย
+                              </th>
+                              <th>
+                                <span className="text-danger">* </span>
+                                จุดรถรับส่ง
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -673,7 +862,7 @@ const create = ({ prefix = "OT" }) => {
                                     className="form-control"
                                     type="text"
                                     value={
-                                      employeesByrole.find(
+                                      employees.find(
                                         (opt) => opt.value === field.option
                                       )?.code
                                     }
@@ -688,7 +877,7 @@ const create = ({ prefix = "OT" }) => {
                                     className="form-control"
                                     type="text"
                                     value={
-                                      employeesByrole.find(
+                                      employees.find(
                                         (opt) => opt.value === field.option
                                       )?.value
                                     }
@@ -704,7 +893,7 @@ const create = ({ prefix = "OT" }) => {
                                     className="form-control"
                                     type="text"
                                     value={
-                                      employeesByrole.find(
+                                      employees.find(
                                         (opt) => opt.value === field.option
                                       )?.cost
                                     }

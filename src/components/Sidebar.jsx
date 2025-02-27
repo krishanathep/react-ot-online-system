@@ -90,6 +90,12 @@ export default function Sidebar() {
                       <p>การอนุมัติ OT</p>
                     </Link>
                   </li>
+                  {/* <li className="nav-item">
+                    <Link to="/report" className="nav-link">
+                      <i className="nav-icon fas fa-chart-pie"></i>
+                      <p>REPORT</p>
+                    </Link>
+                  </li> */}
                 </>
               ) : null}
               {ruleAdmin ? (
@@ -146,7 +152,7 @@ export default function Sidebar() {
                   <li className="nav-item">
                     <Link to="/officecar" className="nav-link">
                       <i className="nav-icon fas fa-truck"></i>
-                      <p>Office Cars</p>
+                      <p>รถรับส่ง</p>
                     </Link>
                   </li>
                 </>

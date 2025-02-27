@@ -28,6 +28,7 @@ import BusPriceAdmin from './pages/admin/overtime/busprice'
 import ApproverMaster from "./pages/admin/approver";
 import ApproverMasterCreate from './pages/admin/approver/create'
 import ApproverMasterUpdate from './pages/admin/approver/update'
+import Report from './pages/report'
 
 const RoutesPage = () => {
   return (
@@ -53,7 +54,7 @@ const RoutesPage = () => {
           <Route path="/approver/view/:id" element={<AppView />} />
           <Route path="/approver/edit/:id" element={<AppEdit />} />
           <Route path="/officecar/" element={<OfficeCar/>} />
-    
+          <Route path="/report" element={<Report/>}/>
 
           {/* Route ADIMIN */}
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />

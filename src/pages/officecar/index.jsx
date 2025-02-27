@@ -48,15 +48,15 @@ const manageCar = () => {
       .then((res) => {
         const otrequest1 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === startdate && e.end_time === "20.00" && e.bus_stations != "ไม่ใช้บริการ") ||
-            (e.ot_create_date === startdate && e.end_time === "19.50" && e.bus_stations != "ไม่ใช้บริการ")
+            (e.ot_create_date === startdate && e.end_time === "20.00") ||
+            (e.ot_create_date === startdate && e.end_time === "19.50")
 
         );
 
         const otrequest2 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === startdate && e.end_time === "22.00" && e.bus_stations != "ไม่ใช้บริการ") ||
-            (e.ot_create_date === startdate && e.end_time === "21.50" && e.bus_stations != "ไม่ใช้บริการ")
+            (e.ot_create_date === startdate && e.end_time === "22.00") ||
+            (e.ot_create_date === startdate && e.end_time === "21.50")
         );
         setEmployees_1(otrequest1);
         setEmployees_2(otrequest2);
@@ -107,14 +107,14 @@ const manageCar = () => {
       .then((res) => {
         const otrequest1 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === date && e.end_time === "20.00" && e.bus_stations != "ไม่ใช้บริการ") ||
-            (e.ot_create_date === date && e.end_time === "19.50" && e.bus_stations != "ไม่ใช้บริการ")
+            (e.ot_create_date === date && e.end_time === "20.00") ||
+            (e.ot_create_date === date && e.end_time === "19.50")
         );
 
         const otrequest2 = res.data.employees.filter(
           (e) =>
-            (e.ot_create_date === date && e.end_time === "22.00"  && e.bus_stations != "ไม่ใช้บริการ") ||
-            (e.ot_create_date === date && e.end_time === "21.50"  && e.bus_stations != "ไม่ใช้บริการ")
+            (e.ot_create_date === date && e.end_time === "22.00") ||
+            (e.ot_create_date === date && e.end_time === "21.50")
         );
         setEmployees_1(otrequest1);
         setEmployees_2(otrequest2);
@@ -303,24 +303,24 @@ const manageCar = () => {
                     <table className="table table-bordered mt-2">
                       <thead>
                         <tr align="center">
-                          <th>#</th>
+                          {/* <th>#</th> */}
                           <th>รหัส</th>
                           <th>ชื่อพนักงาน</th>
-                          <th>จุดรับส่ง 1</th>
-                          <th>จุดรับส่ง 2</th>
-                          <th>จุดรับส่ง 3</th>
-                          <th>จุดรับส่ง 4</th>
+                          <th>สายศาลายา</th>
+                          <th>สายนครชัยศรี</th>
+                          <th>สายหนองแขม</th>
+                          <th>สายวงเวียนใหญ่</th>
                           {/* <th>ไม่ใช้บริการ</th> */}
                           <th>วันที่ทำ</th>
-                          <th>เวลาเลิก</th>
+                          <th>เวลาที่เลิก</th>
                           <th>ค่าเดินทาง</th>
                           <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
                         {employees_1.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
+                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                            {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
                             <td>
@@ -374,9 +374,9 @@ const manageCar = () => {
                               />
                             </td>
                             <td>
-                              {dayjs(e.updated_at).format("HH.mm")}{' '}น.
+                              {dayjs(e.updated_at).format("HH.mm")}{' '}
                             </td>
-
+                            
                             <input
                               hidden
                               type="text"
@@ -390,7 +390,7 @@ const manageCar = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
+                          <td colSpan={2}>รวมพนักงานทั้งหมด {employees_1.filter((e)=>e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
@@ -512,24 +512,24 @@ const manageCar = () => {
                     <table className="table table-bordered mt-2">
                       <thead>
                         <tr align="center">
-                          <th>#</th>
+                          {/* <th>#</th> */}
                           <th>รหัส</th>
                           <th>ชื่อพนักงาน</th>
-                          <th>จุดรับส่ง 1</th>
-                          <th>จุดรับส่ง 2</th>
-                          <th>จุดรับส่ง 3</th>
-                          <th>จุดรับส่ง 4</th>
+                          <th>สายศาลายา</th>
+                          <th>สายนครชัยศรี</th>
+                          <th>สายหนองแขม</th>
+                          <th>สายวงเวียนใหญ่</th>
                           {/* <th>ไม่ใช้บริการ</th> */}
                           <th>วันที่ทำ</th>
-                          <th>เวลาเลิก</th>
-                          <th>ค่าเดินทาง</th>
+                          <th>เวลาที่เลิก</th>
+                          <th>ค่าเดินทาง</th>  
                           <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
                         {employees_2.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
+                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                            {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
                             <td>
@@ -584,7 +584,7 @@ const manageCar = () => {
                               />
                             </td>
                             <td>
-                              {dayjs(e.updated_at).format("HH.mm")}{' '}น.
+                              {dayjs(e.updated_at).format("HH.mm")}{' '}
                             </td>
 
                             <input
@@ -600,7 +600,7 @@ const manageCar = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
+                        <td colSpan={2}>รวมพนักงานทั้งหมด {employees_2.filter((e)=>e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">

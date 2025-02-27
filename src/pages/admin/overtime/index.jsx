@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -16,8 +18,10 @@ const OverTimeAdmin = () => {
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
-  const [approver, setApprover] = useState('')
-  const [startDate, setStartDate] = useState('');
+  const [approver, setApprover] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [empcount, setEmpcount] = useState(0);
+  const [emptotal, setEmptotal] = useState(0);
 
   useEffect(() => {
     setPage(1);
@@ -39,6 +43,21 @@ const OverTimeAdmin = () => {
         setOvertimes(res.data.data);
         setRecords(res.data.data.slice(from, to));
         setLoading(false);
+        //setEmpcount(res.data.data.employees.length);
+
+        // Calculate the number of employees for each ot_member_id
+        const employeeCounts = res.data.data.reduce((acc, otrequest) => {
+          acc[otrequest.ot_member_id] = otrequest.employees.length;
+          return acc;
+        }, {});
+
+        // Calculate the total number of employees
+        const totalEmployees = res.data.data.reduce(
+          (acc, otrequest) => acc + otrequest.employees.length,
+          0
+        );
+        setEmpcount(employeeCounts);
+        setEmptotal(totalEmployees);
       });
   };
 
@@ -48,11 +67,11 @@ const OverTimeAdmin = () => {
     const to = from + pageSize;
 
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests"
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        const code = res.data.data.filter(ot=>ot.ot_member_id.includes(key))
+        const code = res.data.data.filter((ot) =>
+          ot.ot_member_id.includes(key)
+        );
         setOvertimes(code);
         setRecords(code.slice(from, to));
         setLoading(false);
@@ -60,16 +79,31 @@ const OverTimeAdmin = () => {
   };
 
   //filter function by department name
-  const nameFilter = async (key) => {
+  const agencyFilter = async (key) => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
 
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY + "/api/otrequests"
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
-        const controller = res.data.data.filter(ot=>ot.create_name.includes(key))
+        const controller = res.data.data.filter((ot) =>
+          ot.department.includes(key)
+        );
+        setOvertimes(controller);
+        setRecords(controller.slice(from, to));
+        setLoading(false);
+      });
+  };
+
+  //filter function by dept name
+  const departmentFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+      .then((res) => {
+        const controller = res.data.data.filter((ot) => ot.dept.includes(key));
         setOvertimes(controller);
         setRecords(controller.slice(from, to));
         setLoading(false);
@@ -77,21 +111,21 @@ const OverTimeAdmin = () => {
   };
 
   //filter function by result
- const resultFilter = async (key) => {
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize;
+  const resultFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
 
-  await axios
-    .get(
-      import.meta.env.VITE_API_KEY + "/api/otrequests"
-    )
-    .then((res) => {
-      const controller = res.data.data.filter(ot=>ot.result.includes(key))
-      setOvertimes(controller);
-      setRecords(controller.slice(from, to));
-      setLoading(false);
-    });
-};
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+      .then((res) => {
+        const controller = res.data.data.filter((ot) =>
+          ot.result.includes(key)
+        );
+        setOvertimes(controller);
+        setRecords(controller.slice(from, to));
+        setLoading(false);
+      });
+  };
 
   //filter function by status
   const statusFilter = async (key) => {
@@ -99,11 +133,9 @@ const OverTimeAdmin = () => {
     const to = from + pageSize;
 
     await axios
-      .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests`
-      )
+      .get(`${import.meta.env.VITE_API_KEY}/api/otrequests`)
       .then((res) => {
-        const status = res.data.data.filter(ot=>ot.status.includes(key))
+        const status = res.data.data.filter((ot) => ot.status.includes(key));
         setOvertimes(status);
         setRecords(status.slice(from, to));
         setLoading(false);
@@ -116,20 +148,16 @@ const OverTimeAdmin = () => {
     const to = from + pageSize;
 
     await axios
-      .get(
-        `${import.meta.env.VITE_API_KEY}/api/otrequests`
-      )
+      .get(`${import.meta.env.VITE_API_KEY}/api/otrequests`)
       .then((res) => {
-        setStartDate(key)
-        const date_time = res.data.data.filter(ot=>ot.ot_date===key)
+        setStartDate(key);
+        const date_time = res.data.data.filter((ot) => ot.ot_date === key);
         setOvertimes(date_time);
         setRecords(date_time.slice(from, to));
-        setSelectDate(key)
+        setSelectDate(key);
         setLoading(false);
       });
-      console.log(overtimes)
-      
-      
+    console.log(overtimes);
   };
 
   useEffect(() => {
@@ -372,13 +400,15 @@ const OverTimeAdmin = () => {
   const year = today.getFullYear();
   const date = today.getDate();
   const currentDate = "_" + month + "_" + date + "_" + year;
-  const [selectDate, setSelectDate] = useState('')
+  const [selectDate, setSelectDate] = useState("");
 
   // text export function
   const textExport = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_KEY + "/api/otrequest-text-export?data="+selectDate,
+        import.meta.env.VITE_API_KEY +
+          "/api/otrequest-text-export?data=" +
+          selectDate,
         { responseType: "blob" }
       );
 
@@ -402,7 +432,7 @@ const OverTimeAdmin = () => {
       console.error("Export failed:", error);
       //alert('Failed to export data. Please try again.');
     }
-  }
+  };
 
   const getApprover = async () => {
     await axios
@@ -416,7 +446,7 @@ const OverTimeAdmin = () => {
       });
   };
 
-  console.log(selectDate)
+  console.log(selectDate);
 
   return (
     <>
@@ -430,7 +460,7 @@ const OverTimeAdmin = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                  <Link to={'/'}>หน้าหลัก</Link>
+                    <Link to={"/"}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item active">การขออนุมัติ</li>
                 </ol>
@@ -449,8 +479,12 @@ const OverTimeAdmin = () => {
                         <div className="row">
                           <div className="col-md-12">
                             <div className="float-right">
-                              <Link to={'/admin/overtime/busprice'} className="btn btn-info mb-2 mr-1">
-                              <i className="fas fa-truck"></i>  การจัดรถ</Link>
+                              <Link
+                                to={"/admin/overtime/busprice"}
+                                className="btn btn-info mb-2 mr-1"
+                              >
+                                <i className="fas fa-truck"></i> การจัดรถ
+                              </Link>
                               <button
                                 onClick={textExport}
                                 className="btn btn-secondary mb-2"
@@ -481,19 +515,33 @@ const OverTimeAdmin = () => {
 
                               <div className="col-md-2">
                                 <div className="form-group">
-                                  <label htmlFor="">ผู้ควบคุมงาน</label>
+                                  <label htmlFor="">หน่วยงาน</label>
                                   <input
                                     placeholder="กรุณากรอกข้อมูล"
                                     className="form-control"
                                     id="sel1"
                                     onChange={(event) =>
-                                      nameFilter(event.target.value)
+                                      agencyFilter(event.target.value)
                                     }
                                   />
                                 </div>
                               </div>
 
-                              <div className="col-md-3">
+                              <div className="col-md-2">
+                                <div className="form-group">
+                                  <label htmlFor="">ฝ่ายงาน</label>
+                                  <input
+                                    placeholder="กรุณากรอกข้อมูล"
+                                    className="form-control"
+                                    id="sel1"
+                                    onChange={(event) =>
+                                      departmentFilter(event.target.value)
+                                    }
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะการอนุมัติ</label>
                                   <select
@@ -518,7 +566,7 @@ const OverTimeAdmin = () => {
                                   </select>
                                 </div>
                               </div>
-                              <div className="col-md-3">
+                              <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">สถานะรายงาน</label>
                                   <select
@@ -549,17 +597,23 @@ const OverTimeAdmin = () => {
                               <div className="col-md-2">
                                 <div className="form-group">
                                   <label htmlFor="">วันที่จัดทำ</label>
-                                  {/* <DatePicker/> */}
-                                  <input
-                                    type="date"
+                                  <br />
+                                  <DatePicker
+                                    //showIcon
+                                    //icon="fa fa-calendar"
+                                    style={{ width: "100%" }} // กำหนดความกว้างตรงๆ
+                                    //wrapperClassName="w-100" // ใช้ class ควบคุม wrapper
                                     className="form-control"
-                                    onChange={(event) =>
+                                    //isClearable
+                                    placeholderText="กรุณาเลือกวันที่"
+                                    selected={startDate}
+                                    onChange={(date) => {
+                                      setStartDate(date);
                                       dateFilter(
-                                        dayjs(event.target.value).format(
-                                          "YYYY-MM-DD"
-                                        )
-                                      )
-                                    }
+                                        dayjs(date).format("YYYY-MM-DD")
+                                      );
+                                    }}
+                                    dateFormat="dd-MM-yyyy"
                                   />
                                 </div>
                               </div>
@@ -598,14 +652,15 @@ const OverTimeAdmin = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
-                        {
-                          accessor: "dept",
-                          title: "ฝ่ายงาน",
-                          textAlignment: "center",
-                        },
+
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "dept",
+                          title: "ฝ่ายงาน",
                           textAlignment: "center",
                         },
                         {
@@ -683,13 +738,22 @@ const OverTimeAdmin = () => {
                             dayjs(ot_date).format("DD-MM-YYYY"),
                         },
                         {
+                          accessor: "employee_count",
+                          title: "จำนวน(คน)",
+                          textAlignment: "center",
+                          render: (row) => (
+                            <span>{empcount[row.ot_member_id]}</span>
+                          ),
+                          //footer: `${emptotal}`,
+                        },
+                        {
                           accessor: "otrequests",
                           title: "จุดรถรับส่ง",
                           textAlignment: "center",
                           render: (otrequests) => (
                             <span>
                               {otrequests.employees.map((e, index) =>
-                                index === 0  ? e.bus_point_1 : null
+                                index === 0 ? e.bus_point_1 : null
                               )}{" "}
                               : {""}
                               {otrequests.employees.map((e, index) =>
@@ -718,97 +782,99 @@ const OverTimeAdmin = () => {
                               >
                                 <i className="fas fa-bars"></i>
                               </Link>{" "}
-                              <button
-                                className="btn btn-success"
-                                onClick={() => handleApproverSubmit2(blogs)}
-                                // hidden={
-                                //   userDatail().role === "approver_1"
-                                //     ? false
-                                //     : true
-                                // }
-                                disabled={
-                                  blogs.status === "รอการอนุมัติ 1"
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <i className="fas fa-check-circle"></i>
-                              </button>{" "}
-                              <button
-                                className="btn btn-success"
-                                onClick={() => handleApproverSubmit3(blogs)}
-                                // hidden={
-                                //   userDatail().role === "approver_2"
-                                //     ? false
-                                //     : true
-                                // }
-                                disabled={
-                                  blogs.status === "รอการอนุมัติ 2"
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <i className="fas fa-check-circle"></i>
-                              </button>{" "}
-                              <button
-                                className="btn btn-success"
-                                onClick={() => handleApproverSubmit4(blogs)}
-                                // hidden={
-                                //   userDatail().role === "approver_3"
-                                //     ? false
-                                //     : true
-                                // }
-                                disabled={
-                                  blogs.status === "รอการอนุมัติ 3"
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <i className="fas fa-check-circle"></i>
-                              </button>{" "}
-                              <button
-                                className="btn btn-warning text-white"
-                                onClick={() => handleApproverSubmit5(blogs)}
-                                // hidden={
-                                //   userDatail().role === "approver_2"
-                                //     ? false
-                                //     : true
-                                // }
-                                disabled={
-                                  blogs.result === "รอการปิด (ส่วน)"
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <i className="fas fa-check-circle"></i>
-                              </button>{" "}
-                              <button
-                                className="btn btn-warning text-white"
-                                onClick={() => handleApproverSubmit6(blogs)}
-                                // hidden={
-                                //   userDatail().role === "approver_3"
-                                //     ? false
-                                //     : true
-                                // }
-                                disabled={
-                                  blogs.result === "รอการปิด (ผจก)"
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <i className="fas fa-check-circle"></i>
-                              </button>{" "}
-                              <button
-                                className="btn btn-danger"
-                                onClick={() => handleRejectSubmit(blogs)}
-                                // disabled={
-                                //   blogs.status === "รอการอนุมัติ 2"
-                                //     ? false
-                                //     : true
-                                // }
-                              >
-                                <i className="fas fa-times-circle"></i>{" "}
-                              </button>
+                              <div hidden>
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit2(blogs)}
+                                  // hidden={
+                                  //   userDatail().role === "approver_1"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                  disabled={
+                                    blogs.status === "รอการอนุมัติ 1"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit3(blogs)}
+                                  // hidden={
+                                  //   userDatail().role === "approver_2"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                  disabled={
+                                    blogs.status === "รอการอนุมัติ 2"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit4(blogs)}
+                                  // hidden={
+                                  //   userDatail().role === "approver_3"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                  disabled={
+                                    blogs.status === "รอการอนุมัติ 3"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-warning text-white"
+                                  onClick={() => handleApproverSubmit5(blogs)}
+                                  // hidden={
+                                  //   userDatail().role === "approver_2"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                  disabled={
+                                    blogs.result === "รอการปิด (ส่วน)"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-warning text-white"
+                                  onClick={() => handleApproverSubmit6(blogs)}
+                                  // hidden={
+                                  //   userDatail().role === "approver_3"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                  disabled={
+                                    blogs.result === "รอการปิด (ผจก)"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => handleRejectSubmit(blogs)}
+                                  // disabled={
+                                  //   blogs.status === "รอการอนุมัติ 2"
+                                  //     ? false
+                                  //     : true
+                                  // }
+                                >
+                                  <i className="fas fa-times-circle"></i>{" "}
+                                </button>
+                              </div>
                             </>
                           ),
                         },

@@ -256,7 +256,7 @@ const busPrice = () => {
                     <table className="table table-bordered mt-2">
                       <thead>
                         <tr align="center">
-                          <th>#</th>
+                          {/* <th>#</th> */}
                           <th>รหัสพนักงาน</th>
                           <th>ชื่อพนักงาน</th>
                           <th>จุดรถรับส่ง 1</th>
@@ -271,8 +271,8 @@ const busPrice = () => {
                       </thead>
                       <tbody>
                         {employees_1.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
+                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                            {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
                             <td>
@@ -333,7 +333,7 @@ const busPrice = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
+                          <td colSpan={2}>รวมพนักงานทั้งหมด {employees_1.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
                           <td>
                             <div className="form-check">
                               {/* <input
@@ -457,7 +457,7 @@ const busPrice = () => {
                     <table className="table table-bordered mt-2">
                       <thead>
                         <tr align="center">
-                          <th>#</th>
+                          {/* <th>#</th> */}
                           <th>รหัสพนักงาน</th>
                           <th>ชื่อพนักงาน</th>
                           <th>จุดรถรับส่ง 1</th>
@@ -472,8 +472,8 @@ const busPrice = () => {
                       </thead>
                       <tbody>
                         {employees_2.map((e, index) => (
-                          <tr key={e.id} align="center">
-                            <td>{index + 1}</td>
+                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                            {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
                             <td>
@@ -535,7 +535,7 @@ const busPrice = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={3}>รวมพนักงานทั้งหมด</td>
+                        <td colSpan={2}>รวมพนักงานทั้งหมด {employees_2.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
                           <td>
                             <div className="form-check">
                               {/* <input

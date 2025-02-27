@@ -205,7 +205,7 @@ const Overtime = () => {
                     </div>
                     <div className="row">
                       <div className="col-lg-12">
-                        <div className="card shadow-none border">
+                        <div className="card ">
                           <div className="card-body">
                             <div className="row">
                               <div className="col-md-3">
@@ -288,6 +288,8 @@ const Overtime = () => {
                                   <DatePicker
                                     //showIcon
                                     //icon="fa fa-calendar"
+                                    style={{ width: "100%" }}  // กำหนดความกว้างตรงๆ
+                                    wrapperClassName="w-100" // ใช้ class ควบคุม wrapper
                                     className="form-control"
                                     //isClearable
                                     placeholderText="กรุณาเลือกวันที่"
@@ -338,13 +340,13 @@ const Overtime = () => {
                           textAlignment: "center",
                         },
                         {
-                          accessor: "dept",
-                          title: "ฝ่ายงาน",
+                          accessor: "department",
+                          title: "หน่วยงาน",
                           textAlignment: "center",
                         },
                         {
-                          accessor: "department",
-                          title: "หน่วยงาน",
+                          accessor: "dept",
+                          title: "ฝ่ายงาน",
                           textAlignment: "center",
                         },
                         {
@@ -443,21 +445,22 @@ const Overtime = () => {
                               >
                                 <i className="fas fa-bars"></i>
                               </Link>{" "}
-                              {blogs.result != "รอการรายงาน" ? (
-                                <>
+                              {blogs.status === "ผ่านการอนุมัติ" && blogs.result === "รอการรายงาน" ? (
+                                 <>
+                                 <Link
+                                   to={"/overtime/edit/" + blogs.id}
+                                   className="btn btn-info"
+                                 >
+                                   <i className="far fa-edit"></i>
+                                 </Link>
+                                 
+                               </>
+                               
+                              ) : (
+                               <>
                                 <button disabled className="btn btn-info">
                                     <i className="far fa-edit"></i>
                                   </button>
-                                </>
-                              ) : (
-                                <>
-                                  <Link
-                                    to={"/overtime/edit/" + blogs.id}
-                                    className="btn btn-info"
-                                  >
-                                    <i className="far fa-edit"></i>
-                                  </Link>
-                                  
                                 </>
                               )}{" "}
                               <button

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
 const viewAdmin = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   dayjs.extend(duration);
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
@@ -342,9 +343,9 @@ const viewAdmin = () => {
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <Link to={"/admin/overtime"} className="btn btn-danger">
+                            <button onClick={() => navigate(-1)} className="btn btn-danger">
                             <i className="fas fa-arrow-circle-left"></i>  ย้อนกลับ
-                            </Link>{" "}
+                            </button>{" "}
                           </div>
                         </div>
                       </div>
