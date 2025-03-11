@@ -93,18 +93,24 @@ export default function Sidebar() {
                   {/* <li className="nav-item">
                     <Link to="/report" className="nav-link">
                       <i className="nav-icon fas fa-chart-pie"></i>
-                      <p>REPORT</p>
+                      <p>รายงานโอที</p>
                     </Link>
                   </li> */}
                 </>
               ) : null}
               {ruleAdmin ? (
                 <>
-                  <li className="nav-header">MAIN MENU</li>
+                  <li className="nav-header">ADMIN MENU</li>
                   <li className="nav-item">
                     <Link to="/" className="nav-link">
                       <i className="nav-icon fas fa-tachometer-alt"></i>
-                      <p>Dashboard</p>
+                      <p>หน้าหลัก</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/admin/overtime" className="nav-link">
+                      <i className="nav-icon fas fa-calendar-plus"></i>
+                      <p>เอกสารโอที</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -113,17 +119,12 @@ export default function Sidebar() {
                       <p>ขออนุมัติ OT</p>
                     </Link>
                   </li>
-                  <li className="nav-header">ADMIN MENU</li>
-                  <li className="nav-item">
-                    <Link to="/admin/overtime" className="nav-link">
-                      <i className="nav-icon fas fa-calendar-plus"></i>
-                      <p>Overtimes</p>
-                    </Link>
-                  </li>
+                  {/* <li className="nav-header">OTHER MENU</li> */}
+                 
                   <li className="nav-item">
                     <Link to="/admin/employees" className="nav-link">
                       <i className="nav-icon fas fa-users"></i>
-                      <p>Employees</p>
+                      <p>พนักงาน</p>
                     </Link>
                   </li>
                   {/* <li className="nav-item">
@@ -134,10 +135,16 @@ export default function Sidebar() {
                   </li> */}
                   <li className="nav-item">
                     <Link to="/admin/approver" className="nav-link">
-                      <i className="nav-icon fas fa-user-check"></i>
-                      <p>Approver</p>
+                      <i className="nav-icon fas fa-check-circle"></i>
+                      <p>สายอนุมัติ</p>
                     </Link>
                   </li>
+                  {/* <li className="nav-item">
+                    <Link to="/report" className="nav-link">
+                      <i className="nav-icon fas fa-chart-pie"></i>
+                      <p>รายงานโอที</p>
+                    </Link>
+                  </li> */}
                 </>
               ) : null}
               {ruleCarManage ? (

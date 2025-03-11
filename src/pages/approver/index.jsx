@@ -44,35 +44,111 @@ const Approver = () => {
         let filteredData = res.data.data;
 
         //กรณี approver 1 ดูแลหลายหน่วยงาน
-        if (userRole === 'approver_1') {
-          if (userAgency === 'AFD_GROUP_1') {
-            filteredData = filteredData.filter(item => 
-              item.department === 'หน่วย E3' || 
-              item.department === 'FED'
+        if (userRole === "approver_1") {
+          if (userAgency === "AFD_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย E3" || item.department === "FED"
             );
-          } else if (userAgency === 'PLD_GROUP_1') {
-            filteredData = filteredData.filter(item => 
-              item.department === 'กลุ่มงานวางแผนการผลิต-โรงประกอบ' || 
-              item.department === 'กลุ่มงานวางแผนการผลิต-โรงผลิตชิ้นส่วน' || 
-              item.department === 'หน่วย ควบคุมวัตถุดิบ(MC)'              
+          } else if (userAgency === "PLD_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "กลุ่มงานวางแผนการผลิต-โรงประกอบ" ||
+                item.department === "กลุ่มงานวางแผนการผลิต-โรงผลิตชิ้นส่วน" ||
+                item.department === "หน่วย ควบคุมวัตถุดิบ(MC)"
             );
-          } else if (userAgency === 'PLD_GROUP_2') {
-            filteredData = filteredData.filter(item => 
-              item.department === 'หน่วย Logistic 1 - Machinery' || 
-              item.department === 'หน่วย Logistic 2 - OEM' || 
-              item.department === 'หน่วย คลังสินค้าโรงผลิตชิ้นส่วน(SP)' ||
-              item.department === 'หน่วย คลังสินค้าโรงประกอบ 1' || 
-              item.department === 'หน่วย คลังสินค้าโรงประกอบ 2'
+          } else if (userAgency === "PLD_GROUP_2") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย Logistic 1 - Machinery" ||
+                item.department === "หน่วย Logistic 2 - OEM" ||
+                item.department === "หน่วย คลังสินค้าโรงผลิตชิ้นส่วน(SP)" ||
+                item.department === "หน่วย คลังสินค้าโรงประกอบ 1" ||
+                item.department === "หน่วย คลังสินค้าโรงประกอบ 2"
+            );
+          } else if (userAgency === "QAD_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย PQC" ||
+                item.department === "หน่วย QC"
+            );
+          } else if (userAgency === "PRD_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย M2" || item.department === "หน่วย M3"
+            );
+          } else if (userAgency === "PRD_GROUP_2") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "ส่วนสี" ||
+                item.department === "หน่วย I" ||
+                item.department === "หน่วย K2" ||
+                item.department === "หน่วย J2" ||
+                item.department === "หน่วย V2 (07-63)" ||
+                item.department === "หน่วย J1 (07-63)"
+            );
+          } else if (userAgency === "PRD_GROUP_3") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย ติดตั้งอุปกรณ์" ||
+                item.department === "หน่วย ติดตั้งอุปกรณ์ CAB (07-67)"
+            );
+          } else if (userAgency === "PED_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "ส่วนพัฒนาระบบการผลิตชิ้นส่วน" ||
+                item.department === "หน่วย ซ่อมสร้าง"
+            );
+          } else if (userAgency === "AED_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "ส่วนโครงการใหม่งานประกอบและผลิตรถยนต์" ||
+                item.department === "ส่วนประกันคุณภาพงานโครงการใหม่ (10-67)"
+            );
+          } else if (userAgency === "PPD_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "หน่วย บี1" ||
+                item.department === "หน่วย ซี4" ||
+                item.department === "หน่วย เอฟ" ||
+                item.department === "หน่วย บี2" ||
+                item.department === "หน่วย ซ่อมบำรุงแม่พิมพ์และขึ้นรูปฯ"
             );
           } else {
-            filteredData = filteredData.filter(item => item.department === userAgency);
+            filteredData = filteredData.filter(
+              (item) => item.department === userAgency
+            );
           }
-        } else if (userRole === 'approver_2') {
-          filteredData = filteredData.filter(item => item.dept === userDatail().dept);
-        } else if (userRole === 'approver_3' && userAgency === 'MD_GROUP_1') {
-          filteredData = filteredData.filter(item => 
-            item.dept === 'PLD' || 
-            item.dept === 'FED'
+        } else if (userAgency === "QAD_GROUP_1") {
+          filteredData = filteredData.filter(
+            (item) =>
+              item.department === "หน่วย PQC" || item.department === "หน่วย QC"
+          );
+        } else if (userRole === "approver_2") {
+          if (userAgency === "PED_AED") {
+            filteredData = filteredData.filter(
+              (item) => item.dept === "PED" || item.dept === "AED"
+            );
+          } else {
+            filteredData = filteredData.filter(
+              (item) => item.dept === userDatail().dept
+            );
+          }
+        } else if (userRole === "approver_3" && userAgency === "MD_GROUP_1") {
+          filteredData = filteredData.filter(
+            (item) =>
+              item.dept === "PLD" ||
+              item.dept === "FED" ||
+              item.dept === "QAD" ||
+              item.dept === "PPD" ||
+              item.dept === "PRD"
+          );
+        } else if (userRole === "approver_3" && userAgency === "MD_GROUP_2") {
+          filteredData = filteredData.filter(
+            (item) =>
+              item.dept === "AED" ||
+              item.dept === "PED" ||
+              item.dept === "RDD"
           );
         }
 
@@ -82,12 +158,11 @@ const Approver = () => {
       });
   };
 
-
   //filter function by ot code
   const codeFilter = async (key) => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-  
+
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
@@ -95,7 +170,7 @@ const Approver = () => {
         const deptFiltered = res.data.data.filter(
           (item) => item.dept === userDatail().dept
         );
-  
+
         // Then filter by key if it exists
         const keyFiltered = key
           ? deptFiltered.filter((item) =>
@@ -106,7 +181,7 @@ const Approver = () => {
               )
             )
           : deptFiltered;
-  
+
         setOvertimes(keyFiltered);
         console.log(keyFiltered);
         setRecords(keyFiltered.slice(from, to));
@@ -118,7 +193,7 @@ const Approver = () => {
   const nameFilter = async (key) => {
     const from = (page - 1) * pageSize;
     const to = from + pageSize;
-  
+
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
@@ -126,7 +201,7 @@ const Approver = () => {
         const deptFiltered = res.data.data.filter(
           (item) => item.dept === userDatail().dept
         );
-  
+
         // Then filter by key if it exists
         const keyFiltered = key
           ? deptFiltered.filter((item) =>
@@ -137,14 +212,13 @@ const Approver = () => {
               )
             )
           : deptFiltered;
-  
+
         setOvertimes(keyFiltered);
         console.log(keyFiltered);
         setRecords(keyFiltered.slice(from, to));
         setLoading(false);
       });
   };
-
 
   //filter function by status
   const statusFilter = async (key) => {
@@ -185,7 +259,7 @@ const Approver = () => {
   };
 
   useEffect(() => {
-    getData()
+    getData();
     getApprover();
   }, [page, pageSize, selectedRecords]);
 
@@ -353,7 +427,7 @@ const Approver = () => {
   const handleApproverSubmit6 = (blogs, data) => {
     Swal.fire({
       title: "ยืนยันการอนุมัติ",
-      text: "คุณต้องการอนุมัติการรายงานผลใช่ไหม",
+      text: "คุณต้องการอนุมัติการรายงานผลใช่ไหม test",
       icon: "success",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -626,7 +700,13 @@ const Approver = () => {
                                 {/* approv all for approver 2 */}
                                 <button
                                   onClick={handleApproveAll_3}
-                                  disabled={selectedRecords.length === 0}
+                                  disabled={
+                                    selectedRecords.length === 0 ||
+                                    !selectedRecords.every(
+                                      (record) =>
+                                        record.result === "รอการปิด (ผจก)"
+                                    )
+                                  }
                                   className="btn btn-warning text-white float-right"
                                   hidden={
                                     userDatail().role !== "approver_2"
@@ -638,7 +718,13 @@ const Approver = () => {
                                 </button>
                                 <button
                                   onClick={handleApproveAll_2}
-                                  disabled={selectedRecords.length === 0}
+                                  disabled={
+                                    selectedRecords.length === 0 ||
+                                    selectedRecords.every(
+                                      (record) =>
+                                        record.result === "รอการปิด (ผจก)"
+                                    )
+                                  }
                                   className="btn btn-success float-right mr-1"
                                   hidden={
                                     userDatail().role !== "approver_2"
@@ -709,7 +795,7 @@ const Approver = () => {
                                   <DatePicker
                                     //showIcon
                                     //icon="fa fa-calendar"
-                                    style={{ width: "100%" }}  // กำหนดความกว้างตรงๆ
+                                    style={{ width: "100%" }} // กำหนดความกว้างตรงๆ
                                     wrapperClassName="w-100" // ใช้ class ควบคุม wrapper
                                     className="form-control"
                                     //isClearable
@@ -769,7 +855,7 @@ const Approver = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                         },
-                    
+
                         {
                           accessor: "department",
                           title: "หน่วยงาน",
@@ -903,8 +989,8 @@ const Approver = () => {
                               <button
                                 className="btn btn-success"
                                 onClick={() => handleApproverSubmit2(blogs)}
-                                hidden = {
-                                  (userDatail().role === "approver_1")
+                                hidden={
+                                  userDatail().role === "approver_1"
                                     ? false
                                     : true
                                 }
@@ -951,8 +1037,8 @@ const Approver = () => {
                               <button
                                 className="btn btn-warning text-white"
                                 onClick={() => handleApproverSubmit5(blogs)}
-                                hidden = {
-                                  (userDatail().role === "approver_1")
+                                hidden={
+                                  userDatail().role === "approver_1"
                                     ? false
                                     : true
                                 }

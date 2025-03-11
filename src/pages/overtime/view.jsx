@@ -19,9 +19,9 @@ const view = () => {
   const [complete_4, setComplete_4] = useState(false);
 
   //stepper complete state 1
-    const [complete_5, setComplete_5] = useState(false);
-    const [complete_6, setComplete_6] = useState(false);
-    const [complete_7, setComplete_7] = useState(false);
+  const [complete_5, setComplete_5] = useState(false);
+  const [complete_6, setComplete_6] = useState(false);
+  const [complete_7, setComplete_7] = useState(false);
 
   const getData = async () => {
     await axios
@@ -48,21 +48,21 @@ const view = () => {
         }
         if (res.data.data.status === "ผ่านการอนุมัติ") {
           setComplete_1(true),
-          setComplete_2(true),
-          setComplete_3(true),
-          setComplete_4(true);
+            setComplete_2(true),
+            setComplete_3(true),
+            setComplete_4(true);
         }
 
-          //stepper complete 2
-          if (res.data.data.result === "รอการปิด (ส่วน)") {
-            setComplete_5(true);
-          }
-          if (res.data.data.result === "รอการปิด (ผจก)") {
-            setComplete_5(true), setComplete_6(true);
-          }
-          if (res.data.data.result === "ปิดการรายงาน") {
-            setComplete_5(true), setComplete_6(true), setComplete_7(true);
-          }
+        //stepper complete 2
+        if (res.data.data.result === "รอการปิด (ส่วน)") {
+          setComplete_5(true);
+        }
+        if (res.data.data.result === "รอการปิด (ผจก)") {
+          setComplete_5(true), setComplete_6(true);
+        }
+        if (res.data.data.result === "ปิดการรายงาน") {
+          setComplete_5(true), setComplete_6(true), setComplete_7(true);
+        }
 
         //คำนวนเวลาทั้งหมด * จำนวนพนักงาน
         const overtime = res.data.data.total_date; // เวลาล่วงเวลาในรูปแบบ 'ชั่วโมง:นาที'
@@ -120,7 +120,7 @@ const view = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                  <Link to={'/'}>หน้าหลัก</Link>
+                    <Link to={"/"}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">การขออนุมัติ</li>
                   <li className="breadcrumb-item active">ข้อมูลการขออนุมัติ</li>
@@ -209,7 +209,21 @@ const view = () => {
                                   "01-01-2024 " + member.out_time
                                 );
 
-                                const diff = dayjs.duration(end.diff(start));
+                                let diff = dayjs.duration(end.diff(start));
+
+                                // ตรวจสอบว่า overtimes.start_date เป็นช่วงที่ต้องหัก 60 นาทีหรือไม่
+                                if (
+                                  overtimes.start_date === "8:00 - 17:10" &&
+                                  member.out_time > "12:00"
+                                ) {
+                                 diff = dayjs.duration(diff.asMinutes() - 70, "minutes");
+                                }
+
+                                if (
+                                  overtimes.start_date === "21:45 - 6:45"
+                                ) {
+                                 diff = dayjs.duration(diff.asMinutes() + 1380, "minutes");
+                                }
 
                                 const hours = Math.floor(diff.asHours());
                                 const minutes = diff.minutes();
@@ -230,11 +244,14 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.scan_data === null || member.scan_data === "[null]" ? (
-                                      <span>ไม่มีข้อมูล</span>
-                                    ):(
-                                      member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
-                                    )}
+                                      {member.scan_data === null ||
+                                      member.scan_data === "[null]" ? (
+                                        <span>ไม่มีข้อมูล</span>
+                                      ) : (
+                                        member.scan_data.substring(13, 18) +
+                                        " - " +
+                                        member.scan_data.substring(32, 37)
+                                      )}
                                     </td>
                                     <td>
                                       {member.out_time === null ? (
@@ -342,8 +359,8 @@ const view = () => {
                             </div>
                           </div>
                         </div>
-                         {/* Stepper Function */}
-                         <div className="col-md-6 offset-3">
+                        {/* Stepper Function */}
+                        <div className="col-md-6 offset-3">
                           <div
                             className="stepper-wrapper"
                             style={{ fontFamily: "Prompt" }}

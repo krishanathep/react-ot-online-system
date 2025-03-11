@@ -2,20 +2,26 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-//import jsPDF from "jspdf";
-//import "jspdf-autotable";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import axios from "axios";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 
 // นำเข้าฟอนต์ไทยสำหรับ PDF
 //import { KanitNomal } from "../../../assets/fonts/Kanit-nomal.jsx";
 //import { KanitBold } from "../../../assets/fonts/Kanit-bold.jsx";
+import { KanitNomal } from '../../assets/fonts/Kanit-nomal'
+import { KanitBold } from '../../assets/fonts/Kanit-bold'
 
 const PAGE_SIZES = [10, 20, 30];
 
 const Report = () => {
+  dayjs.extend(duration);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [employees, setEmployees] = useState([]);
+  const [otrequest, setOtrequest] = useState([]);
+  const [startDate, setStartDate] = useState("");
 
   useEffect(() => {
     setPage(1);
@@ -26,16 +32,89 @@ const Report = () => {
   const [records, setRecords] = useState(employees.slice(0, pageSize));
 
   const getData = async () => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-
     await axios
       .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
       .then((res) => {
-        setEmployees(res.data.employees);
-        setRecords(res.data.employees.slice(from, to));
+        const filteredEmployees = res.data.employees.filter(
+          (employee) => employee.status === 1
+        );
+        setEmployees(filteredEmployees);
+        setRecords(
+          filteredEmployees.slice((page - 1) * pageSize, page * pageSize)
+        );
         setLoading(false);
-        console.log(res);
+      });
+  };
+
+  const getOtrequest = async () => {
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+      .then((res) => {
+        setOtrequest(res.data.data);
+      });
+  };
+
+  //filter function by date
+  const dateFilter = async (key) => {
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
+      .then((res) => {
+        const filteredEmployees = res.data.employees.filter(
+          (employee) => employee.status === 1 && employee.ot_create_date === key
+        );
+        setEmployees(filteredEmployees);
+        setRecords(
+          filteredEmployees.slice((page - 1) * pageSize, page * pageSize)
+        );
+        setLoading(false);
+      });
+  };
+
+  //filter function by date
+  const typeFilter = async (key) => {
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
+      .then((res) => {
+        const filteredEmployees = res.data.employees.filter(
+          (employee) => employee.status === 1 && employee.cost_type === key
+        );
+        setEmployees(filteredEmployees);
+        setRecords(
+          filteredEmployees.slice((page - 1) * pageSize, page * pageSize)
+        );
+        setLoading(false);
+      });
+  };
+
+  //filter function by date
+  const codeFilter = async (key) => {
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
+      .then((res) => {
+        const filteredEmployees = res.data.employees.filter(
+          (employee) => employee.status === 1 && employee.code.includes(key)
+        );
+        setEmployees(filteredEmployees);
+        setRecords(
+          filteredEmployees.slice((page - 1) * pageSize, page * pageSize)
+        );
+        setLoading(false);
+      });
+  };
+
+  //filter function by date
+  const nameFilter = async (key) => {
+    await axios
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequest-employees")
+      .then((res) => {
+        const filteredEmployees = res.data.employees.filter(
+          (employee) => employee.status === 1 && employee.emp_name.includes(key)
+        );
+        setEmployees(filteredEmployees);
+        setRecords(
+          filteredEmployees.slice((page - 1) * pageSize, page * pageSize)
+        );
+        setLoading(false);
       });
   };
 
@@ -58,28 +137,21 @@ const Report = () => {
 
     const tableColumns = [
       "#",
-      "วันที่จัดทำ",
-      "เลขที่บัญชี",
+      "รหัสพนักงาน",
+      "ชื่อพนักงาน",
+      "ประเภทค่าแรง",
+      "ชนิดของาน",
+      "เป้าหมาย",
       "เลขที่เอกสาร",
-      "จ่ายเงินให้",
-      "ฝ่าย",
-      "Account",
-      "Costcenter",
-      "Project",
-      "Product",
-      "จำนวนเงิน",
-      "ค่าเดินทาง",
-      "ค่าทางด่วน",
-      "ค่าเบี้ยเลี้ยง",
-      "ค่าปรับ",
-      "ค่ารับรอง",
-      "วัสดุสิ้นเปลือง",
-      "ค่าโทรศัพท์",
-      "ค่าอื่นๆ",
+      "วันที่ทำ OT",
+      "เวลาเริ่มทำ",
+      "เวลาสิ้นสุด",
+      "เวลารวม",
+      "สแกนนิ้ว",
     ];
 
     const tableRows = records.map((record, index) => {
-      const payListByType = (type) =>
+      const empListByType = (type) =>
         record.pay_list
           .filter((pay) => pay.pay_type === type)
           .map((pay) => pay.amount)
@@ -87,29 +159,12 @@ const Report = () => {
 
       return [
         index + 1,
-        dayjs(record.created_at).format("DD-MMM-YYYY"),
-        record.afd_id,
-        record.petty_cash_id,
-        record.pay_to,
-        record.dept,
-        record.pay_list.map((pay) => pay.acc_id.substring(7, 14)).join(", "),
-        record.pay_list.map((pay) => pay.acc_id.substring(15, 22)).join(", "),
-        record.pay_list.map((pay) => pay.acc_id.substring(23, 35)).join(", "),
-        record.pay_list.map((pay) => pay.acc_id.substring(36, 40)).join(", "),
-        record.total,
-        payListByType("ค่าเดินทาง"),
-        payListByType("ค่าทางด่วน"),
-        payListByType("ค่าเบี้ยเลี้ยง"),
-        payListByType("ค่าปรับ"),
-        payListByType("ค่ารับรอง"),
-        payListByType("วัสดุสิ้นเปลือง"),
-        payListByType("ค่าโทรศัพท์"),
-        payListByType("เบ็ดเตล็ด"),
+        record.code,
+        record.emp_name,
+        record.cost_type,
+        record.job_type,
       ];
     });
-
-    // คำนวณผลรวมของจำนวนเงินทั้งหมด
-    const totalAmount = records.reduce((sum, record) => sum + record.total, 0);
 
     // เพิ่มแถวรวมยอดไปที่ tableRows
     tableRows.push([
@@ -131,7 +186,7 @@ const Report = () => {
       "",
       "",
       "รวมทั้งหมด",
-      totalAmount.toFixed(2), // แสดงผลรวมสองตำแหน่งทศนิยม
+      //totalAmount.toFixed(2), // แสดงผลรวมสองตำแหน่งทศนิยม
       "",
       "",
       "",
@@ -155,7 +210,7 @@ const Report = () => {
     doc.text("บริษัท ไทยรุ่งยูเนี่ยนคาร์ จำกัด(มหาชน)", 14, 15);
 
     doc.setFontSize(13);
-    doc.text("รายงานการสั่งจ่ายเงินสดย่อย", 14, 25);
+    doc.text("รายงานการทำงานล่วงเวลา(OT)", 14, 25);
 
     doc.autoTable({
       startY: 30,
@@ -181,6 +236,7 @@ const Report = () => {
 
   useEffect(() => {
     getData();
+    getOtrequest();
   }, [page, pageSize]);
 
   return (
@@ -190,14 +246,14 @@ const Report = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0">All OT REPORT</h1>
+                <h1 className="m-0">รายงานโอที</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
                     <a href="#">หน้าหลัก</a>
                   </li>
-                  <li className="breadcrumb-item active">REPORT</li>
+                  <li className="breadcrumb-item active">รายงานโอที</li>
                 </ol>
               </div>
             </div>
@@ -206,7 +262,7 @@ const Report = () => {
         <div className="content">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-lg-12">
+              <div className="col-md-12">
                 <div className="card">
                   <div className="card-body">
                     <div className="row">
@@ -214,95 +270,229 @@ const Report = () => {
                         <div className="card shadow-none border">
                           <div className="card-body">
                             <div className="row">
-                              <dir className="col-md-3">
+                              <div className="col-md-3">
                                 <label htmlFor="">รหัสพนักงาน:</label>
-                                <input type="text" className="form-control" />
-                              </dir>
-                              <dir className="col-md-3">
-                                <label htmlFor="">รหัสพนักงาน:</label>
-                                <input type="text" className="form-control" />
-                              </dir>
-                              <dir className="col-md-3">
-                                <label htmlFor="">รหัสพนักงาน:</label>
-                                <input type="text" className="form-control" />
-                              </dir>
-                              <dir className="col-md-3">
-                                <label htmlFor="">รหัสพนักงาน:</label>
-                                <input type="text" className="form-control" />
-                              </dir>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Please Enter"
+                                  onChange={(event) =>
+                                    codeFilter(event.target.value)
+                                  }
+                                />
+                              </div>
+                              <div className="col-md-3">
+                                <label htmlFor="">ชื่อพนักงาน:</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Please Enter"
+                                  onChange={(event) =>
+                                    nameFilter(event.target.value)
+                                  }
+                                />
+                              </div>
+                              <div className="col-md-3">
+                                <label htmlFor="">ประเภทค่าแรง:</label>
+                                <select
+                                  className="form-control"
+                                  id="sel1"
+                                  onChange={(event) =>
+                                    typeFilter(event.target.value)
+                                  }
+                                >
+                                  <option defaultValue="">Please Select</option>
+                                  <option value="Direct">Direct</option>
+                                  <option value="Indirect (s)">
+                                    Indirect (s)
+                                  </option>
+                                </select>
+                              </div>
+                              <div className="col-md-3">
+                                <label htmlFor="">วันที่ทำ OT:</label>
+                                <br />
+                                <DatePicker
+                                  //showIcon
+                                  //icon="fa fa-calendar"
+                                  style={{ width: "100%" }} // กำหนดความกว้างตรงๆ
+                                  wrapperClassName="w-100" // ใช้ class ควบคุม wrapper
+                                  className="form-control"
+                                  //isClearable
+                                  placeholderText="กรุณาเลือกวันที่"
+                                  selected={startDate}
+                                  onChange={(date) => {
+                                    setStartDate(date);
+                                    dateFilter(
+                                      dayjs(date).format("YYYY-MM-DD")
+                                    );
+                                  }}
+                                  dateFormat="dd-MM-yyyy"
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <DataTable
-                          style={{
-                            fontFamily: "Prompt",
-                          }}
-                          withBorder
-                          highlightOnHover
-                          fontSize={"md"}
-                          verticalSpacing="md"
-                          paginationSize="md"
-                          withColumnBorders
-                          fetching={loading}
-                          idAccessor="id"
-                          columns={[
-                            {
-                              accessor: "index",
-                              title: "#",
-                              textAlignment: "center",
-                              width: 50,
-                              render: (record) => records.indexOf(record) + 1,
-                            },
-                            {
-                              accessor: "code",
-                              title: "รหัส",
-                              textAlignment: "center",
-                            },
-                            {
-                              accessor: "emp_name",
-                              title: "ชื่อพนักงาน",
-                              textAlignment: "center",
-                            },
-                            {
-                              accessor: "cost_type",
-                              title: "ประเภทค่าแรง",
-                              textAlignment: "center",
-                            },
-                            {
-                              accessor: "job_type",
-                              title: "ชนิดงาน",
-                              textAlignment: "center",
-                            },
-                            {
-                              accessor: "target",
-                              title: "เป้าหมาย",
-                              textAlignment: "center",
-                            },
-                            {
-                              accessor: "ot_create_date",
-                              title: "วันที่ทำ OT",
-                              textAlignment: "center",
-                              render: ({ ot_create_date }) =>
-                                dayjs(ot_create_date).format("DD-MM-YYYY"),
-                            },
-                            {
-                              accessor: "created_at",
-                              title: "วันที่ขอ OT",
-                              textAlignment: "center",
-                              render: ({ created_at }) =>
-                                dayjs(created_at).format("DD-MM-YYYY"),
-                            },
-                          ]}
-                          records={records}
-                          minHeight={200}
-                          totalRecords={employees.length}
-                          recordsPerPage={pageSize}
-                          page={page}
-                          onPageChange={(p) => setPage(p)}
-                          recordsPerPageOptions={PAGE_SIZES}
-                          onRecordsPerPageChange={setPageSize}
-                        />
+                        <div>
+                          <DataTable
+                            style={{
+                              fontFamily: "Prompt",
+                            }}
+                            striped
+                            withBorder
+                            highlightOnHover
+                            fontSize={"md"}
+                            verticalSpacing="md"
+                            paginationSize="md"
+                            withColumnBorders
+                            fetching={loading}
+                            idAccessor="id"
+                            columns={[
+                              {
+                                accessor: "index",
+                                title: "#",
+                                textAlignment: "center",
+                                width: 50,
+                                render: (record) => records.indexOf(record) + 1,
+                              },
+                              {
+                                accessor: "code",
+                                title: "รหัสพนักงาน",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "emp_name",
+                                title: "ชื่อพนักงาน",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "cost_type",
+                                title: "ประเภทค่าแรง",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "job_type",
+                                title: "ชนิดของงาน",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "target",
+                                title: "เป้าหมาย",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "ot_document",
+                                title: "เลขที่เอกสาร",
+                                textAlignment: "center",
+                                render: ({ ot_emp_id }) => {
+                                  // ค้นหาข้อมูล otrequest ที่มี ot_emp_id ตรงกับ code ของพนักงาน
+                                  const matchedOtRequest = otrequest.find(
+                                    (request) => request.ot_emp === ot_emp_id
+                                  );
+
+                                  // ถ้าพบข้อมูล ให้แสดง ot_member_id ถ้าไม่พบให้แสดงเครื่องหมาย -
+                                  return matchedOtRequest
+                                    ? matchedOtRequest.ot_member_id
+                                    : "-";
+                                },
+                              },
+                              {
+                                accessor: "ot_create_date",
+                                title: "วันที่ทำ OT",
+                                textAlignment: "center",
+                                render: ({ ot_create_date }) =>
+                                  dayjs(ot_create_date).format("DD-MM-YYYY"),
+                              },
+                              {
+                                accessor: "ot_in_time",
+                                title: "เวลาเริ่ม",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "out_time",
+                                title: "เวลาสิ้นสุด",
+                                textAlignment: "center",
+                              },
+                              {
+                                accessor: "total_time",
+                                title: "เวลารวม",
+                                textAlignment: "center",
+                                render: (record) => {
+                                  // ตรวจสอบว่ามี ot_in_time และ out_time หรือไม่
+                                  if (!record.ot_in_time || !record.out_time) {
+                                    return "-";
+                                  }
+
+                                  const start = dayjs(
+                                    "01-01-2024 " + record.ot_in_time
+                                  );
+                                  const end = dayjs(
+                                    "01-01-2024 " + record.out_time
+                                  );
+
+                                  let diff = dayjs.duration(end.diff(start));
+
+                                  // ตรวจสอบว่า overtimes.start_date เป็นช่วงที่ต้องหัก 60 นาทีหรือไม่
+                                  // if (
+                                  //   overtimes &&
+                                  //   overtimes.start_date === "8:00 - 17:10" &&
+                                  //   record.out_time > "12:00"
+                                  // ) {
+                                  //   diff = dayjs.duration(diff.asMinutes() - 70, "minutes");
+                                  // }
+
+                                  // if (
+                                  //   overtimes &&
+                                  //   overtimes.start_date === "21:45 - 6:45"
+                                  // ) {
+                                  //   diff = dayjs.duration(diff.asMinutes() + 1380, "minutes");
+                                  // }
+
+                                  const hours = Math.floor(diff.asHours());
+                                  const minutes = diff.minutes();
+
+                                  // แสดงเวลาในรูปแบบ ชั่วโมง:นาที
+                                  return `${hours
+                                    .toString()
+                                    .padStart(2, "0")}:${minutes
+                                    .toString()
+                                    .padStart(2, "0")}`;
+                                },
+                              },
+                              {
+                                accessor: "scan_data",
+                                title: "สแกนนิ้ว",
+                                textAlignment: "center",
+                                render: ({ scan_data }) =>
+                                  scan_data === null ? (
+                                    <span>-</span>
+                                  ) : (
+                                    scan_data.substring(13, 18) +
+                                    " - " +
+                                    scan_data.substring(32, 37)
+                                  ),
+                              },
+                            ]}
+                            records={records}
+                            minHeight={200}
+                            totalRecords={employees.length}
+                            recordsPerPage={pageSize}
+                            page={page}
+                            onPageChange={(p) => setPage(p)}
+                            recordsPerPageOptions={PAGE_SIZES}
+                            onRecordsPerPageChange={setPageSize}
+                          />
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                  <div className="card-footer">
+                  <div className="float-right">
+                      <button
+                        className="btn btn-secondary"
+                        onClick={handleExportPDF}
+                      >
+                        <i className="fas fa-download"></i> EXPORT
+                      </button>
                     </div>
                   </div>
                 </div>

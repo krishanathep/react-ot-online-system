@@ -211,7 +211,21 @@ const view = () => {
                                   "01-01-2024 " + member.out_time
                                 );
 
-                                const diff = dayjs.duration(end.diff(start));
+                                let diff = dayjs.duration(end.diff(start));
+
+                                  // ตรวจสอบว่า overtimes.start_date เป็นช่วงที่ต้องหัก 60 นาทีหรือไม่
+                                  if (
+                                    overtimes.start_date === "8:00 - 17:10" &&
+                                    member.out_time > "12:00"
+                                  ) {
+                                   diff = dayjs.duration(diff.asMinutes() - 70, "minutes");
+                                  }
+  
+                                  if (
+                                    overtimes.start_date === "21:45 - 6:45"
+                                  ) {
+                                   diff = dayjs.duration(diff.asMinutes() + 1380, "minutes");
+                                  }
 
                                 const hours = Math.floor(diff.asHours());
                                 const minutes = diff.minutes();

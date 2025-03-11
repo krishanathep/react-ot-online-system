@@ -404,6 +404,9 @@ const OverTimeAdmin = () => {
 
   // text export function
   const textExport = async () => {
+    // Assuming you have already included dayjs in your project
+    const currentDate = dayjs().format('DD_MM_YYYY');
+
     try {
       const response = await axios.get(
         import.meta.env.VITE_API_KEY +
@@ -727,7 +730,7 @@ const OverTimeAdmin = () => {
                         },
                         {
                           accessor: "start_date",
-                          title: "เวลาที่ OT",
+                          title: "เวลาที่ทำ OT",
                           textAlignment: "center",
                         },
                         {
