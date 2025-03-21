@@ -50,7 +50,6 @@ const manageCar = () => {
           (e) =>
             (e.ot_create_date === startdate && e.end_time === "20.00") ||
             (e.ot_create_date === startdate && e.end_time === "19.50")
-
         );
 
         const otrequest2 = res.data.employees.filter(
@@ -138,7 +137,7 @@ const manageCar = () => {
               bus_stations: employee.bus_stations,
             })),
 
-            test_2: res.data.employees
+          test_2: res.data.employees
             .filter(
               (e) =>
                 (e.ot_create_date === startdate && e.end_time === "22.00") ||
@@ -160,11 +159,6 @@ const manageCar = () => {
   };
 
   const handleUpdate_01 = async (data) => {
-    localStorage.setItem("bus_point_1", JSON.stringify(data.bus_point_1));
-    localStorage.setItem("bus_point_2", JSON.stringify(data.bus_point_2));
-    localStorage.setItem("bus_point_3", JSON.stringify(data.bus_point_3));
-    localStorage.setItem("bus_point_4", JSON.stringify(data.bus_point_4));
-
     await axios
       .put(
         import.meta.env.VITE_API_KEY + "/api/otrequest-employees-update",
@@ -183,10 +177,10 @@ const manageCar = () => {
   };
 
   const handleUpdate_02 = async (data) => {
-    localStorage.setItem("bus_point_5", JSON.stringify(data.bus_point_5));
-    localStorage.setItem("bus_point_6", JSON.stringify(data.bus_point_6));
-    localStorage.setItem("bus_point_7", JSON.stringify(data.bus_point_7));
-    localStorage.setItem("bus_point_8", JSON.stringify(data.bus_point_8));
+    // localStorage.setItem("bus_point_5", JSON.stringify(data.bus_point_5));
+    // localStorage.setItem("bus_point_6", JSON.stringify(data.bus_point_6));
+    // localStorage.setItem("bus_point_7", JSON.stringify(data.bus_point_7));
+    // localStorage.setItem("bus_point_8", JSON.stringify(data.bus_point_8));
 
     await axios
       .put(
@@ -205,44 +199,44 @@ const manageCar = () => {
       });
   };
 
-  const getValue = () => {
-    const savedAcceptTerm1 = JSON.parse(localStorage.getItem("bus_point_1"));
-    if (savedAcceptTerm1 !== null) {
-      setValue("bus_point_1", savedAcceptTerm1);
-    }
-    const savedAcceptTerm2 = JSON.parse(localStorage.getItem("bus_point_2"));
-    if (savedAcceptTerm2 !== null) {
-      setValue("bus_point_2", savedAcceptTerm2);
-    }
-    const savedAcceptTerm3 = JSON.parse(localStorage.getItem("bus_point_3"));
-    if (savedAcceptTerm3 !== null) {
-      setValue("bus_point_3", savedAcceptTerm3);
-    }
-    const savedAcceptTerm4 = JSON.parse(localStorage.getItem("bus_point_4"));
-    if (savedAcceptTerm4 !== null) {
-      setValue("bus_point_4", savedAcceptTerm4);
-    }
-    const savedAcceptTerm5 = JSON.parse(localStorage.getItem("bus_point_5"));
-    if (savedAcceptTerm5 !== null) {
-      setValue("bus_point_5", savedAcceptTerm5);
-    }
-    const savedAcceptTerm6 = JSON.parse(localStorage.getItem("bus_point_6"));
-    if (savedAcceptTerm6 !== null) {
-      setValue("bus_point_6", savedAcceptTerm6);
-    }
-    const savedAcceptTerm7 = JSON.parse(localStorage.getItem("bus_point_7"));
-    if (savedAcceptTerm7 !== null) {
-      setValue("bus_point_7", savedAcceptTerm7);
-    }
-    const savedAcceptTerm8 = JSON.parse(localStorage.getItem("bus_point_8"));
-    if (savedAcceptTerm8 !== null) {
-      setValue("bus_point_8", savedAcceptTerm8);
-    }
-  };
+  // const getValue = () => {
+  //   const savedAcceptTerm1 = JSON.parse(localStorage.getItem("bus_point_1"));
+  //   if (savedAcceptTerm1 !== null) {
+  //     setValue("bus_point_1", savedAcceptTerm1);
+  //   }
+  //   const savedAcceptTerm2 = JSON.parse(localStorage.getItem("bus_point_2"));
+  //   if (savedAcceptTerm2 !== null) {
+  //     setValue("bus_point_2", savedAcceptTerm2);
+  //   }
+  //   const savedAcceptTerm3 = JSON.parse(localStorage.getItem("bus_point_3"));
+  //   if (savedAcceptTerm3 !== null) {
+  //     setValue("bus_point_3", savedAcceptTerm3);
+  //   }
+  //   const savedAcceptTerm4 = JSON.parse(localStorage.getItem("bus_point_4"));
+  //   if (savedAcceptTerm4 !== null) {
+  //     setValue("bus_point_4", savedAcceptTerm4);
+  //   }
+  //   const savedAcceptTerm5 = JSON.parse(localStorage.getItem("bus_point_5"));
+  //   if (savedAcceptTerm5 !== null) {
+  //     setValue("bus_point_5", savedAcceptTerm5);
+  //   }
+  //   const savedAcceptTerm6 = JSON.parse(localStorage.getItem("bus_point_6"));
+  //   if (savedAcceptTerm6 !== null) {
+  //     setValue("bus_point_6", savedAcceptTerm6);
+  //   }
+  //   const savedAcceptTerm7 = JSON.parse(localStorage.getItem("bus_point_7"));
+  //   if (savedAcceptTerm7 !== null) {
+  //     setValue("bus_point_7", savedAcceptTerm7);
+  //   }
+  //   const savedAcceptTerm8 = JSON.parse(localStorage.getItem("bus_point_8"));
+  //   if (savedAcceptTerm8 !== null) {
+  //     setValue("bus_point_8", savedAcceptTerm8);
+  //   }
+  // };
 
   useEffect(() => {
     getData();
-    getValue();
+    //getValue();
   }, [setValue]);
 
   if (loading === true) {
@@ -319,7 +313,11 @@ const manageCar = () => {
                       </thead>
                       <tbody>
                         {employees_1.map((e, index) => (
-                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                          <tr
+                            key={e.id}
+                            align="center"
+                            hidden={e.bus_stations === "ไม่ใช้บริการ"}
+                          >
                             {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
@@ -362,7 +360,13 @@ const manageCar = () => {
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>
                             <td>{e.end_time} </td>
-                            <td hidden><input size={2} type="text" value={ e.bus_stations}/></td>
+                            <td hidden>
+                              <input
+                                size={2}
+                                type="text"
+                                value={e.bus_stations}
+                              />
+                            </td>
                             <td>
                               <input
                                 style={{ border: 0 }}
@@ -373,10 +377,7 @@ const manageCar = () => {
                                 })}
                               />
                             </td>
-                            <td>
-                              {dayjs(e.updated_at).format("HH.mm")}{' '}
-                            </td>
-                            
+                            <td>{e.update_time ? dayjs(e.update_time).format("HH:mm") : "ไม่พบข้อมูล"}</td>
                             <input
                               hidden
                               type="text"
@@ -390,7 +391,19 @@ const manageCar = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={2}>รวมพนักงานทั้งหมด {employees_1.filter((e)=>e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
+                          <td colSpan={2}>
+                            <b>รวมพนักงานทั้งหมด{" "}
+                            {
+                              employees_1.filter(
+                                (e) =>
+                                  e.bus_stations === "จุดที่ 1" ||
+                                  e.bus_stations === "จุดที่ 2" ||
+                                  e.bus_stations === "จุดที่ 3" ||
+                                  e.bus_stations === "จุดที่ 4"
+                              ).length
+                            }{" "}
+                            คน</b>
+                          </td>
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
@@ -471,13 +484,12 @@ const manageCar = () => {
                               </label>
                             </div>
                           </td>
-                          <td>
-                          </td>
-                          <td colSpan={4}>
-                            บันทึกโดย :{" "}
-                            {employees_1
-                              .filter((e, index) => index === 0)
-                              .map((e) => e.updated_by)}
+                          <td></td>
+                          <td><b>บันทึกโดย</b></td>
+                          <td colSpan={2}>
+                              {" "}
+                              {employees_1.find((e) => e.updated_by)
+                                ?.updated_by || "ไม่พบข้อมูล"}
                           </td>
                         </tr>
                       </tbody>
@@ -489,7 +501,7 @@ const manageCar = () => {
                       </span>
                     </div>
                     <button
-                      disabled={buttonLock}
+                      disabled={buttonLock || employees_1.length===0}
                       type="submit"
                       className="btn btn-success mt-2 float-right"
                     >
@@ -522,13 +534,17 @@ const manageCar = () => {
                           {/* <th>ไม่ใช้บริการ</th> */}
                           <th>วันที่ทำ</th>
                           <th>เวลาที่เลิก</th>
-                          <th>ค่าเดินทาง</th>  
+                          <th>ค่าเดินทาง</th>
                           <th>เวลาที่บันทึก</th>
                         </tr>
                       </thead>
                       <tbody>
                         {employees_2.map((e, index) => (
-                          <tr key={e.id} align="center" hidden={e.bus_stations === "ไม่ใช้บริการ"}>
+                          <tr
+                            key={e.id}
+                            align="center"
+                            hidden={e.bus_stations === "ไม่ใช้บริการ"}
+                          >
                             {/* <td>{index + 1}</td> */}
                             <td>{e.code}</td>
                             <td>{e.emp_name}</td>
@@ -571,7 +587,13 @@ const manageCar = () => {
                               {dayjs(e.ot_create_date).format("DD-MM-YYYY")}
                             </td>
                             <td>{e.end_time} </td>
-                            <td hidden><input type="text" size={1} value={e.bus_stations} /></td>
+                            <td hidden>
+                              <input
+                                type="text"
+                                size={1}
+                                value={e.bus_stations}
+                              />
+                            </td>
                             <td>
                               <input
                                 style={{ border: 0 }}
@@ -583,9 +605,7 @@ const manageCar = () => {
                                 })}
                               />
                             </td>
-                            <td>
-                              {dayjs(e.updated_at).format("HH.mm")}{' '}
-                            </td>
+                            <td>{e.update_time ? dayjs(e.update_time).format("HH:mm") : "ไม่พบข้อมูล"}</td>
 
                             <input
                               hidden
@@ -600,7 +620,19 @@ const manageCar = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                        <td colSpan={2}>รวมพนักงานทั้งหมด {employees_2.filter((e)=>e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
+                          <td colSpan={2}>
+                            <b>รวมพนักงานทั้งหมด{" "}
+                            {
+                              employees_2.filter(
+                                (e) =>
+                                  e.bus_stations === "จุดที่ 1" ||
+                                  e.bus_stations === "จุดที่ 2" ||
+                                  e.bus_stations === "จุดที่ 3" ||
+                                  e.bus_stations === "จุดที่ 4"
+                              ).length
+                            }{" "}
+                            คน</b>
+                          </td>
                           <td>
                             <div className="form-check">
                               <label className="form-check-label">
@@ -681,13 +713,10 @@ const manageCar = () => {
                               </label>
                             </div>
                           </td>
-                          <td>
-                          </td>
-                          <td colSpan={4}>
-                            บันทึกโดย :{" "}
-                            {employees_2
-                              .filter((e, index) => index === 0)
-                              .map((e) => e.updated_by)}
+                          <td></td>
+                          <td><b>บันทึกโดย</b></td>
+                          <td colSpan={2}>
+                          {employees_2.find((e) => e.updated_by)?.updated_by || "ไม่พบข้อมูล"}
                           </td>
                         </tr>
                       </tbody>
@@ -699,7 +728,7 @@ const manageCar = () => {
                       </span>
                     </div>
                     <button
-                      disabled={buttonLock}
+                      disabled={buttonLock || employees_2.length===0}
                       type="submit"
                       className="btn btn-success mt-2 float-right"
                     >

@@ -243,13 +243,36 @@ const viewAdmin = () => {
                                       )}
                                     </td>
                                     <td>
-                                      {member.scan_data === null ||
-                                      member.scan_data === "[null]" ? (
-                                        <span>ไม่มีข้อมูล</span>
+                                    {timeRecord.filter(
+                                        (r) =>
+                                          r.dl_date.startsWith(
+                                            overtimes.ot_date
+                                          ) && r.em_code === member.code
+                                      ).length === 0 ? (
+                                        <div className="text-muted">
+                                          ไม่มีข้อมูล...
+                                        </div>
                                       ) : (
-                                        member.scan_data.substring(13, 18) +
-                                        " - " +
-                                        member.scan_data.substring(32, 37)
+                                        timeRecord
+                                          .filter(
+                                            (r) =>
+                                              r.dl_date.startsWith(
+                                                overtimes.ot_date
+                                              ) && r.em_code === member.code
+                                          )
+                                          .map((s, index) => (
+                                            <div key={index} className="text-muted">
+                                              {s.dl_sacttime === null || s.dl_eacttime === null
+                                                ? "ไม่มีข้อมูล..."
+                                                : `${s.dl_sacttime.substring(
+                                                    11,
+                                                    16
+                                                  )} - ${s.dl_eacttime.substring(
+                                                    11,
+                                                    16
+                                                  )}`}
+                                            </div>
+                                          ))
                                       )}
                                     </td>
                                     <td className="text-secondary">

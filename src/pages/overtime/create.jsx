@@ -36,6 +36,7 @@ const create = ({ prefix = "OT" }) => {
     ],
     holiday_ot: [
       { value: "OT วันหยุด ทำเต็มวัน", label: "OT วันหยุด ทำเต็มวัน" },
+      { value: "OT วันหยุด ก่อนเข้างาน", label: "OT วันหยุด ก่อนเข้างาน" },
       {
         value: "OT วันหยุด หลังเลิกงาน-ไม่พัก",
         label: "OT วันหยุด หลังเลิกงาน-ไม่พัก",
@@ -336,25 +337,20 @@ const create = ({ prefix = "OT" }) => {
   useEffect(() => {
     const fetchLastIdAndGenerate = async () => {
       try {
-        // เรียก API เพื่อดึง last ID
-        const response = await axios.get(
-          import.meta.env.VITE_API_KEY + "/api/get-last-id"
-        );
-        let lastId = response.data.last_id; // ใช้ lastId หรือ fallback เป็น "00000"
-
-        // Add leading zeros to lastId
+        const response = await axios.get(import.meta.env.VITE_API_KEY + "/api/get-last-id");
+        let lastId = response.data.last_id || "0000"; // กำหนดค่า fallback
+        
         lastId = lastId.toString().padStart(4, "0");
-
-        // Generate ID
+    
         const date = new Date();
         const day = date.getDate().toString().padStart(2, "0");
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const year = date.getFullYear().toString().slice(-2);
-        const generatedId = `${prefix}-${day}${month}${year}-${lastId}`;
-
-        console.log(lastId);
-
-        // ตั้งค่า ID
+    
+        // ใช้ timestamp (มิลลิวินาที) เพื่อป้องกันการซ้ำ
+        const timestamp = Date.now().toString().slice(-2); // ใช้ 5 หลักท้ายของ timestamp
+    
+        const generatedId = `${prefix}-${day}${month}${year}${timestamp}-${lastId}`;
         setId(generatedId);
       } catch (error) {
         console.error("Error fetching last ID:", error);

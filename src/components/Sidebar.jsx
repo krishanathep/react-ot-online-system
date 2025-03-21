@@ -113,12 +113,12 @@ export default function Sidebar() {
                       <p>เอกสารโอที</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>
                       <p>ขออนุมัติ OT</p>
                     </Link>
-                  </li>
+                  </li> */}
                   {/* <li className="nav-header">OTHER MENU</li> */}
                  
                   <li className="nav-item">
@@ -139,12 +139,12 @@ export default function Sidebar() {
                       <p>สายอนุมัติ</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link to="/report" className="nav-link">
                       <i className="nav-icon fas fa-chart-pie"></i>
-                      <p>รายงานโอที</p>
+                      <p>รายงาน</p>
                     </Link>
-                  </li> */}
+                  </li>
                 </>
               ) : null}
               {ruleCarManage ? (

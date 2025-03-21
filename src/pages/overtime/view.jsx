@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate  } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -7,6 +7,7 @@ import duration from "dayjs/plugin/duration";
 const view = () => {
   dayjs.extend(duration);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
@@ -246,7 +247,7 @@ const view = () => {
                                     <td>
                                       {member.scan_data === null ||
                                       member.scan_data === "[null]" ? (
-                                        <span>ไม่มีข้อมูล</span>
+                                        <span className="text-danger">ไม่มีข้อมูล</span>
                                       ) : (
                                         member.scan_data.substring(13, 18) +
                                         " - " +
@@ -399,10 +400,13 @@ const view = () => {
                         </div>
                         <div className="col-md-12 mt-3">
                           <div className="float-right">
-                            <Link to={"/overtime"} className="btn btn-danger">
+                          <button
+                              onClick={() => navigate(-1)}
+                              className="btn btn-danger"
+                            >
                               <i className="fas fa-arrow-circle-left"></i>{" "}
                               ย้อนกลับ
-                            </Link>{" "}
+                            </button>{" "}
                           </div>
                         </div>
                       </div>

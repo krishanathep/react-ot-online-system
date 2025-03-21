@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
-import { Badge } from "react-bootstrap";
 import { useAuthUser } from "react-auth-kit";
+import Badge from 'react-bootstrap/Badge';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from "react-router-dom";
+import { Link,useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -15,6 +15,7 @@ const PAGE_SIZES = [10, 20, 30];
 const Approver = () => {
   //user login
   const userDatail = useAuthUser();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [overtimes, setOvertimes] = useState([]);
@@ -23,9 +24,17 @@ const Approver = () => {
 
   const [selectedRecords, setSelectedRecords] = useState([]);
 
+  // useEffect(() => {
+  //   setPage(1);
+  // }, [pageSize]);
+
   useEffect(() => {
-    setPage(1);
-  }, [pageSize]);
+        const savedPage = searchParams.get("page");
+        const savedPageSize = searchParams.get("pageSize");
+      
+        if (savedPage) setPage(Number(savedPage)); // โหลดค่าจาก URL
+        if (savedPageSize) setPageSize(Number(savedPageSize));
+      }, []);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -258,10 +267,15 @@ const Approver = () => {
       });
   };
 
-  useEffect(() => {
-    getData();
-    getApprover();
-  }, [page, pageSize, selectedRecords]);
+  // useEffect(() => {
+  //   getData();
+  //   getApprover();
+  // }, [page, pageSize, selectedRecords]);
+
+    useEffect(() => {
+       getData();
+       setSearchParams({ page, pageSize }); // อัปเดตค่าใน URL
+     }, [page, pageSize, selectedRecords, setSearchParams]);
 
   // Approver 2 update status
   const handleApproverSubmit2 = (blogs, data) => {

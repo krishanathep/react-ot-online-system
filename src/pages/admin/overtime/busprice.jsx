@@ -317,7 +317,7 @@ const busPrice = () => {
                                 })}
                               />
                             </td>
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
+                           <td>{e.update_time ? dayjs(e.update_time).format("HH:mm") : "ไม่พบข้อมูล"}</td>
                             <td hidden>
                               <input
                                 type="text"
@@ -333,7 +333,7 @@ const busPrice = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                          <td colSpan={2}>รวมพนักงานทั้งหมด {employees_1.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
+                          <td colSpan={2}><b>รวมพนักงานทั้งหมด {employees_1.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</b></td>
                           <td>
                             <div className="form-check">
                               {/* <input
@@ -418,11 +418,12 @@ const busPrice = () => {
                               </label>
                             </div>
                           </td>
+                          <td></td>
+                          <td><b>บันทึกโดย</b></td>
                           <td colSpan={4}>
-                            บันทึกโดย :{" "}
-                            {employees_1
-                              .filter((e, index) => index === 0)
-                              .map((e) => e.updated_by)}
+                            
+                          {employees_1.find((e) => e.updated_by)
+                                ?.updated_by || "ไม่พบข้อมูล"}
                           </td>
                         </tr>
                       </tbody>
@@ -519,7 +520,7 @@ const busPrice = () => {
                               />
                             </td>
                            
-                            <td>{dayjs(e.updated_at).format("HH.mm")}</td>
+                            <td>{e.update_time ? dayjs(e.update_time).format("HH:mm") : "ไม่พบข้อมูล"}</td>
                             <td hidden>
                               <input
                                 type="text"
@@ -535,7 +536,7 @@ const busPrice = () => {
                           </tr>
                         ))}
                         <tr align="center">
-                        <td colSpan={2}>รวมพนักงานทั้งหมด {employees_2.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</td>
+                        <td colSpan={2}><b>รวมพนักงานทั้งหมด {employees_2.filter((e)=> e.bus_stations === "จุดที่ 1" || e.bus_stations === "จุดที่ 2" || e.bus_stations === "จุดที่ 3" || e.bus_stations === "จุดที่ 4").length} คน</b></td>
                           <td>
                             <div className="form-check">
                               {/* <input
@@ -620,11 +621,12 @@ const busPrice = () => {
                               </label>
                             </div>
                           </td>
+                          <td></td>
+                          <td><b>บันทึกโดย</b></td>
                           <td colSpan={4}>
-                            บันทึกโดย :{" "}
-                            {employees_2
-                              .filter((e, index) => index === 0)
-                              .map((e) => e.updated_by)}
+                            
+                          {employees_2.find((e) => e.updated_by)
+                                ?.updated_by || "ไม่พบข้อมูล"}
                           </td>
                         </tr>
                       </tbody>

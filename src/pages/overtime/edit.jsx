@@ -118,7 +118,7 @@ const edit = ({ index }) => {
       timer: 2000,
     });
     console.log(res);
-    navigate("/overtime");
+    navigate(-1);
   })
   .catch((error) => {
     console.log(error);
@@ -314,8 +314,8 @@ const edit = ({ index }) => {
                                             overtimes.ot_date
                                           ) && r.em_code === member.code
                                       ).length === 0 ? (
-                                        <div className="text-muted">
-                                          ไม่มีข้อมูล...
+                                        <div className="text-danger">
+                                          ไม่มีข้อมูล
                                         </div>
                                       ) : (
                                         timeRecord
@@ -328,7 +328,7 @@ const edit = ({ index }) => {
                                           .map((s, index) => (
                                             <div key={index} className="text-muted">
                                               {s.dl_sacttime === null || s.dl_eacttime === null
-                                                ? "ไม่มีข้อมูล..."
+                                                ? "ไม่มีข้อมูล"
                                                 : `${s.dl_sacttime.substring(
                                                     11,
                                                     16
@@ -491,10 +491,13 @@ const edit = ({ index }) => {
                             >
                               <i className="fas fa-save"></i> ยืนยัน
                             </button>{" "}
-                            <Link to={"/overtime"} className="btn btn-danger">
+                            <button
+                              onClick={() => navigate(-1)}
+                              className="btn btn-danger"
+                            >
                               <i className="fas fa-arrow-circle-left"></i>{" "}
                               ย้อนกลับ
-                            </Link>{" "}
+                            </button>{" "}
                           </div>
                         </div>
                       </div>

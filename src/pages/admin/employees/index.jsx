@@ -202,20 +202,21 @@ const Employees = () => {
                           textAlignment: "center",
                         },
                         {
-                          accessor: "position",
-                          title: "ตำแหน่ง",
+                          accessor: "agency",
+                          title: "หน่วย",
+                          textAlignment: "center",
+                        },
+                        {
+                          accessor: "department",
+                          title: "ส่วน",
                           textAlignment: "center",
                         },
                         {
                           accessor: "dept",
-                          title: "แผนก",
+                          title: "ฝ่าย",
                           textAlignment: "center",
                         },
-                        {
-                          accessor: "work_exp",
-                          title: "อายุงาน",
-                          textAlignment: "center",
-                        },
+                       
                         {
                           accessor: "created_at",
                           title: "วันที่จัดทำ",

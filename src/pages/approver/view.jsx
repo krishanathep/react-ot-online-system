@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -13,6 +13,7 @@ const view = () => {
 
   //user login
   const userDatail = useAuthUser();
+  const navigate = useNavigate();
 
   const [overtimes, setOvertimes] = useState({});
   const [members, setMemebers] = useState([]);
@@ -470,10 +471,13 @@ const view = () => {
                             >
                               <i className="fas fa-check-circle"></i> อนุมัติ
                             </button>{" "}  */}
-                            <Link to={"/approver"} className="btn btn-danger">
+                          <button
+                              onClick={() => navigate(-1)}
+                              className="btn btn-danger"
+                            >
                               <i className="fas fa-arrow-circle-left"></i>{" "}
                               ย้อนกลับ
-                            </Link>{" "}
+                            </button>{" "}
                           </div>
                         </div>
                       </div>
