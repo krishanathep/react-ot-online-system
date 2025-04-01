@@ -139,10 +139,17 @@ export default function Sidebar() {
                       <p>สายอนุมัติ</p>
                     </Link>
                   </li>
+                  <li className="nav-header">REPORT MENU</li>
                   <li className="nav-item">
                     <Link to="/report" className="nav-link">
+                      <i className="nav-icon fas fa-users"></i>
+                      <p>พนักงานที่ทำโอที</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/ot/overtime" className="nav-link">
                       <i className="nav-icon fas fa-chart-pie"></i>
-                      <p>รายงาน</p>
+                      <p>เอกสารการทำโอที</p>
                     </Link>
                   </li>
                 </>

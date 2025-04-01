@@ -3,7 +3,7 @@ import { DataTable } from "mantine-datatable";
 import { TextInput, MultiSelect, Button, Stack } from "@mantine/core";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedValue, useSetState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -38,6 +38,7 @@ const Report = () => {
   const [selectEndTime, setSelectEndTime] = useState([])
   const [dateRange, setDateRange] = useState(null);
   const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null)
   
   // Get unique values for filters
   const depts = useMemo(() => {
@@ -217,8 +218,10 @@ const Report = () => {
       });
       
       setStartDate(dateRange[0]);
+      setEndDate(dateRange[1]);
     } else {
       setStartDate(null);
+      setEndDate(null);
     }
     
     setFilteredData(filtered);
@@ -234,6 +237,7 @@ const Report = () => {
     }
   }, [page, pageSize, filteredData]);
 
+   // ฟังก์ชันสำหรับสร้าง PDF
   const handleExportPDF = () => {
     const doc = new jsPDF({
       orientation: "landscape",
@@ -287,9 +291,11 @@ const Report = () => {
     doc.text("รายงานการทำงานล่วงเวลา", 14, 25);
 
     // Add date information if filter is applied
-    if (startDate) {
-      doc.text(`วันที่: ${dayjs(startDate).format("DD-MM-YYYY")}`, 14, 35);
-    }
+if (startDate && endDate) {
+  doc.text(`วันที่: ${dayjs(startDate).format("DD-MM-YYYY")} ถึง ${dayjs(endDate).format("DD-MM-YYYY")}`, 14, 35);
+} else if (startDate) {
+  doc.text(`วันที่: ${dayjs(startDate).format("DD-MM-YYYY")}`, 14, 35);
+}
 
     doc.autoTable({
       startY: startDate ? 40 : 30,

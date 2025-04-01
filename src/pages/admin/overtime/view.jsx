@@ -314,7 +314,8 @@ const viewAdmin = () => {
                               <tr align="center">
                                 <td>
                                   <b>หัวหน้าหน่วย/ผู้จัดทำ</b> :{" "}
-                                  {overtimes.name_app_1}
+                                  {overtimes.name_app_1}<br/>
+                                  <b>วัน/เวลาที่จัดทำ</b> :{" "}{dayjs(overtimes.created_at).format('DD-MMM-YYYY, HH:mm:ss')}
                                 </td>
                                 <td>
                                   <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
@@ -345,7 +346,8 @@ const viewAdmin = () => {
                                 <i className="fas fa-check"></i>
                               </div>
                               <div className="step-name">
-                                หัวหน้าหน่วย/ผู้จัดทำ
+                                หัวหน้าหน่วย/ผู้จัดทำ<br/>
+                                
                               </div>
                             </div>
                             <div

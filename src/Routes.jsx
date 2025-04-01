@@ -29,6 +29,8 @@ import ApproverMaster from "./pages/admin/approver";
 import ApproverMasterCreate from './pages/admin/approver/create'
 import ApproverMasterUpdate from './pages/admin/approver/update'
 import Report from './pages/report'
+import OTReport from './pages/report/overtime'
+import OTReportView from './pages/report/view'
 
 const RoutesPage = () => {
   return (
@@ -55,6 +57,8 @@ const RoutesPage = () => {
           <Route path="/approver/edit/:id" element={<AppEdit />} />
           <Route path="/officecar/" element={<OfficeCar/>} />
           <Route path="/report" element={<Report/>}/>
+          <Route path="/ot/overtime" element={<OTReport/>}/>
+          <Route path="/ot/overtime/view/:id" element={<OTReportView/>}/>
 
           {/* Route ADIMIN */}
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />

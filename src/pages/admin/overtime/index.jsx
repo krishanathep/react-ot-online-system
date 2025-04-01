@@ -750,7 +750,7 @@ const OverTimeAdmin = () => {
                                 <DatePicker
                                   selected={filters.ot_date}
                                   onChange={(date) => handleFilterChange("ot_date", date)}
-                                  dateFormat="yyyy-MM-dd"
+                                  dateFormat="dd-MM-yyyy"
                                   placeholderText="เลือกวันที่"
                                   className="pl-10 pr-3 py-2 border rounded w-full"
                                   isClearable

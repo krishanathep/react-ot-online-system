@@ -105,7 +105,6 @@ const view = () => {
       });
   };
 
-
   useEffect(() => {
     getData();
     getTimeRecord();
@@ -123,7 +122,7 @@ const view = () => {
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <Link to={'/'}>หน้าหลัก</Link>
+                    <Link to={"/"}>หน้าหลัก</Link>
                   </li>
                   <li className="breadcrumb-item">การขออนุมัติ</li>
                   <li className="breadcrumb-item active">ข้อมูลการขออนุมัติ</li>
@@ -214,19 +213,23 @@ const view = () => {
 
                                 let diff = dayjs.duration(end.diff(start));
 
-                                  // ตรวจสอบว่า overtimes.start_date เป็นช่วงที่ต้องหัก 60 นาทีหรือไม่
-                                  if (
-                                    overtimes.start_date === "8:00 - 17:10" &&
-                                    member.out_time > "12:00"
-                                  ) {
-                                   diff = dayjs.duration(diff.asMinutes() - 70, "minutes");
-                                  }
-  
-                                  if (
-                                    overtimes.start_date === "21:45 - 6:45"
-                                  ) {
-                                   diff = dayjs.duration(diff.asMinutes() + 1380, "minutes");
-                                  }
+                                // ตรวจสอบว่า overtimes.start_date เป็นช่วงที่ต้องหัก 60 นาทีหรือไม่
+                                if (
+                                  overtimes.start_date === "8:00 - 17:10" &&
+                                  member.out_time > "12:00"
+                                ) {
+                                  diff = dayjs.duration(
+                                    diff.asMinutes() - 70,
+                                    "minutes"
+                                  );
+                                }
+
+                                if (overtimes.start_date === "21:45 - 6:45") {
+                                  diff = dayjs.duration(
+                                    diff.asMinutes() + 1380,
+                                    "minutes"
+                                  );
+                                }
 
                                 const hours = Math.floor(diff.asHours());
                                 const minutes = diff.minutes();
@@ -247,11 +250,14 @@ const view = () => {
                                       )}
                                     </td>
                                     <td>
-                                    {member.scan_data === null || member.scan_data === "[null]" ? (
-                                      <span>ไม่มีข้อมูล</span>
-                                    ):(
-                                      member.scan_data.substring(13,18)+" - "+member.scan_data.substring(32,37)
-                                    )}
+                                      {member.scan_data === null ||
+                                      member.scan_data === "[null]" ? (
+                                        <span>ไม่มีข้อมูล</span>
+                                      ) : (
+                                        member.scan_data.substring(13, 18) +
+                                        " - " +
+                                        member.scan_data.substring(32, 37)
+                                      )}
                                     </td>
                                     <td>
                                       {member.out_time === null ? (
@@ -293,6 +299,11 @@ const view = () => {
                                 <td>
                                   <b>หัวหน้าหน่วย/ผู้จัดทำ</b> :{" "}
                                   {overtimes.name_app_1}
+                                  <br />
+                                  <b>วัน/เวลาที่จัดทำ</b> :{" "}
+                                  {dayjs(overtimes.created_at).format(
+                                    "DD-MMM-YYYY, HH:mm:ss"
+                                  )}
                                 </td>
                                 <td>
                                   <b>หัวหน้าส่วน</b> : {overtimes.name_app_2}
@@ -471,7 +482,7 @@ const view = () => {
                             >
                               <i className="fas fa-check-circle"></i> อนุมัติ
                             </button>{" "}  */}
-                          <button
+                            <button
                               onClick={() => navigate(-1)}
                               className="btn btn-danger"
                             >
