@@ -416,6 +416,41 @@ export default function Home() {
           setApproved1(counter3.length);
           setRejected(counter5.length);
         });
+      } else if (
+        userDatail().role === "approver_1" &&
+        userDatail().agency === "TED_GROUP_1"
+      ) {
+        await axios
+          .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+          .then((res) => {
+            // Filter for PLD and FED departments
+            const filteredData = res.data.data.filter(
+              (item) =>
+                item.department === "ฝ่ายวิศวกรรมแม่พิมพ์และจิ๊ก" || 
+              item.department === "ส่วนออกแบบแม่พิมพ์และจิ๊ก" || 
+              item.department === "ส่วนวิศวกรรมแม่พิมพ์และจิ๊ก" || 
+              item.department === "ส่วนงานโครงการ" || 
+              item.department === "กลุ่มงานต้นทุน (07-63)"
+            );
+  
+            const counter1 = filteredData.filter(
+              (ot) =>
+                ot.status === "รอการอนุมัติ 1" ||
+                ot.status === "รอการอนุมัติ 2" ||
+                ot.status === "รอการอนุมัติ 3"
+            );
+            const counter3 = filteredData.filter(
+              (ot) => ot.status === "ผ่านการอนุมัติ"
+            );
+            const counter5 = filteredData.filter(
+              (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+            );
+  
+            setOvertimes(filteredData.length);
+            setInprogress1(counter1.length);
+            setApproved1(counter3.length);
+            setRejected(counter5.length);
+          });
     } else if (userDatail().role === "approver_1") {
       await axios
         .get(
@@ -520,6 +555,68 @@ export default function Home() {
           // Filter for PLD and FED departments
           const filteredData = res.data.data.filter(
             (ot) => ot.dept === "RDD" || ot.dept === "PED" || ot.dept === "AED"
+          );
+
+          const counter1 = filteredData.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = filteredData.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = filteredData.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(filteredData.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+    } else if (
+      userDatail().role === "approver_3" &&
+      userDatail().agency === "MD_GROUP_2"
+    ) {
+      console.log(userDatail().role);
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+        .then((res) => {
+          // Filter for PLD and FED departments
+          const filteredData = res.data.data.filter(
+            (ot) => ot.dept === "RDD" || ot.dept === "PED" || ot.dept === "AED"
+          );
+
+          const counter1 = filteredData.filter(
+            (ot) =>
+              ot.status === "รอการอนุมัติ 1" ||
+              ot.status === "รอการอนุมัติ 2" ||
+              ot.status === "รอการอนุมัติ 3"
+          );
+          const counter3 = filteredData.filter(
+            (ot) => ot.status === "ผ่านการอนุมัติ"
+          );
+          const counter5 = filteredData.filter(
+            (ot) => ot.status === "ไม่ผ่านการอนุมัติ"
+          );
+
+          setOvertimes(filteredData.length);
+          setInprogress1(counter1.length);
+          setApproved1(counter3.length);
+          setRejected(counter5.length);
+        });
+    } else if (
+      userDatail().role === "approver_3" &&
+      userDatail().agency === "MD_GROUP_3"
+    ) {
+      console.log(userDatail().role);
+      await axios
+        .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
+        .then((res) => {
+          // Filter for PLD and FED departments
+          const filteredData = res.data.data.filter(
+            (ot) => ot.dept === "TED" || ot.dept === "DMD"
           );
 
           const counter1 = filteredData.filter(

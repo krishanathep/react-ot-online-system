@@ -114,6 +114,13 @@ const Approver = () => {
                 item.department === "ส่วนโครงการใหม่งานประกอบและผลิตรถยนต์" ||
                 item.department === "ส่วนประกันคุณภาพงานโครงการใหม่ (10-67)"
             );
+          } else if (userAgency === "TED_GROUP_1") {
+            filteredData = filteredData.filter(
+              (item) =>
+                item.department === "ฝ่ายวิศวกรรมแม่พิมพ์และจิ๊ก" || 
+              item.department === "ส่วนวิศวกรรมแม่พิมพ์และจิ๊ก" || 
+              item.department === "กลุ่มงานต้นทุน (07-63)"
+            );
           } else if (userAgency === "PPD_GROUP_1") {
             filteredData = filteredData.filter(
               (item) =>
@@ -158,6 +165,12 @@ const Approver = () => {
               item.dept === "AED" ||
               item.dept === "PED" ||
               item.dept === "RDD"
+          );
+        } else if (userRole === "approver_3" && userAgency === "MD_GROUP_3") {
+          filteredData = filteredData.filter(
+            (item) =>
+              item.dept === "DMD" ||
+              item.dept === "TED"
           );
         }
 

@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import axios from "axios";
 import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import duration from "dayjs/plugin/duration";
 
 // นำเข้าฟอนต์ไทยสำหรับ PDF
@@ -18,6 +19,7 @@ import { KanitBold } from "../../assets/fonts/Kanit-bold";
 const PAGE_SIZES = [20, 30, 40];
 
 const Report = () => {
+  dayjs.extend(isSameOrAfter);
   dayjs.extend(duration);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [employees, setEmployees] = useState([]);
@@ -214,7 +216,8 @@ const Report = () => {
       
       filtered = filtered.filter(emp => {
         const otDate = dayjs(emp.ot_create_date);
-        return otDate.isAfter(startDate) && otDate.isBefore(endDate.add(1, 'day'));
+        //return otDate.isAfter(startDate) && otDate.isBefore(endDate.add(1, 'day'));
+        return otDate.isSameOrAfter(startDate, 'day') && otDate.isBefore(endDate.add(1, 'day'));
       });
       
       setStartDate(dateRange[0]);

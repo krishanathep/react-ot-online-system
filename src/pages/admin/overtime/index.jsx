@@ -147,10 +147,10 @@ const OverTimeAdmin = () => {
     updatePaginatedRecords(filteredRecords);
   }, [page, pageSize, filteredRecords]);
 
-  useEffect(() => {
-    getData();
-    getApprover();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  //   getApprover();
+  // }, []);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({
