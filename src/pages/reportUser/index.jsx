@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDebouncedValue, useSetState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
+import { useAuthUser } from "react-auth-kit";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import axios from "axios";
@@ -19,6 +20,8 @@ import { KanitBold } from "../../assets/fonts/Kanit-bold";
 const PAGE_SIZES = [20, 30, 40];
 
 const Report = () => {
+  //user login
+    const userDatail = useAuthUser();
   dayjs.extend(isSameOrAfter);
   dayjs.extend(duration);
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
@@ -174,12 +177,18 @@ const Report = () => {
     }
 
     // Filter by departments
-    if (selectDepartment.length > 0) {
-      filtered = filtered.filter(emp => {
-        const department = getDepartMent(emp.ot_emp_id);
-        return selectDepartment.includes(department);
-      });
-    }
+    // if (selectDepartment.length > 0) {
+    //   filtered = filtered.filter(emp => {
+    //     const department = getDepartMent(emp.ot_emp_id);
+    //     return selectDepartment.includes(department);
+    //   });
+    // }
+
+     // Filter by departments
+    filtered = filtered.filter(emp => {
+      const department = getDepartMent(emp.ot_emp_id);
+      return department === userDatail().agency;
+    });
 
       // Filter by start time
       if (selectStartTime.length > 0) {
@@ -413,40 +422,12 @@ if (startDate && endDate) {
       title: "หน่วยงาน",
       textAlignment: "center",
       render: ({ ot_emp_id }) => getDepartMent(ot_emp_id),
-      filter: (
-        <MultiSelect
-          label="ฝ่ายงาน"
-          description="เลือกฝ่ายงานที่ต้องการแสดง"
-          data={department}
-          value={selectDepartment}
-          placeholder="เลือกฝ่ายงาน..."
-          onChange={setSelectDepartment}
-          icon={<IconSearch size={16} />}
-          clearable
-          searchable
-        />
-      ),
-      filtering: selectDepartment.length > 0,
     },
     {
       accessor: "dept",
       title: "ฝ่ายงาน",
       textAlignment: "center",
       render: ({ ot_emp_id }) => getDocumentNumber(ot_emp_id),
-      filter: (
-        <MultiSelect
-          label="ฝ่ายงาน"
-          description="เลือกฝ่ายงานที่ต้องการแสดง"
-          data={depts}
-          value={selectedDepts}
-          placeholder="เลือกฝ่ายงาน..."
-          onChange={setSelectedDepts}
-          icon={<IconSearch size={16} />}
-          clearable
-          searchable
-        />
-      ),
-      filtering: selectedDepts.length > 0,
     },
     {
       accessor: "ot_create_date",

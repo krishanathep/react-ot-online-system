@@ -32,6 +32,10 @@ import Report from './pages/report'
 import OTReport from './pages/report/overtime'
 import OTReportView from './pages/report/view'
 
+import ReportUser from './pages/reportUser'
+import OTReportUser from './pages/reportUser/overtime'
+import OTReportUserView from './pages/reportUser/view'
+
 const RoutesPage = () => {
   return (
     <Router basename="/otrequest">
@@ -59,6 +63,9 @@ const RoutesPage = () => {
           <Route path="/report" element={<Report/>}/>
           <Route path="/ot/overtime" element={<OTReport/>}/>
           <Route path="/ot/overtime/view/:id" element={<OTReportView/>}/>
+          <Route path="/user-report" element={<ReportUser/>}/>
+          <Route path="/ot-user/overtime" element={<OTReportUser/>}/>
+          <Route path="/ot-user/overtime/view/:id" element={<OTReportUserView/>}/>
 
           {/* Route ADIMIN */}
           <Route path="/admin/overtime" element={<OvertimeAdmin />} />

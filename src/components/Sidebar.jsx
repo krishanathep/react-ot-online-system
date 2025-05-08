@@ -61,6 +61,7 @@ export default function Sidebar() {
             >
               {ruleUser ? (
                 <>
+                <li className="nav-header">MAIN MENU</li>
                   <li className="nav-item">
                     <Link to="/" className="nav-link">
                       <i className="nav-icon fas fa-home"></i>
@@ -71,6 +72,19 @@ export default function Sidebar() {
                     <Link to="/overtime" className="nav-link">
                       <i className="nav-icon fas fa-calendar-plus"></i>
                       <p>ขออนุมัติ OT</p>
+                    </Link>
+                  </li>
+                  <li className="nav-header">REPORT MENU</li>
+                    <li className="nav-item">
+                    <Link to="/user-report" className="nav-link">
+                      <i className="nav-icon fas fa-users"></i>
+                      <p>พนักงานที่ทำโอที</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/ot-user/overtime" className="nav-link">
+                      <i className="nav-icon fas fa-chart-pie"></i>
+                      <p>เอกสารการทำโอที</p>
                     </Link>
                   </li>
                 </>
