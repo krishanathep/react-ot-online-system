@@ -80,31 +80,27 @@ const OverTimeAdmin = () => {
   const getData = async () => {
     // get ot requrst data from dept by user login
     await axios
-      .get(
-        import.meta.env.VITE_API_KEY +
-          "/api/otrequests-agency?data=" +
-          userDatail().agency
-      )
+      .get(import.meta.env.VITE_API_KEY + "/api/otrequests")
       .then((res) => {
         //Change api name
-        setOvertimes(res.data.otrequests);
-        setFilteredRecords(res.data.otrequests);
-        updatePaginatedRecords(res.data.otrequests);
+        setOvertimes(res.data.data);
+        setFilteredRecords(res.data.data);
+        updatePaginatedRecords(res.data.data);
         setLoading(false);
 
-        //Calculate the number of employees for each ot_member_id
-        // const employeeCounts = res.data.otrequests.reduce((acc, otrequest) => {
-        //   acc[otrequest.ot_member_id] = otrequest.employees.length;
-        //   return acc;
-        // }, {});
+        // Calculate the number of employees for each ot_member_id
+        const employeeCounts = res.data.data.reduce((acc, otrequest) => {
+          acc[otrequest.ot_member_id] = otrequest.employees.length;
+          return acc;
+        }, {});
 
-        //Calculate the total number of employees
-        // const totalEmployees = res.data.otrequests.reduce(
-        //   (acc, otrequest) => acc + otrequest.employees.length,
-        //   0
-        // );
-        //setEmpcount(employeeCounts);
-        //setEmptotal(totalEmployees);
+        // Calculate the total number of employees
+        const totalEmployees = res.data.data.reduce(
+          (acc, otrequest) => acc + otrequest.employees.length,
+          0
+        );
+        setEmpcount(employeeCounts);
+        setEmptotal(totalEmployees);
       });
   };
 
@@ -497,23 +493,24 @@ const OverTimeAdmin = () => {
                         <div className="row">
                           <div className="col-md-12">
                             <div className="float-right">
+                              <Link
+                                to={"/admin/overtime/busprice"}
+                                className="btn btn-info mr-1"
+                              >
+                                <i className="fas fa-truck"></i> การจัดรถ
+                              </Link>
+                              <button
+                                onClick={textExport}
+                                className="btn btn-primary mr-1"
+                              >
+                                <i className="fas fa-download"></i> ดึงข้อมูล
+                              </button>
                               <button
                                 className="btn btn-secondary"
                                 onClick={clearFilters}
                               >
-                                <i className="fas fa-undo"></i> ล้างตัวกรอง
-                              </button>{" "}
-                              <Link
-                                to={"/overtime/create"}
-                                className="btn btn-success"
-                                hidden={
-                                  userDatail().role === "approver"
-                                    ? true
-                                    : false
-                                }
-                              >
-                                <i className="fa fa-plus"></i> คำร้องใหม่
-                              </Link>
+                               <i className="fas fa-undo"></i> ล้างตัวกรอง
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -584,16 +581,32 @@ const OverTimeAdmin = () => {
                           title: "ผู้ควบคุมงาน",
                           textAlignment: "center",
                           filtering: true,
+                          // filter: (
+                          //   <TextInput
+                          //     label="กรองด้วยชื่อผู้ควบคุมงาน"
+                          //     description="ค้นหาผู้ควบคุมงาน"
+                          //     placeholder="ค้นหา..."
+                          //     icon={<IconSearch size={16} />}
+                          //     value={filters.create_name}
+                          //     onChange={(e) => handleFilterChange('create_name', e.currentTarget.value)}
+                          //   />
+                          // ),
+                        },
+                        {
+                          accessor: "department",
+                          title: "หน่วยงาน",
+                          textAlignment: "center",
+                          filtering: true,
                           filter: (
                             <TextInput
-                              label="กรองด้วยชื่อผู้ควบคุมงาน"
-                              description="ค้นหาผู้ควบคุมงาน"
+                              label="กรองด้วยหน่วยงาน"
+                              description="ค้นหาหน่วยงาน"
                               placeholder="ค้นหา..."
                               icon={<IconSearch size={16} />}
-                              value={filters.create_name}
+                              value={filters.department}
                               onChange={(e) =>
                                 handleFilterChange(
-                                  "create_name",
+                                  "department",
                                   e.currentTarget.value
                                 )
                               }
@@ -601,46 +614,25 @@ const OverTimeAdmin = () => {
                           ),
                         },
                         {
-                          accessor: "department",
-                          title: "หน่วยงาน",
-                          textAlignment: "center",
-                          filtering: true,
-                          // filter: (
-                          //   <TextInput
-                          //     label="กรองด้วยหน่วยงาน"
-                          //     description="ค้นหาหน่วยงาน"
-                          //     placeholder="ค้นหา..."
-                          //     icon={<IconSearch size={16} />}
-                          //     value={filters.department}
-                          //     onChange={(e) =>
-                          //       handleFilterChange(
-                          //         "department",
-                          //         e.currentTarget.value
-                          //       )
-                          //     }
-                          //   />
-                          // ),
-                        },
-                        {
                           accessor: "dept",
                           title: "ฝ่ายงาน",
                           textAlignment: "center",
                           filtering: true,
-                          // filter: (
-                          //   <TextInput
-                          //     label="กรองด้วยฝ่ายงาน"
-                          //     description="ค้นหาฝ่ายงาน"
-                          //     placeholder="ค้นหา..."
-                          //     icon={<IconSearch size={16} />}
-                          //     value={filters.dept}
-                          //     onChange={(e) =>
-                          //       handleFilterChange(
-                          //         "dept",
-                          //         e.currentTarget.value
-                          //       )
-                          //     }
-                          //   />
-                          // ),
+                          filter: (
+                            <TextInput
+                              label="กรองด้วยฝ่ายงาน"
+                              description="ค้นหาฝ่ายงาน"
+                              placeholder="ค้นหา..."
+                              icon={<IconSearch size={16} />}
+                              value={filters.dept}
+                              onChange={(e) =>
+                                handleFilterChange(
+                                  "dept",
+                                  e.currentTarget.value
+                                )
+                              }
+                            />
+                          ),
                         },
                         {
                           accessor: "status",
@@ -750,111 +742,137 @@ const OverTimeAdmin = () => {
                           filtering: true,
                           filter: (
                             <div>
-                              <label className="block text-sm font-medium mb-1">
-                                กรองด้วยวันที่ทำ OT
-                              </label>
+                              <label className="block text-sm font-medium mb-1">กรองด้วยวันที่ทำ OT</label>
                               <div className="relative">
                                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                                   <IconCalendar size={16} />
                                 </div>
                                 <DatePicker
                                   selected={filters.ot_date}
-                                  onChange={(date) =>
-                                    handleFilterChange("ot_date", date)
-                                  }
+                                  onChange={(date) => handleFilterChange("ot_date", date)}
                                   dateFormat="dd-MM-yyyy"
                                   placeholderText="เลือกวันที่"
                                   className="pl-10 pr-3 py-2 border rounded w-full"
                                   isClearable
                                 />
                               </div>
-                              <p className="text-xs text-gray-500 mt-1">
-                                เลือกวันที่ทำ OT
-                              </p>
+                              <p className="text-xs text-gray-500 mt-1">เลือกวันที่ทำ OT</p>
                             </div>
                           ),
-                          render: ({ ot_date }) =>
-                            dayjs(ot_date).format("DD-MM-YYYY"),
+                          render: ({ ot_date }) => dayjs(ot_date).format("DD-MM-YYYY"),
                         },
-                        // {
-                        //   accessor: "employee_count",
-                        //   title: "จำนวน(คน)",
-                        //   textAlignment: "center",
-                        //   render: (row) => (
-                        //     <span>{empcount[row.ot_member_id]}</span>
-                        //   ),
-                        // },
-                        // {
-                        //   accessor: "otrequests",
-                        //   title: "จุดรถรับส่ง",
-                        //   textAlignment: "center",
-                        //   render: (otrequests) => {
-                        //     const firstEmployee = otrequests.employees[0]; // ดึงพนักงานคนแรก
-                        //     if (!firstEmployee) return "ไม่จัดรถ"; // ถ้าไม่มีพนักงานเลย
+                        {
+                          accessor: "employee_count",
+                          title: "จำนวน(คน)",
+                          textAlignment: "center",
+                          render: (row) => (
+                            <span>{empcount[row.ot_member_id]}</span>
+                          ),
+                        },
+                        {
+                          accessor: "otrequests",
+                          title: "จุดรถรับส่ง",
+                          textAlignment: "center",
+                          render: (otrequests) => {
+                            const firstEmployee = otrequests.employees[0]; // ดึงพนักงานคนแรก
+                            if (!firstEmployee) return "ไม่จัดรถ"; // ถ้าไม่มีพนักงานเลย
 
-                        //     const busPoints = [
-                        //       firstEmployee.bus_point_1,
-                        //       firstEmployee.bus_point_2,
-                        //       firstEmployee.bus_point_3,
-                        //       firstEmployee.bus_point_4,
-                        //     ];
+                            const busPoints = [
+                              firstEmployee.bus_point_1,
+                              firstEmployee.bus_point_2,
+                              firstEmployee.bus_point_3,
+                              firstEmployee.bus_point_4,
+                            ];
 
-                        //     // ตรวจสอบว่าทุกค่าของ bus_point เป็น null
-                        //     const allNull = busPoints.every(
-                        //       (point) => point === null
-                        //     );
-                        //     if (allNull) return <p>ไม่ได้จัดรถ</p>;
+                            // ตรวจสอบว่าทุกค่าของ bus_point เป็น null
+                            const allNull = busPoints.every(
+                              (point) => point === null
+                            );
+                            if (allNull) return <p>ไม่ได้จัดรถ</p>;
 
-                        //     // แสดงค่าที่มีข้อมูล (ตัด null หรือค่าว่างออก)
-                        //     const filteredPoints = busPoints
-                        //       .filter((point) => point !== null && point !== "")
-                        //       .join(" : ");
+                            // แสดงค่าที่มีข้อมูล (ตัด null หรือค่าว่างออก)
+                            const filteredPoints = busPoints
+                              .filter((point) => point !== null && point !== "")
+                              .join(" : ");
 
-                        //     return filteredPoints;
-                        //   },
-                        // },
+                            return filteredPoints;
+                          },
+                        },
                         {
                           accessor: "actions",
                           textAlignment: "center",
                           title: "ดำเนินการ",
                           render: (blogs) => (
                             <>
-                              <>
-                                <Link
-                                  to={"/overtime/view/" + blogs.id}
-                                  className="btn btn-primary"
-                                >
-                                  <i className="fas fa-bars"></i>
-                                </Link>{" "}
-                                {blogs.status === "ผ่านการอนุมัติ" &&
-                                blogs.result === "รอการรายงาน" ? (
-                                  <>
-                                    <Link
-                                      to={"/overtime/edit/" + blogs.id}
-                                      className="btn btn-info"
-                                    >
-                                      <i className="far fa-edit"></i>
-                                    </Link>
-                                  </>
-                                ) : (
-                                  <>
-                                    <button disabled className="btn btn-info">
-                                      <i className="far fa-edit"></i>
-                                    </button>
-                                  </>
-                                )}{" "}
+                              <Link
+                                to={"/admin/overtime/view/" + blogs.id}
+                                className="btn btn-primary"
+                              >
+                                <i className="fas fa-bars"></i>
+                              </Link>{" "}
+                              <div hidden>
                                 <button
-                                  onClick={() => handleDeleteSubmit(blogs)}
-                                  className="btn btn-danger"
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit2(blogs)}
                                   disabled={
                                     blogs.status === "รอการอนุมัติ 1"
                                       ? false
                                       : true
                                   }
                                 >
-                                  <i className="far fa-trash-alt"></i>
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit3(blogs)}
+                                  disabled={
+                                    blogs.status === "รอการอนุมัติ 2"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApproverSubmit4(blogs)}
+                                  disabled={
+                                    blogs.status === "รอการอนุมัติ 3"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-warning text-white"
+                                  onClick={() => handleApproverSubmit5(blogs)}
+                                  disabled={
+                                    blogs.result === "รอการปิด (ส่วน)"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-warning text-white"
+                                  onClick={() => handleApproverSubmit6(blogs)}
+                                  disabled={
+                                    blogs.result === "รอการปิด (ผจก)"
+                                      ? false
+                                      : true
+                                  }
+                                >
+                                  <i className="fas fa-check-circle"></i>
+                                </button>{" "}
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => handleRejectSubmit(blogs)}
+                                >
+                                  <i className="fas fa-times-circle"></i>{" "}
                                 </button>
-                              </>
+                              </div>
                             </>
                           ),
                         },

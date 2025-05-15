@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "mantine-datatable";
 import { useAuthUser } from "react-auth-kit";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import dayjs from "dayjs";
@@ -30,7 +30,7 @@ const Employees = () => {
     const to = from + pageSize;
 
     await axios
-      .get(import.meta.env.VITE_API_KEY+"/api/employees")
+      .get(import.meta.env.VITE_API_KEY + "/api/employees")
       .then((res) => {
         setEmployees(res.data.employees);
         setRecords(res.data.employees.slice(from, to));
@@ -38,8 +38,34 @@ const Employees = () => {
       });
   };
 
-  // filter by employees id
-  
+  //filter function by ot code
+  const nameFilter = async (key) => {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize;
+
+    setLoading(true);
+
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_KEY}/api/employees`
+      );
+      const allEmployees = res.data.employees;
+
+      // Filter by emp_id or emp_name
+      const filtered = allEmployees.filter(
+        (emp) =>
+          emp.emp_id.toLowerCase().includes(key.toLowerCase()) ||
+          emp.emp_name.toLowerCase().includes(key.toLowerCase())
+      );
+
+      setEmployees(filtered);
+      setRecords(filtered.slice(from, to));
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [selectFile, setSelectFile] = useState("");
 
@@ -66,11 +92,7 @@ const Employees = () => {
       formData.append("importFile", selectFile);
 
       await axios
-        .post(
-          import.meta.env.VITE_API_KEY +
-            "/api/employees-import",
-          formData
-        )
+        .post(import.meta.env.VITE_API_KEY + "/api/employees-import", formData)
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -92,20 +114,23 @@ const Employees = () => {
     }
   };
 
-  const handleDeleteSubmit =async(blogs,data)=>{
+  const handleDeleteSubmit = async (blogs, data) => {
     await axios
-      .delete(import.meta.env.VITE_API_KEY + "/api/employees-delete/"+blogs.id,data)
+      .delete(
+        import.meta.env.VITE_API_KEY + "/api/employees-delete/" + blogs.id,
+        data
+      )
       .then((res) => {
-        console.log(res.data.employees)
+        console.log(res.data.employees);
         Swal.fire({
           icon: "error",
           title: "Your employees has been deleted",
           showConfirmButton: false,
           timer: 2000,
         });
-        getData()
+        getData();
       });
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -138,9 +163,20 @@ const Employees = () => {
                 <div className="card card-outline card-primary">
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-12 mb-2">
+                      <div className="col-md-2">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="ค้นหาพนักงาน"
+                          onChange={(event) => nameFilter(event.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-10 mb-2">
                         <div className="float-right mb-2">
-                          <div className="file btn btn-primary mr-1" style={{position:"relative",overflow:"hidden"}}>
+                          <div
+                            className="file btn btn-primary mr-1"
+                            style={{ position: "relative", overflow: "hidden" }}
+                          >
                             <i className="fas fa-folder-plus"></i> เลือกไฟล์
                             <input
                               style={{
@@ -158,11 +194,16 @@ const Employees = () => {
                           </div>
                           <button
                             onClick={handleSubmitImportFile}
-                            className="btn btn-secondary mr-1" 
+                            className="btn btn-secondary mr-1"
                           >
                             <i className="fas fa-file-upload"></i> อัพโหลด
                           </button>
-                          <Link to={'/admin/employees/create'} className="btn btn-success"><i className="fas fa-plus"></i> Create</Link>
+                          <Link
+                            to={"/admin/employees/create"}
+                            className="btn btn-success"
+                          >
+                            <i className="fas fa-plus"></i> Create
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -216,7 +257,7 @@ const Employees = () => {
                           title: "ฝ่าย",
                           textAlignment: "center",
                         },
-                       
+
                         {
                           accessor: "created_at",
                           title: "วันที่จัดทำ",
@@ -237,8 +278,7 @@ const Employees = () => {
                                 <i className="far fa-edit"></i>
                               </Link>{" "}
                               <button
-                                onClick={()=>handleDeleteSubmit(blogs)}
-                               
+                                onClick={() => handleDeleteSubmit(blogs)}
                                 className="btn btn-danger"
                               >
                                 <i className="fas fa-trash"></i>
